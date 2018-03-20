@@ -17,7 +17,7 @@ def index():
     # template = env.get_template('index.pug')
     # with open("index.pug", "w") as index_file:
     #     output = template.render(index_variables)
-    #     index_file.write(output.encode('utf-8'))  
+    #     index_file.write(output.encode('utf-8'))
     return render_template('index.pug', encoding='utf-8')
 
 @userApp.route('/fonts/<path:path>')
