@@ -1,0 +1,13 @@
+{
+  "name": "static",
+  "authors": [
+    "Maxim <havasez@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "dependencies": {
+    "materialize": "^0.100.2"
+  }
+}
