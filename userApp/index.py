@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
-# from __future__ import unicode_literals
-from flask import render_template, send_from_directory
-from jinja2 import Environment, PackageLoader
-#env = Environment(loader=PackageLoader('userApp', 'templates'))
-
+from flask import render_template, send_from_directory, request
 from userApp import userApp
-import os
-# from requests import request
 
 @userApp.route('/')
 def index():
-    print(render_template('index.pug'))
-    # myvar = 'Привет World'
-    # index_variables = {'title': ''}
-    # index_variables['title'] = myvar.decode('utf-8')
-    # template = env.get_template('index.pug')
-    # with open("index.pug", "w") as index_file:
-    #     output = template.render(index_variables)
-    #     index_file.write(output.encode('utf-8'))
+    print("Index")
     return render_template('index.pug', encoding='utf-8')
+
+@userApp.route('/login', methods=['GET'])
+def login():
+    print("login")
+    return render_template('login.pug', encoding='utf-8')
+
+@userApp.route('/login', methods=['POST'])
+def login_post():
+    print unicode(request.form['login'])
+    print unicode(request.form['loginpassword'])
+    print("login_post")
+    return render_template('login.pug', encoding='utf-8')
 
 @userApp.route('/fonts/<path:path>')
 def send_fonts(path):

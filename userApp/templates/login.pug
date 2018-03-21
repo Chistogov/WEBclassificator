@@ -1,0 +1,18 @@
+include application
+include modals/info-modal
+
+div.enterblock
+    .card.view-card.grey.lighten-4
+        form#loginform(method="post")
+            div.card-content.black-text
+                div.input-field
+                    i.material-icons.prefix account_circle
+                    input#login.validate(type="text" name="login")
+                    label(for="login") Username
+                div.input-field
+                    i.material-icons.prefix fingerprint
+                    input#loginpassword.validate(type="password" name="loginpassword")
+                    label(for="loginpassword") Password
+            div.card-action
+                a.black-text.modal-trigger(href="#info-modal")="Регистрация"
+                a.black-text(href="#" onclick="document.getElementById('loginform').submit()" )="Вход"
