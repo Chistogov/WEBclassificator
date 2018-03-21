@@ -1,0 +1,35 @@
+nav.nav-extended
+    div.nav-content
+        ul.tabs.tabs-transparent
+            li.tab
+                if(currentPage == "/")
+                    .active
+                a(href="/") Информация
+            li.tab
+                if(currentPage == "/rec")
+                    .active
+                a(href="/rec") Разметка снимков
+            li.tab
+                if(currentPage == "/second_rec")
+                    .active
+                a(href="/second_rec") Повторная разметка
+            li.tab
+                if(currentPage == "/settings")
+                    .active
+                a(href="/settings") Параметры
+            li.tab
+                if(currentPage == "/instruction")
+                    .active
+                a(href="/instruction") Инструкция
+            li.tab
+                if(currentPage == "/stats")
+                    .active
+                a(href="/stats") Статистика
+            li.tab
+                if(currentPage == "/help")
+                    .active
+                a(href="/help") Помощь
+            li.tab
+                if(currentPage == "/logout")
+                    .active
+                a(href="/logout") Выход
