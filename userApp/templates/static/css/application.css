@@ -12,3 +12,6 @@
    margin: 0px auto;
    z-index: 2;
 }
+.parent-width{
+    max-width: 100%;
+}

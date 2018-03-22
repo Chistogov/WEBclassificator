@@ -1,35 +1,52 @@
 nav.nav-extended
     div.nav-content
         ul.tabs.tabs-transparent
-            li.tab
-                if(currentPage == "/")
-                    .active
-                a(href="/") Информация
-            li.tab
-                if(currentPage == "/rec")
-                    .active
-                a(href="/rec") Разметка снимков
-            li.tab
-                if(currentPage == "/second_rec")
-                    .active
-                a(href="/second_rec") Повторная разметка
-            li.tab
-                if(currentPage == "/settings")
-                    .active
-                a(href="/settings") Параметры
-            li.tab
-                if(currentPage == "/instruction")
-                    .active
-                a(href="/instruction") Инструкция
-            li.tab
-                if(currentPage == "/stats")
-                    .active
-                a(href="/stats") Статистика
-            li.tab
-                if(currentPage == "/help")
-                    .active
-                a(href="/help") Помощь
-            li.tab
-                if(currentPage == "/logout")
-                    .active
-                a(href="/logout") Выход
+            if(currentPage == "/")
+                li.tab
+                    a.active(href="/" target="_self") Информация
+            else
+                li.tab
+                    a(href="/" target="_self") Информация
+            if(currentPage=="/rec")
+                li.tab
+                    a.active(href="/rec" target="_self") Разметка
+            else
+                li.tab
+                    a(href="/rec" target="_self") Разметка
+            if(currentPage == "/second_rec")
+                li.tab
+                    a.active(href="/second_rec" target="_self") Повторная разметка
+            else
+                li.tab
+                    a(href="/second_rec" target="_self") Повторная разметка
+            if(currentPage == "/settings")
+                li.tab
+                    a.active(href="/settings" target="_self") Параметры
+            else
+                li.tab
+                    a(href="/settings" target="_self") Параметры
+            if(currentPage == "/instruction" )
+                li.tab
+                    a.active(href="/instruction" target="_self") Инструкция
+            else
+                li.tab
+                    a(href="/instruction" target="_self") Инструкция
+            if(currentPage == "/stats")
+                li.tab
+                    a.active(href="/stats" target="_self") Статистика
+            else
+                li.tab
+                    a(href="/stats" target="_self") Статистика
+            if(currentPage == "/help")
+                li.tab
+                    a.active(href="/help" target="_self") Помощь
+            else
+                li.tab
+                    a(href="/help" target="_self") Помощь
+            if(currentPage == "/logout")
+                li.tab
+                    a.active(href="/logout" target="_self") Выход
+            else
+                li.tab
+                    a(href="/logout" target="_self") Выход
+

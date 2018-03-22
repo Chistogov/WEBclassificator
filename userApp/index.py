@@ -19,6 +19,17 @@ def login_post():
     print("login_post")
     return render_template('login.pug', encoding='utf-8')
 
+@userApp.route('/rec', methods=['GET'])
+def rec():
+    print("rec")
+    return render_template('rec.pug', encoding='utf-8')\
+
+@userApp.route('/second_rec', methods=['GET'])
+def second_rec():
+    print("second_rec")
+    return render_template('second_rec.pug', encoding='utf-8')
+
+#Настройки для CSS и HTML
 @userApp.route('/fonts/<path:path>')
 def send_fonts(path):
     print("Incude + " + path)
