@@ -7,6 +7,6 @@ from userApp import userApp
 def page_not_found(e):
     return redirect("/login")
 
-@userApp.errorhandler(404)
-def page_not_found(e):
-    return redirect("/")
+# @userApp.errorhandler(404)
+# def page_not_found(e):
+#     return redirect("/")

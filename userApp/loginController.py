@@ -11,7 +11,6 @@ login_manager.init_app(userApp)
 
 @login_manager.user_loader
 def load_user(user_id):
-    db.create_all()
     newuser = User.User.query.get(int(user_id))
     if newuser:
         return newuser
@@ -29,16 +28,17 @@ def login():
 def login_post():
     username = request.form['login']
     password = request.form['loginpassword']
-    db.create_all()
     user = User.User.query.filter_by(user_name=username).first()
     if user:
         if(user.password == password):
             login_user(user)
             return redirect("/")
         else:
-            return render_template('login.pug', error = "Неверный логин или пароль!")
+            return render_template('login.pug', error = "Не удается войти. \
+            Пожалуйста, проверьте правильность написания имени пользователя и пароля.")
     else:
-        return render_template('login.pug', error="Неверный логин или пароль!")
+        return render_template('login.pug', error="Не удается войти. \
+            Пожалуйста, проверьте правильность написания имени пользователя и пароля.")
 
 
 
