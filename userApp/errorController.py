@@ -1,7 +1,12 @@
-from flask import render_template
+# -*- coding: utf-8 -*-
+from flask import render_template, redirect
 from userApp import userApp
 
 
 @userApp.errorhandler(401)
 def page_not_found(e):
-    return render_template('<p>Login failed</p>')
+    return redirect("/login")
+
+@userApp.errorhandler(404)
+def page_not_found(e):
+    return redirect("/")

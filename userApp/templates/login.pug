@@ -6,6 +6,9 @@ div.enterblock
     .card.view-card.grey.lighten-4
         form#loginform(method="post")
             div.card-content.black-text
+                if(error)
+                    div.card.center-align.red.accent-1
+                        span.center-align=error
                 div.input-field
                     i.material-icons.prefix account_circle
                     input#login.validate(type="text" name="login")
