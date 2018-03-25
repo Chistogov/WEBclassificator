@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from userApp.dbc import db
+from userApp.dbc import db, Recognized
 
 
 class User(db.Model, UserMixin):
@@ -7,6 +7,12 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(50), unique=True)
+    pictures = db.relationship('pictures',
+                               secondary=Recognized.Recognized,
+                               backref=db.backref("users_", lazy="dynamic"))
+    symptoms = db.relationship('symptoms',
+                               secondary=Recognized.Recognized,
+                               backref=db.backref("users_", lazy="dynamic"))
 
     def __init__(self, id, user_name, password):
         self.id = id

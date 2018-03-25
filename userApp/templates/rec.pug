@@ -14,4 +14,9 @@ include navBar
                         div
                             input.filled-in(type="checkbox", id=symp.id, name=symp.id)
                             label(for=symp.id, style="{pointer-events: auto;}")=symp.symptom_name
-            a.black-text(onclick="document.getElementById('tagsform').submit()" )="Сохранить"
+            p
+            div.row
+                div.col.s4
+                    a.btn.black-text(onclick="document.getElementById('tagsform').submit()" )="Сохранить"
+                div.col.s4
+                    a.btn.black-text()="Пропустить"
