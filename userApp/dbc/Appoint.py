@@ -2,11 +2,10 @@ from userApp.dbc import db
 
 
 
-class Recognized(db.Model):
-    __tablename__ = "recognized"
+class Appoint(db.Model):
+    __tablename__ = "appointed"
     id = db.Column(db.Integer, primary_key=True)
     pic_id = db.Column(db.Integer, db.ForeignKey('pictures.id'), nullable=False)
-    symp_id = db.Column(db.Integer, db.ForeignKey('symptoms.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     date = db.Column(db.Date)
 
