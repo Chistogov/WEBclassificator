@@ -11,6 +11,8 @@ from userApp import loginController
 from userApp import dependencies
 from userApp import errorController
 from userApp import primaryRecController
+from userApp import secondaryRecController
+from userApp import parameterController
 from userApp.dbc import db
 
 # Load the config file

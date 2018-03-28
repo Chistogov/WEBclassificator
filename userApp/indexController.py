@@ -23,13 +23,6 @@ def index():
     return render_template('index.pug', infoForm=infoForm)
 
 
-@userApp.route('/second_rec', methods=['GET'])
-@login_required
-def second_rec():
-    print("second_rec")
-    return render_template('second_rec.pug', encoding='utf-8')
-
-
 class infoForm():
     name = "";
     today_rec = 0;
