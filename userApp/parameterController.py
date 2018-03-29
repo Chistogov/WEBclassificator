@@ -7,8 +7,8 @@ from flask_login import login_required, current_user
 @userApp.route('/settings', methods=['GET'])
 @login_required
 def parameter():
-
-    return render_template('parameter.pug')
+    symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
+    return render_template('parameter.pug', symptoms=symptoms)
 
 @userApp.route('/settings', methods=['POST'])
 @login_required

@@ -1,52 +1,54 @@
+include modals/help-modal
+
 nav.nav-extended
     div.nav-content
         ul.tabs.tabs-transparent
             if(currentPage == "/")
                 li.tab
-                    a.active(href="/" target="_self") Информация
+                    a.active(href="/", target="_self") Информация
             else
                 li.tab
-                    a(href="/" target="_self") Информация
+                    a(href="/", target="_self") Информация
             if(currentPage=="/rec")
                 li.tab
-                    a.active(href="/rec" target="_self") Разметка
+                    a.active(href="/rec", target="_self") Разметка
             else
                 li.tab
-                    a(href="/rec" target="_self") Разметка
+                    a(href="/rec", target="_self") Разметка
             if(currentPage == "/second_rec")
                 li.tab
-                    a.active(href="/second_rec" target="_self") Повторная разметка
+                    a.active(href="/second_rec", target="_self") Повторная разметка
             else
                 li.tab
-                    a(href="/second_rec" target="_self") Повторная разметка
+                    a(href="/second_rec", target="_self") Повторная разметка
             if(currentPage == "/settings")
                 li.tab
-                    a.active(href="/settings" target="_self") Параметры
+                    a.active(href="/settings", target="_self") Параметры
             else
                 li.tab
-                    a(href="/settings" target="_self") Параметры
+                    a(href="/settings", target="_self") Параметры
             if(currentPage == "/instruction" )
                 li.tab
-                    a.active(href="/instruction" target="_self") Инструкция
+                    a.active(href="/instruction", target="_self") Инструкция
             else
                 li.tab
-                    a(href="/instruction" target="_self") Инструкция
+                    a(href="/instruction", target="_self") Инструкция
             if(currentPage == "/stats")
                 li.tab
-                    a.active(href="/stats" target="_self") Статистика
+                    a.active(href="/stats", target="_self") Статистика
             else
                 li.tab
-                    a(href="/stats" target="_self") Статистика
+                    a(href="/stats", target="_self") Статистика
             if(currentPage == "/help")
                 li.tab
-                    a.active(href="/help" target="_self") Помощь
+                    a.active.modal-trigger(href="#help-modal", target="_self") Помощь
             else
                 li.tab
-                    a(href="/help" target="_self") Помощь
+                    a.modal-trigger(href="#help-modal", target="_self") Помощь
             if(currentPage == "/logout")
                 li.tab
-                    a.active(href="/logout" target="_self") Выход
+                    a.active(href="/logout", target="_self") Выход
             else
                 li.tab
-                    a(href="/logout" target="_self") Выход
+                    a(href="/logout", target="_self") Выход
 

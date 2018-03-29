@@ -8,13 +8,7 @@ from flask_login import login_required, current_user
 @login_required
 def rec():
     symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
-    symptoms_ear = Symptom.Symptom.query.filter_by(ear=True).order_by(Symptom.Symptom.id).all()
-    symptoms_nose = Symptom.Symptom.query.filter_by(nose=True).order_by(Symptom.Symptom.id).all()
-    symptoms_throat = Symptom.Symptom.query.filter_by(throat=True).order_by(Symptom.Symptom.id).all()
-    return render_template('second_rec.pug', symptoms_ear=symptoms_ear,
-                           symptoms_nose=symptoms_nose,
-                           symptoms_throat=symptoms_throat,
-                           symptoms=symptoms)
+    return render_template('second_rec.pug', symptoms=symptoms)
 
 @userApp.route('/second_rec', methods=['POST'])
 @login_required

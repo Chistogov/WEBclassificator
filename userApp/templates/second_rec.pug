@@ -5,7 +5,7 @@ include navBar
 .content.row
     div.col.s6
         .card-panel
-            img.parent-width(src="img/1446.jpg")
+            img.materialboxed(src="img/1446.jpg", width="100%")
         .card
             .card-content
                 form#searchform(method="post" action="#")
@@ -29,8 +29,8 @@ include navBar
             .card-content
                 div#noseTab
                     form#noseform(method="post" action="#")
-                        each symp in symptoms_nose
-                            if(symp.symptom_name)
+                        each symp in symptoms
+                            if(symp.symptom_name and symp.nose)
                                 div
                                     if(symp.symptom_name == "Нос")
                                         input.filled-in(type="checkbox", id=symp.id~'nose', name=symp.id, checked)
@@ -43,8 +43,8 @@ include navBar
                             a(href = "")="Пропустить"
                 div#earTab
                     form#earform(method="post" action="#")
-                        each symp in symptoms_ear
-                            if(symp.symptom_name)
+                        each symp in symptoms
+                            if(symp.symptom_name and symp.ear)
                                 div
                                     if(symp.symptom_name == "Ухо")
                                         input.filled-in(type="checkbox", id=symp.id~'ear', name=symp.id, checked)
@@ -57,8 +57,8 @@ include navBar
                             a(href = "")="Пропустить"
                 div#throatTab
                     form#throatform(method="post" action="#")
-                        each symp in symptoms_throat
-                            if(symp.symptom_name)
+                        each symp in symptoms
+                            if(symp.symptom_name and symp.throat)
                                 div
                                     if(symp.symptom_name == "Горло")
                                         input.filled-in(type="checkbox", id=symp.id~'throat', name=symp.id, checked)

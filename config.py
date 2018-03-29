@@ -8,5 +8,7 @@ CSRF_ENABLED = True
 # TEMPLATES_AUTO_RELOAD=True
 SECRET_KEY='secret_xxx'
 
+#test
 SQLALCHEMY_DATABASE_URI='postgresql://postgres:12345@127.0.0.1:5432/classdb'
+#prod
 SQLALCHEMY_TRACK_MODIFICATIONS = True

@@ -21,3 +21,7 @@
     margin-right: -25px;
     margin-bottom: -25px;
 }
+
+a:hover {
+ cursor:pointer;
+}
