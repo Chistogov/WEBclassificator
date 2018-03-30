@@ -27,12 +27,6 @@ nav.nav-extended
             else
                 li.tab
                     a(href="/settings", target="_self") Параметры
-            if(currentPage == "/instruction" )
-                li.tab
-                    a.active(href="/instruction", target="_self") Инструкция
-            else
-                li.tab
-                    a(href="/instruction", target="_self") Инструкция
             if(currentPage == "/stats")
                 li.tab
                     a.active(href="/stats", target="_self") Статистика
@@ -45,6 +39,12 @@ nav.nav-extended
             else
                 li.tab
                     a.modal-trigger(href="#help-modal", target="_self") Помощь
+            if(currentPage == "/appoint")
+                li.tab
+                    a.active.modal-trigger(href="/appoint", target="_self") Назначить
+            else
+                li.tab
+                    a.modal-trigger(href="/appoint", target="_self") Назначить
             if(currentPage == "/logout")
                 li.tab
                     a.active(href="/logout", target="_self") Выход

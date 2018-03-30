@@ -1,0 +1,46 @@
+include application
+currentPage = "/stats"
+include navBar
+
+.content.row
+    div.col.s12
+        .card-panel
+            table.striped
+                tbody
+                    tr
+                        td Размеченных снимков:
+                        td=infoForm.rec_pics
+                    tr
+                        td Снимков в ожидании:
+                        td=infoForm.all_pics
+            ul.collapsible
+                li
+                    .collapsible-header Снимки уха
+                    .collapsible-body
+                        table.striped
+                            tbody
+                                each item in pics_by_symp
+                                    if(item[1]==True)
+                                        tr
+                                            td=item[0]
+                                            td=item[4]
+                li
+                    .collapsible-header Снимки горла
+                    .collapsible-body
+                        table.striped
+                            tbody
+                                each item in pics_by_symp
+                                    if(item[2]==True)
+                                        tr
+                                            td=item[0]
+                                            td=item[4]
+                li
+                    .collapsible-header Снимки носа
+                    .collapsible-body
+                        table.striped
+                            tbody
+                                each item in pics_by_symp
+                                    if(item[3]==True)
+                                        tr
+                                            td=item[0]
+                                            td=item[4]

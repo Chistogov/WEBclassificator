@@ -13,6 +13,8 @@ from userApp import errorController
 from userApp import primaryRecController
 from userApp import secondaryRecController
 from userApp import parameterController
+from userApp import appointController
+from userApp import statsController
 from userApp.dbc import db
 
 # Load the config file

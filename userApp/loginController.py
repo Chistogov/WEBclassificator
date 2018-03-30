@@ -30,6 +30,10 @@ def login_post():
     password = request.form['loginpassword']
     user = User.User.query.filter_by(user_name=username).first()
     if user:
+        print user.user_name
+        print username
+        print user.password
+        print password
         if(user.password == password):
             login_user(user)
             return redirect("/")

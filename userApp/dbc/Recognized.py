@@ -19,3 +19,4 @@ class Recognized(db.Model):
     #     self.hash = hash
     #     self.first_rec = first_rec
     #     self.skipped = skipped
+    #     super(Recognized, self).__init__()

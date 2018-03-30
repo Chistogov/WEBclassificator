@@ -14,6 +14,17 @@ def parameter():
 @login_required
 def parameter_post():
     form = request.form
-    for item in form:
-        print item
+    if(form['diagnos'] != ""):
+        symptom = Symptom.Symptom()
+        symptom.symptom_name = form['diagnos']
+        for item in form:
+            if(item == 'ear'):
+                symptom.ear = True
+            if (item == 'nose'):
+                symptom.nose = True
+            if (item == 'throat'):
+                symptom.throat = True
+        db.session.add(symptom)
+        db.session.commit()
     return redirect('/settings')
+
