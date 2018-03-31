@@ -4,10 +4,12 @@ from userApp import *
 from userApp.dbc import Symptom, Picture, User, db, Recognized
 from flask_login import login_required, current_user
 import datetime
+import logging
 
 @userApp.route('/rec', methods=['GET'])
 @login_required
 def sec_rec():
+    logging.info('second_rec')
     symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
     return render_template('rec.pug', symptoms=symptoms)
 

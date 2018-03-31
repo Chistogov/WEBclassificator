@@ -18,15 +18,6 @@ class User(db.Model, UserMixin):
                           lazy='dynamic',
                           primaryjoin=id == Appoint.Appoint.user_id)
 
-
-    # def __init__(self, id, user_name, password):
-    #     self.id = id
-    #     self.user_name = user_name
-    #     self.password = password
-    #
-    # def __repr__(self):
-    #     return '<User %r>' % self.user_name
-
     def is_active(self):
         return True
 

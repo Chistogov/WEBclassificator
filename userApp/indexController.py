@@ -4,12 +4,13 @@ from userApp import *
 from userApp.dbc import User, db, Picture, Symptom, Recognized, Appoint
 from flask_login import login_required, current_user
 import datetime
+import logging
 
 
 @userApp.route('/')
 @login_required
 def index():
-    print("Index")
+    logging.info("Index")
     # pics = len(list(User.User.query.get(current_user.id).stock.filter_by(date=datetime.datetime.now())))
     # pics = User.User.query.get(current_user.id).stock.all()
     # print pics
