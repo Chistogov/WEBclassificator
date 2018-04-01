@@ -10,7 +10,7 @@ import logging
 def rec():
     logging.info('second_rec')
     symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
-    return render_template('second_rec.pug', symptoms=symptoms)
+    return render_template('second_rec.pug', symptoms=symptoms, admin=current_user.admin)
 
 @userApp.route('/second_rec', methods=['POST'])
 @login_required

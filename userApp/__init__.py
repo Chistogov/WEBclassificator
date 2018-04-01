@@ -16,6 +16,8 @@ from userApp import secondaryRecController
 from userApp import parameterController
 from userApp import appointController
 from userApp import statsController
+from userApp import usersController
+from userApp import indexingController
 from userApp.dbc import db
 
 # Load the config file

@@ -1,0 +1,29 @@
+include application
+currentPage = "/indexing"
+include navBar
+
+
+.content.row
+    div.col.s12
+        .card
+            .card-content
+                if(message)
+                    div.card.center-align.red.accent-1
+                        span.center-align=message
+                .card-title="Индексация снимков"
+                table.striped
+                    tbody
+                        tr
+                            td Снимков в папке:
+                            td=infoForm.folder
+                        tr
+                            td Снимков в базе:
+                            td=infoForm.db
+                        tr
+                            td Готово к индексации:
+                            td=infoForm.ready
+            .card-action
+                a.green-text(href="/indexing/now")="Проиндексировать"
+
+
+

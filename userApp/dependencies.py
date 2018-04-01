@@ -31,3 +31,8 @@ def send_dev_css(path):
 def send_dev_img(path):
     logging.info("Incude: " + path)
     return send_from_directory('templates/static/images', path)
+
+@userApp.route('/data/<path:path>')
+def send_data(path):
+    logging.info("Incude: " + path)
+    return send_from_directory(userApp.config.get('DATA_PATH'), path)

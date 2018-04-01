@@ -10,7 +10,7 @@ import logging
 def parameter():
     logging.info('parameter')
     symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
-    return render_template('parameter.pug', symptoms=symptoms)
+    return render_template('parameter.pug', symptoms=symptoms, admin=current_user.admin)
 
 @userApp.route('/settings', methods=['POST'])
 @login_required

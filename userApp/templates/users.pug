@@ -1,0 +1,27 @@
+include application
+currentPage = "/users"
+include navBar
+
+
+.content.row
+    div.col.s12
+        .card
+            form#regForm(method="post")
+                div.card-content.black-text
+                    if(message)
+                        div.card.center-align.red.accent-1
+                            span.center-align=message
+                    div.input-field
+                        i.material-icons.prefix account_circle
+                        input#username.validate(type="text" name="username")
+                        label(for="username") Имя пользователя
+                    div.input-field
+                        i.material-icons.prefix fingerprint
+                        input#password.validate(type="password" name="password")
+                        label(for="password") Пароль
+                    div.input-field
+                        i.material-icons.prefix fingerprint
+                        input#password2.validate(type="password" name="password2")
+                        label(for="password2") Пароль
+                div.card-action
+                    a.modal-trigger(onclick="document.getElementById('regForm').submit()")="ЗАРЕГИСТРИРОВАТЬ"

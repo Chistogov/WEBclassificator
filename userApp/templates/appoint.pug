@@ -48,34 +48,35 @@ include navBar
                                             td=item[0]
                                             td=item[4]
     div.col.s12
-        .card-panel
-            span.card-title="Назначение снимков"
-            if(message)
-                div.card.center-align.red.accent-1
-                    span.center-align=message
-            form#addForm(method="post" action="#")
-                div.row
-                    div.input-field.col.s12
-                        select(name="forUser")
-                            option(value="", disabled, selected)="Пользователь"
-                            for _user in users
-                                option(value=_user.id)=_user.user_name
-                    div.col.s12.input-field
-                        input#count.validate(placeholder="Количество", name="count", type="text", required, aria-required="true")
-                    div.switch
-                        label
-                            input(type = 'checkbox', name="fromApp")
-                            span.lever
-                            ="Из назначенных"
-                    div.switch
-                        label
-                            input(type = 'checkbox', name="fromRec")
-                            span.lever
-                            ="Из распознанных пользователем:"
-                    div.input-field.col.s12
-                        select(name="fromUser")
-                            option(value="0", selected)="Любой пользователь"
-                            for _user in users
-                                option(value=_user.id)=_user.user_name
+        .card
+            .card-content
+                span.card-title="Назначение снимков"
+                if(message)
+                    div.card.center-align.red.accent-1
+                        span.center-align=message
+                form#addForm(method="post" action="#")
+                    div.row
+                        div.input-field.col.s12
+                            select(name="forUser")
+                                option(value="", disabled, selected)="Пользователь"
+                                for _user in users
+                                    option(value=_user.id)=_user.user_name
+                        div.col.s12.input-field
+                            input#count.validate(placeholder="Количество", name="count", type="text", required, aria-required="true")
+                        div.switch
+                            label
+                                input(type = 'checkbox', name="fromApp")
+                                span.lever
+                                ="Из назначенных"
+                        div.switch
+                            label
+                                input(type = 'checkbox', name="fromRec")
+                                span.lever
+                                ="Из распознанных пользователем:"
+                        div.input-field.col.s12
+                            select(name="fromUser")
+                                option(value="0", selected)="Любой пользователь"
+                                for _user in users
+                                    option(value=_user.id)=_user.user_name
             .card-action
                 a.green-text(onclick="document.getElementById('addForm').submit()")="НАЗНАЧИТЬ"

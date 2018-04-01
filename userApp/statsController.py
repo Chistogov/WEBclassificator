@@ -10,6 +10,8 @@ import logging
 @userApp.route('/stats')
 @login_required
 def stats():
+    if not(current_user.admin):
+        return redirect('/')
     logging.info("Stats")
     all_pics = db.session.query(Picture.Picture).all()
     app_pics = db.session.query(Appoint.Appoint).all()
@@ -22,7 +24,7 @@ def stats():
     infoForm.rec_pics = len(list(rec_pics))
     infoForm.app_pics = len(list(app_pics))
     infoForm.wait_pics = infoForm.all_pics-infoForm.rec_pics
-    return render_template('stats.pug', infoForm=infoForm, pics_by_symp=pics_by_symp)
+    return render_template('stats.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, admin=current_user.admin)
 
 
 class infoForm():

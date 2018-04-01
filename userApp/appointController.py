@@ -10,6 +10,8 @@ import logging
 @userApp.route('/appoint', methods=['GET'])
 @login_required
 def appoint():
+    if not(current_user.admin):
+        return redirect('/')
     message = ""
     if('message' in request.args):
         message = request.args['message']
@@ -26,7 +28,7 @@ def appoint():
     infoForm.app_pics = len(list(app_pics))
     infoForm.wait_pics = infoForm.all_pics-infoForm.rec_pics
     users = User.User.query.all()
-    return render_template('appoint.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, users=users, message=message)
+    return render_template('appoint.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, users=users, message=message, admin=current_user.admin)
 
 @userApp.route('/appoint', methods=['POST'])
 @login_required

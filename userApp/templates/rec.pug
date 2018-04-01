@@ -5,7 +5,11 @@ include navBar
 .content.row
     div.col.s6
         .card-panel
-            img.materialboxed(src="img/1446.jpg", width="100%")
+            if(message)
+                div.card.center-align.red.accent-1
+                    span.center-align=message
+            if(pic_local)
+                img.materialboxed(src=pic_local, width="100%")
     div.col.s6
         .card
             .card-tabs
@@ -19,6 +23,8 @@ include navBar
             .card-content
                 div#noseTab
                     form#noseform(method="post" action="#")
+                        if(appointed)
+                            input.hidden(name = "appointed", value=appointed, hidden)
                         each symp in symptoms
                             if(symp.symptom_name and symp.nose)
                                 div
@@ -29,10 +35,13 @@ include navBar
                                     label(for=symp.id~'nose', style="{pointer-events: auto;}")=symp.symptom_name
 
                         .card-action.card-tab-action
-                            a.green-text(onclick="document.getElementById('noseform').submit()" )="Сохранить"
-                            a(href = "")="Пропустить"
+                            if(appointed)
+                                a.green-text(onclick="document.getElementById('noseform').submit()" )="Сохранить"
+                                a(href="/rec/skip/"~appointed)="Пропустить"
                 div#earTab
                     form#earform(method="post" action="#")
+                        if(appointed)
+                            input.hidden(name = "appointed", value=appointed, hidden)
                         each symp in symptoms
                             if(symp.symptom_name and symp.ear)
                                 div
@@ -43,10 +52,13 @@ include navBar
                                     label(for=symp.id~'ear', style="{pointer-events: auto;}")=symp.symptom_name
 
                         .card-action.card-tab-action
-                            a.green-text(onclick="document.getElementById('earform').submit()" )="Сохранить"
-                            a(href = "")="Пропустить"
+                            if(appointed)
+                                a.green-text(onclick="document.getElementById('earform').submit()" )="Сохранить"
+                                a(href="/rec/skip/"~appointed)="Пропустить"
                 div#throatTab
                     form#throatform(method="post" action="#")
+                        if(appointed)
+                            input.hidden(name = "appointed", value=appointed, hidden)
                         each symp in symptoms
                             if(symp.symptom_name and symp.throat)
                                 div
@@ -57,5 +69,6 @@ include navBar
                                     label(for=symp.id~'throat', style="{pointer-events: auto;}")=symp.symptom_name
 
                         .card-action.card-tab-action
-                            a.green-text(onclick="document.getElementById('throatform').submit()" )="Сохранить"
-                            a(href = "")="Пропустить"
+                            if(appointed)
+                                a.green-text(onclick="document.getElementById('throatform').submit()" )="Сохранить"
+                                a(href="/rec/skip/"~appointed)="Пропустить"

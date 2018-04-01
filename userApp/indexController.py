@@ -23,16 +23,15 @@ def index():
     infoForm.today_rec = len(list(pics_today))
     infoForm.in_wait = len(list(pics_in_wait))
     infoForm.all_rec = len(list(rec_pics))
-    infoForm.confirmed = 0
-    return render_template('index.pug', infoForm=infoForm)
+    return render_template('index.pug', infoForm=infoForm, admin=current_user.admin)
 
 
 class infoForm():
-    name = "";
-    today_rec = 0;
-    in_wait = 0;
-    all_rec = 0;
-    confirmed = 0;
+    name = ""
+    today_rec = 0
+    in_wait = 0
+    all_rec = 0
+
 
 
 
