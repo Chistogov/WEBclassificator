@@ -10,6 +10,14 @@ include navBar
                     span.center-align=message
             if(pic_local)
                 img.materialboxed(src=pic_local, width="100%")
+            table.striped
+                tbody
+                    tr
+                        td Сегодня распознано:
+                        td=today_rec
+                    tr
+                        td Снимков в ожидании:
+                        td=in_wait
     div.col.s6
         .card
             .card-tabs
@@ -26,7 +34,16 @@ include navBar
                         if(appointed)
                             input.hidden(name = "appointed", value=appointed, hidden)
                         each symp in symptoms
-                            if(symp.symptom_name and symp.nose)
+                            if(symp.symptom_name and symp.nose and symp.ismedical)
+                                div
+                                    if(symp.symptom_name == "Нос")
+                                        input.filled-in(type="checkbox", id=symp.id~'nose', name=symp.id, checked)
+                                    else
+                                        input.filled-in(type="checkbox", id=symp.id~'nose', name=symp.id)
+                                    label(for=symp.id~'nose', style="{pointer-events: auto;}")=symp.symptom_name
+                        hr
+                        each symp in symptoms
+                            if not(symp.ismedical)
                                 div
                                     if(symp.symptom_name == "Нос")
                                         input.filled-in(type="checkbox", id=symp.id~'nose', name=symp.id, checked)
@@ -43,7 +60,16 @@ include navBar
                         if(appointed)
                             input.hidden(name = "appointed", value=appointed, hidden)
                         each symp in symptoms
-                            if(symp.symptom_name and symp.ear)
+                            if(symp.symptom_name and symp.ear and symp.ismedical)
+                                div
+                                    if(symp.symptom_name == "Ухо")
+                                        input.filled-in(type="checkbox", id=symp.id~'ear', name=symp.id, checked)
+                                    else
+                                        input.filled-in(type="checkbox", id=symp.id~'ear', name=symp.id)
+                                    label(for=symp.id~'ear', style="{pointer-events: auto;}")=symp.symptom_name
+                        hr
+                        each symp in symptoms
+                            if not(symp.ismedical)
                                 div
                                     if(symp.symptom_name == "Ухо")
                                         input.filled-in(type="checkbox", id=symp.id~'ear', name=symp.id, checked)
@@ -60,7 +86,16 @@ include navBar
                         if(appointed)
                             input.hidden(name = "appointed", value=appointed, hidden)
                         each symp in symptoms
-                            if(symp.symptom_name and symp.throat)
+                            if(symp.symptom_name and symp.throat and symp.ismedical)
+                                div
+                                    if(symp.symptom_name == "Горло")
+                                        input.filled-in(type="checkbox", id=symp.id~'throat', name=symp.id, checked)
+                                    else
+                                        input.filled-in(type="checkbox", id=symp.id~'throat', name=symp.id)
+                                    label(for=symp.id~'throat', style="{pointer-events: auto;}")=symp.symptom_name
+                        hr
+                        each symp in symptoms
+                            if not(symp.ismedical)
                                 div
                                     if(symp.symptom_name == "Горло")
                                         input.filled-in(type="checkbox", id=symp.id~'throat', name=symp.id, checked)

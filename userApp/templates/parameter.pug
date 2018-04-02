@@ -33,7 +33,7 @@ include navBar
     div.col.s6
         .card
             .card-content
-                span.card-title="Добавить диагноз"
+                span.card-title="Добавить признак"
                 form#addForm(method="post" action="#")
                     div.row
                         div.col.s4
@@ -46,7 +46,7 @@ include navBar
                             input.filled-in(type="checkbox", id='nose', name="nose")
                             label(for='nose', style="{pointer-events: auto;}")="Нос"
                         div.col.s12.input-field
-                            input#diagnos.validate(placeholder="Диагноз", name="diagnos", type="text", required, aria-required="true")
-                            label(for="diagnos")="Диагноз"
+                            input#diagnos.validate(placeholder="Признак", name="diagnos", type="text", required, aria-required="true")
+                            label(for="diagnos")="Признак"
             .card-action
                 a.green-text(onclick="document.getElementById('addForm').submit()")="Добавить"

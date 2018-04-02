@@ -20,7 +20,14 @@ def sec_rec():
         appointed = pic[2]
     else:
         message = "Вам не назначено снимков, обратитесь к администратору"
-    return render_template('rec.pug', symptoms=symptoms, admin=current_user.admin, pic_local=pic_local, message=message, appointed=appointed)
+    pics_today = db.session.query(Recognized.Recognized.pic_id).filter_by(user_id=current_user.id,
+                                                                          date=datetime.datetime.now().date()).group_by(
+        Recognized.Recognized.pic_id)
+    pics_in_wait = Appoint.Appoint.query.filter_by(user_id=current_user.id)
+    return render_template('rec.pug', symptoms=symptoms,
+                           admin=current_user.admin, pic_local=pic_local,
+                           message=message, appointed=appointed,
+                           today_rec=len(list(pics_today)), in_wait=len(list(pics_in_wait)))
 
 @userApp.route('/rec', methods=['POST'])
 @login_required

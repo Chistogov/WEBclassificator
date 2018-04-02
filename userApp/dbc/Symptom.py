@@ -8,6 +8,7 @@ class Symptom(db.Model):
     ear = db.Column(db.Boolean)
     nose = db.Column(db.Boolean)
     throat = db.Column(db.Boolean)
+    ismedical = db.Column(db.Boolean)
     rec = db.relationship('Recognized', backref='symptom',
                             lazy='dynamic',
                             primaryjoin=id == Recognized.Recognized.symp_id)

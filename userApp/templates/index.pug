@@ -20,4 +20,12 @@ include navBar
                     tr
                         td Всего распознано:
                         td=infoForm.all_rec
+        each message in messageHistory
+            .card
+                .card-content
+                    .card-title
+                        div.chip=message.user_name
+                    p=message.message
+                    p=message.date
+
 
