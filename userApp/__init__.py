@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 from flask import Flask
-from flask_login import LoginManager, UserMixin
-from flask_sqlalchemy import SQLAlchemy
 import logging
 
 userApp = Flask(__name__, instance_relative_config=True)
@@ -25,8 +23,6 @@ userApp.jinja_env.add_extension('pypugjs.ext.jinja.PyPugJSExtension')
 userApp.config.from_object('config')
 logging.basicConfig(level = logging.INFO)
 db.create_all()
-# userApp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-# userApp.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@127.0.0.1:5432/classdb'
 
 
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, send_from_directory, request, redirect, abort
+from flask import render_template
 from userApp import *
-from userApp.dbc import User, db, Picture, Symptom, Recognized, Appoint, Journal
+from userApp.dbc import User, db, Recognized, Appoint, Journal
 from flask_login import login_required, current_user
 import datetime
 import logging
@@ -25,10 +25,6 @@ def index():
     infoForm.all_rec = len(list(rec_pics))
     messageHistory =db.session.query(Journal.Journal.user_From ,User.User.user_name, Journal.Journal.date, Journal.Journal.message)\
         .filter(Journal.Journal.userTo==current_user.id, Journal.Journal.user_From).order_by(Journal.Journal.date).limit(10)
-    print messageHistory
-    for mssg in messageHistory:
-        print mssg[1]
-        print mssg[0]
     return render_template('index.pug', infoForm=infoForm, admin=current_user.admin, messageHistory=messageHistory)
 
 

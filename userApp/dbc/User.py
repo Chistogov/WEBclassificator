@@ -2,9 +2,6 @@ from flask_login import UserMixin
 from userApp.dbc import db, Recognized, Appoint, Journal
 
 
-# https://gist.github.com/kirang89/10030736
-
-
 class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)

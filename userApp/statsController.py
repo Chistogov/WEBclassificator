@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, send_from_directory, request, redirect, abort
+from flask import render_template, redirect
 from userApp import *
-from userApp.dbc import User, db, Picture, Symptom, Recognized, Appoint
+from userApp.dbc import db, Picture, Symptom, Recognized, Appoint
 from flask_login import login_required, current_user
-import datetime
 import logging
 
 

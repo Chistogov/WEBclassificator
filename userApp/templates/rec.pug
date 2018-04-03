@@ -36,19 +36,13 @@ include navBar
                         each symp in symptoms
                             if(symp.symptom_name and symp.nose and symp.ismedical)
                                 div
-                                    if(symp.symptom_name == "Нос")
-                                        input.filled-in(type="checkbox", id=symp.id~'nose', name=symp.id, checked)
-                                    else
-                                        input.filled-in(type="checkbox", id=symp.id~'nose', name=symp.id)
+                                    input.filled-in(type="checkbox", id=symp.id~'nose', name=symp.id)
                                     label(for=symp.id~'nose', style="{pointer-events: auto;}")=symp.symptom_name
                         hr
                         each symp in symptoms
                             if not(symp.ismedical)
                                 div
-                                    if(symp.symptom_name == "Нос")
-                                        input.filled-in(type="checkbox", id=symp.id~'nose', name=symp.id, checked)
-                                    else
-                                        input.filled-in(type="checkbox", id=symp.id~'nose', name=symp.id)
+                                    input.filled-in(type="checkbox", id=symp.id~'nose', name=symp.id)
                                     label(for=symp.id~'nose', style="{pointer-events: auto;}")=symp.symptom_name
 
                         .card-action.card-tab-action
@@ -62,19 +56,13 @@ include navBar
                         each symp in symptoms
                             if(symp.symptom_name and symp.ear and symp.ismedical)
                                 div
-                                    if(symp.symptom_name == "Ухо")
-                                        input.filled-in(type="checkbox", id=symp.id~'ear', name=symp.id, checked)
-                                    else
-                                        input.filled-in(type="checkbox", id=symp.id~'ear', name=symp.id)
+                                    input.filled-in(type="checkbox", id=symp.id~'ear', name=symp.id)
                                     label(for=symp.id~'ear', style="{pointer-events: auto;}")=symp.symptom_name
                         hr
                         each symp in symptoms
                             if not(symp.ismedical)
                                 div
-                                    if(symp.symptom_name == "Ухо")
-                                        input.filled-in(type="checkbox", id=symp.id~'ear', name=symp.id, checked)
-                                    else
-                                        input.filled-in(type="checkbox", id=symp.id~'ear', name=symp.id)
+                                    input.filled-in(type="checkbox", id=symp.id~'ear', name=symp.id)
                                     label(for=symp.id~'ear', style="{pointer-events: auto;}")=symp.symptom_name
 
                         .card-action.card-tab-action
@@ -88,19 +76,13 @@ include navBar
                         each symp in symptoms
                             if(symp.symptom_name and symp.throat and symp.ismedical)
                                 div
-                                    if(symp.symptom_name == "Горло")
-                                        input.filled-in(type="checkbox", id=symp.id~'throat', name=symp.id, checked)
-                                    else
-                                        input.filled-in(type="checkbox", id=symp.id~'throat', name=symp.id)
+                                    input.filled-in(type="checkbox", id=symp.id~'throat', name=symp.id)
                                     label(for=symp.id~'throat', style="{pointer-events: auto;}")=symp.symptom_name
                         hr
                         each symp in symptoms
                             if not(symp.ismedical)
                                 div
-                                    if(symp.symptom_name == "Горло")
-                                        input.filled-in(type="checkbox", id=symp.id~'throat', name=symp.id, checked)
-                                    else
-                                        input.filled-in(type="checkbox", id=symp.id~'throat', name=symp.id)
+                                    input.filled-in(type="checkbox", id=symp.id~'throat', name=symp.id)
                                     label(for=symp.id~'throat', style="{pointer-events: auto;}")=symp.symptom_name
 
                         .card-action.card-tab-action

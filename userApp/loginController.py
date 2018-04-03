@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, request, redirect, abort
+from flask import render_template, request, redirect
 from userApp import *
-from userApp.dbc import User, db
+from userApp.dbc import User
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 
 

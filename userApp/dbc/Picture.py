@@ -1,4 +1,4 @@
-from userApp.dbc import db, Recognized, Appoint
+from userApp.dbc import db, Recognized, Appoint, Cnnrec
 
 
 class Picture(db.Model):
@@ -16,6 +16,9 @@ class Picture(db.Model):
     app = db.relationship('Appoint', backref='picture',
                           lazy='dynamic',
                           primaryjoin=id == Appoint.Appoint.pic_id)
+    cnn = db.relationship('Cnnrec', backref='picture',
+                          lazy='dynamic',
+                          primaryjoin=id == Cnnrec.Cnnrec.pic_id)
 
     # def __init__(self, id, pic_name, index_date, note, hash, first_rec, skipped):
     #     self.id = id
