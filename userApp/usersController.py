@@ -11,6 +11,7 @@ import logging
 def users():
     if not(current_user.admin):
         return redirect('/')
+    logging.info("Users")
     message = ""
     if ('message' in request.args):
         message = request.args['message']
@@ -24,8 +25,8 @@ def users():
 def users_post():
     if not(current_user.admin):
         return redirect('/')
+    logging.info("Users Post")
     form = request.form
-    print form
     if(form['password'] != form['password2']):
         return redirect(url_for('users', message="Пароли не совпадают"))
     if (form['username'] == ""):
