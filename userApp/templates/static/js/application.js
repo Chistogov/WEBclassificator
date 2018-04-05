@@ -3,6 +3,7 @@ $(function() {
     $('.modal').modal();
     $('.tabs').tabs();
     $('select').material_select();
+    $(".dropdown-trigger").dropdown();
 });
 
 

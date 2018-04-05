@@ -15,12 +15,6 @@ nav.nav-extended
             else
                 li.tab
                     a(href="/rec", target="_self") Разметка
-            //if(currentPage == "/second_rec")
-            //    li.tab
-            //        a.active(href="/second_rec", target="_self") Повторная разметка
-            //else
-            //    li.tab
-            //        a(href="/second_rec", target="_self") Повторная разметка
             if(currentPage == "/settings")
                 li.tab
                     a.active(href="/settings", target="_self") Параметры
@@ -34,6 +28,14 @@ nav.nav-extended
                 else
                     li.tab
                         a(href="/stats", target="_self") Статистика
+            if(admin)
+                if(currentPage == "/stats_cnn")
+                    li.tab
+                        a.active(href="/stats_cnn", target="_self") Статистика(НС)
+                else
+                    li.tab
+                        a(href="/stats_cnn", target="_self") Статистика(НС)
+
             if(currentPage == "/help")
                 li.tab
                     a.active.modal-trigger(href="#help-modal", target="_self") Помощь
@@ -61,6 +63,12 @@ nav.nav-extended
                 else
                     li.tab
                         a.modal-trigger(href="/indexing", target="_self") Индексация
+            if(currentPage == "/updates")
+                li.tab
+                    a.active.modal-trigger(href="/updates", target="_self") Обновления
+            else
+                li.tab
+                    a.modal-trigger(href="/updates", target="_self") Обновления
             if(currentPage == "/logout")
                 li.tab
                     a.active(href="/logout", target="_self") Выход

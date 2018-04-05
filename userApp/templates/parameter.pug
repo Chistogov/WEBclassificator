@@ -36,15 +36,18 @@ include navBar
                 span.card-title="Добавить признак"
                 form#addForm(method="post" action="#")
                     div.row
-                        div.col.s4
+                        div.col.s3
                             input.filled-in(type="checkbox", id='ear', name="ear")
                             label(for='ear', style="{pointer-events: auto;}")="Ухо"
-                        div.col.s4
+                        div.col.s3
                             input.filled-in(type="checkbox", id='throat', name="throat")
                             label(for='throat', style="{pointer-events: auto;}")="Горло"
-                        div.col.s4
+                        div.col.s3
                             input.filled-in(type="checkbox", id='nose', name="nose")
                             label(for='nose', style="{pointer-events: auto;}")="Нос"
+                        div.col.s3
+                            input.filled-in(type="checkbox", id='ismedical', name="ismedical")
+                            label(for='ismedical', style="{pointer-events: auto;}")="Медицинский признак"
                         div.col.s12.input-field
                             input#diagnos.validate(placeholder="Признак", name="diagnos", type="text", required, aria-required="true")
                             label(for="diagnos")="Признак"

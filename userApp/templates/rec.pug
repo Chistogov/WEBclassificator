@@ -20,6 +20,12 @@ include navBar
                         td=in_wait
     div.col.s6
         .card
+            .card-content
+                .card-title="Нейросеть"
+                each item in neural
+                    p
+                    span=item[1]
+        .card
             .card-tabs
                 ul.tabs
                     li.tab.col.s3

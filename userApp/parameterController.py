@@ -26,6 +26,8 @@ def parameter_post():
                 symptom.nose = True
             if (item == 'throat'):
                 symptom.throat = True
+            if (item == 'ismedical'):
+                symptom.ismedical = True
         db.session.add(symptom)
         db.session.commit()
     return redirect('/settings')

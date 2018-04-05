@@ -20,6 +20,7 @@ include navBar
                     tr
                         td Всего распознано:
                         td=infoForm.all_rec
+    .col.s6
         each message in messageHistory
             .card
                 .card-content
@@ -27,5 +28,12 @@ include navBar
                         div.chip=message.user_name
                     p=message.message
                     p=message.date
-
-
+    .col.s6
+        if(recHistory)
+            .card-panel
+                table.striped
+                    tbody
+                        each item in recHistory
+                            tr
+                                td="Дата: "~item.date
+                                td="Распознано: "~item.count_rec
