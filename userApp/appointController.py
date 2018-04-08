@@ -63,8 +63,9 @@ def appoint_post():
     app = db.session.query(Appoint.Appoint.pic_id)
     pics = db.session.query(Picture.Picture).filter(~Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(app), ~Picture.Picture.id.in_(in_app)).limit(count)
     appointService.toAppDb(pics, forUser)
+    print ("Назначено")
     journalService.newMessaage(forUser, "Назначены новые снимки (" + str(len(list(pics))) + " шт.)")
-
+    print ("Журнал ++")
     return redirect('/appoint')
 
 

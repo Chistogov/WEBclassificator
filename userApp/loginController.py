@@ -40,8 +40,6 @@ def login_post():
         return render_template('login.pug', error="Не удается войти. \
             Пожалуйста, проверьте правильность написания имени пользователя и пароля.")
 
-
-
 # somewhere to logout
 @userApp.route('/logout')
 @login_required

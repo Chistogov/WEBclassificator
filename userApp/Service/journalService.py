@@ -10,6 +10,7 @@ def newMessaage(userTo, message):
     note.message = message
     note.date = datetime.datetime.now()
     db.session.add(note)
+    print ("Commit...")
     db.session.commit()
 
 

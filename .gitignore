@@ -4,3 +4,4 @@ venv/
 test/
 *.pyc
 config.py
+flaskapp.wsgi

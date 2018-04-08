@@ -23,4 +23,5 @@ def toAppDb(pics, forUser):
         app.pic_id = pic.id
         app.date = datetime.datetime.now().date()
         db.session.add(app)
+    print ("Commit...")
     db.session.commit()
