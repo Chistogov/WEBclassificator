@@ -3,37 +3,40 @@ currentPage = "/"
 include navBar
 
 
-.content.row
-    div.col.s12
-        .card-panel
-            table.striped
-                tbody
-                    tr
-                        td Имя пользователя:
-                        td=infoForm.name
-                    tr
-                        td Сегодня распознано:
-                        td=infoForm.today_rec
-                    tr
-                        td Снимков в ожидании:
-                        td=infoForm.in_wait
-                    tr
-                        td Всего распознано:
-                        td=infoForm.all_rec
-    .col.s6
-        each message in messageHistory
-            .card
-                .card-content
-                    .card-title
-                        div.chip=message.user_name
-                    p=message.message
-                    p=message.date
-    .col.s6
-        if(recHistory)
-            .card-panel
-                table.striped
-                    tbody
-                        each item in recHistory
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                .card-body
+                    table.table.table-striped
+                        tbody
                             tr
-                                td="Дата: "~item.date
-                                td="Распознано: "~item.count_rec
+                                td Имя пользователя:
+                                td=infoForm.name
+                            tr
+                                td Сегодня распознано:
+                                td=infoForm.today_rec
+                            tr
+                                td Снимков в ожидании:
+                                td=infoForm.in_wait
+                            tr
+                                td Всего распознано:
+                                td=infoForm.all_rec
+        div.col-md-6
+            each message in messageHistory
+                .card.card-block
+                    .card-body
+                        h5.card-title
+                            span.badge.badge-pill.badge-primary=message.user_name
+                        p=message.message
+                        span.badge.badge-secondary=message.date
+        div.col-md-6
+            if(recHistory)
+                .card.card-block
+                    .card-body
+                        table.table.table-striped
+                            tbody
+                                each item in recHistory
+                                    tr
+                                        td="Дата: "~item.date
+                                        td="Распознано: "~item.count_rec

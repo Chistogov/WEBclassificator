@@ -1,78 +1,74 @@
 include modals/help-modal
 
-nav.nav-extended
-    div.nav-content
-        ul.tabs.tabs-transparent
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+    button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+    div#navbarSupportedContent.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
             if(currentPage == "/")
-                li.tab
-                    a.active(href="/", target="_self") Информация
+                li.nav-item
+                    a.nav-link.active(href="/", target="_self") Информация
             else
-                li.tab
-                    a(href="/", target="_self") Информация
+                li.nav-item
+                    a.nav-link(href="/", target="_self") Информация
             if(currentPage=="/rec")
-                li.tab
-                    a.active(href="/rec", target="_self") Разметка
+                li.nav-item
+                    a.nav-link.active(href="/rec", target="_self") Разметка
             else
-                li.tab
-                    a(href="/rec", target="_self") Разметка
+                li.nav-item
+                    a.nav-link(href="/rec", target="_self") Разметка
             if(currentPage == "/settings")
-                li.tab
-                    a.active(href="/settings", target="_self") Параметры
+                li.nav-item
+                    a.nav-link.active(href="/settings", target="_self") Параметры
             else
-                li.tab
-                    a(href="/settings", target="_self") Параметры
+                li.nav-item
+                    a.nav-link(href="/settings", target="_self") Параметры
             if(admin)
                 if(currentPage == "/stats")
-                    li.tab
-                        a.active(href="/stats", target="_self") Статистика
+                    li.nav-item
+                        a.nav-link.active(href="/stats", target="_self") Статистика
                 else
-                    li.tab
-                        a(href="/stats", target="_self") Статистика
+                    li.nav-item
+                        a.nav-link(href="/stats", target="_self") Статистика
             if(admin)
                 if(currentPage == "/stats_cnn")
-                    li.tab
-                        a.active(href="/stats_cnn", target="_self") Статистика(НС)
+                    li.nav-item
+                        a.nav-link.active(href="/stats_cnn", target="_self") Статистика(НС)
                 else
-                    li.tab
-                        a(href="/stats_cnn", target="_self") Статистика(НС)
+                    li.nav-item
+                        a.nav-link(href="/stats_cnn", target="_self") Статистика(НС)
 
             if(currentPage == "/help")
-                li.tab
-                    a.active.modal-trigger(href="#help-modal", target="_self") Помощь
+                li.nav-item
+                    a.nav-link.active.modal-trigger(data-toggle="modal", data-target="#help-modal") Помощь
             else
-                li.tab
-                    a.modal-trigger(href="#help-modal", target="_self") Помощь
+                li.nav-item
+                    a.nav-link.modal-trigger(data-toggle="modal", data-target="#help-modal") Помощь
             if(admin)
                 if(currentPage == "/appoint")
-                    li.tab
-                        a.active.modal-trigger(href="/appoint", target="_self") Назначить
+                    li.nav-item
+                        a.nav-link.active(href="/appoint", target="_self") Назначить
                 else
-                    li.tab
-                        a.modal-trigger(href="/appoint", target="_self") Назначить
+                    li.nav-item
+                        a.nav-link(href="/appoint", target="_self") Назначить
             if(admin)
                 if(currentPage == "/users")
-                    li.tab
-                        a.active.modal-trigger(href="/users", target="_self") Пользователи
+                    li.nav-item
+                        a.nav-link.active(href="/users", target="_self") Пользователи
                 else
-                    li.tab
-                        a.modal-trigger(href="/users", target="_self") Пользователи
+                    li.nav-item
+                        a.nav-link(href="/users", target="_self") Пользователи
             if(admin)
                 if(currentPage == "/indexing")
-                    li.tab
-                        a.active.modal-trigger(href="/indexing", target="_self") Индексация
+                    li.nav-item
+                        a.nav-link.active(href="/indexing", target="_self") Индексация
                 else
-                    li.tab
-                        a.modal-trigger(href="/indexing", target="_self") Индексация
+                    li.nav-item
+                        a.nav-link(href="/indexing", target="_self") Индексация
             if(currentPage == "/updates")
-                li.tab
-                    a.active.modal-trigger(href="/updates", target="_self") Обновления
+                li.nav-item
+                    a.nav-link.active(href="/updates", target="_self") Обновления
             else
-                li.tab
-                    a.modal-trigger(href="/updates", target="_self") Обновления
-            if(currentPage == "/logout")
-                li.tab
-                    a.active(href="/logout", target="_self") Выход
-            else
-                li.tab
-                    a(href="/logout", target="_self") Выход
-
+                li.nav-item
+                    a.nav-link(href="/updates", target="_self") Обновления
+    a.navbar-brand.text-right(href ="/logout", target="_self") Выход

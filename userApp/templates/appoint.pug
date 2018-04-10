@@ -2,81 +2,46 @@ include application
 currentPage = "/appoint"
 include navBar
 
-.content.row
-    div.col.s12
-        .card-panel
-            table.striped
-                tbody
-                    tr
-                        td Размеченных снимков:
-                        td=infoForm.rec_pics
-                    tr
-                        td Снимков в ожидании:
-                        td=infoForm.wait_pics
-                    tr
-                        td Назначены пользователям:
-                        td=infoForm.app_pics
-            //ul.collapsible
-                li
-                    .collapsible-header Снимки уха
-                    .collapsible-body
-                        table.striped
-                            tbody
-                                each item in pics_by_symp
-                                    if(item[1]==True)
-                                        tr
-                                            td=item[0]
-                                            td=item[4]
-                li
-                    .collapsible-header Снимки горла
-                    .collapsible-body
-                        table.striped
-                            tbody
-                                each item in pics_by_symp
-                                    if(item[2]==True)
-                                        tr
-                                            td=item[0]
-                                            td=item[4]
-                li
-                    .collapsible-header Снимки носа
-                    .collapsible-body
-                        table.striped
-                            tbody
-                                each item in pics_by_symp
-                                    if(item[3]==True)
-                                        tr
-                                            td=item[0]
-                                            td=item[4]
-    div.col.s12
-        .card
-            .card-content
-                span.card-title="Назначение снимков"
-                if(message)
-                    div.card.center-align.red.accent-1
-                        span.center-align=message
-                form#addForm(method="post" action="#")
-                    div.row
-                        div.input-field.col.s12
-                            select(name="forUser")
+.content
+    .row
+        div.col-12
+            .card.card-block
+                .card-body
+                    table.table.table-striped
+                        tbody
+                            tr
+                                td Размеченных снимков:
+                                td=infoForm.rec_pics
+                            tr
+                                td Снимков в ожидании:
+                                td=infoForm.wait_pics
+                            tr
+                                td Назначены пользователям:
+                                td=infoForm.app_pics
+
+        div.col-12
+            .card.card-block
+                .card-body
+                    h5.card-title="Назначение снимков"
+                    if(message)
+                        div.alert.alert-danger(role="alert")=message
+                    form#addForm(method="post" action="#")
+                        div.form-group
+                            select.form-control(name="forUser")
                                 option(value="", disabled, selected)="Пользователь"
                                 for _user in users
                                     option(value=_user.id)=_user.user_name
-                        div.col.s12.input-field
-                            input#count.validate(placeholder="Количество", name="count", type="text", required, aria-required="true")
-                        div.switch
-                            label
-                                input(type = 'checkbox', name="fromApp")
-                                span.lever
-                                ="Из назначенных"
-                        div.switch
-                            label
-                                input(type = 'checkbox', name="fromRec")
-                                span.lever
-                                ="Из распознанных пользователем:"
-                        div.input-field.col.s12
-                            select(name="fromUser")
+                        div.form-group
+                            input#count.form-control(placeholder="Количество", name="count", type="text", required)
+                        div.form-check
+                            input#fromApp.form-check-input(type = 'checkbox', name="fromApp")
+                            label.form-check-label(for='fromApp')="Из назначенных"
+                        div.form-check
+                            input#fromRec.form-check-input(type = 'checkbox', name="fromRec")
+                            label.form-check-label(for='fromRec')="Из распознанных пользователем:"
+                        div.form-group
+                            select.form-control(name="fromUser")
                                 option(value="0", selected)="Любой пользователь"
                                 for _user in users
                                     option(value=_user.id)=_user.user_name
-            .card-action
-                a.green-text(onclick="document.getElementById('addForm').submit()")="НАЗНАЧИТЬ"
+                        button.btn.btn-primary(href="#" type="submit")="Назначить"

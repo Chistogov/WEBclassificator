@@ -3,27 +3,27 @@ currentPage = "/indexing"
 include navBar
 
 
-.content.row
-    div.col.s12
-        .card
-            .card-content
-                if(message)
-                    div.card.center-align.red.accent-1
-                        span.center-align=message
-                .card-title="Индексация снимков"
-                table.striped
-                    tbody
-                        tr
-                            td Снимков в папке:
-                            td=infoForm.folder
-                        tr
-                            td Снимков в базе:
-                            td=infoForm.db
-                        tr
-                            td Готово к индексации:
-                            td=infoForm.ready
-            .card-action
-                a.green-text(href="/indexing/now")="Проиндексировать"
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                .card-body
+                    .card-title="Индексация снимков"
+                    if(message)
+                        div.alert.alert-danger(role="alert")=message
+                    table.table.table-striped
+                        tbody
+                            tr
+                                td Снимков в папке:
+                                td=infoForm.folder
+                            tr
+                                td Снимков в базе:
+                                td=infoForm.db
+                            tr
+                                td Готово к индексации:
+                                td=infoForm.ready
+                .card-footer
+                    a.btn.btn-secondary(role="button", href="/indexing/now")="Проиндексировать"
 
 
 

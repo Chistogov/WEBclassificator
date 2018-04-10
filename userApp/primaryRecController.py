@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for
 from userApp import *
 from userApp.dbc import Symptom, Picture, db, Recognized, Appoint, Cnnrec
 from flask_login import login_required, current_user
@@ -12,29 +12,31 @@ def sec_rec():
     logging.info('primary_rec')
     pic = db.session.query(Picture.Picture.id, Picture.Picture.pic_name, Appoint.Appoint.id).filter(Picture.Picture.id==Appoint.Appoint.pic_id, Appoint.Appoint.user_id==current_user.id).first()
     neural = ""
-    if(pic):
-        neural = db.session.query(Cnnrec.Cnnrec.symp_id, Symptom.Symptom.symptom_name).filter(Cnnrec.Cnnrec.pic_id==pic[0], Symptom.Symptom.id==Cnnrec.Cnnrec.symp_id).group_by(Cnnrec.Cnnrec.symp_id, Symptom.Symptom.symptom_name).all()
-    symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
     pic_local = ""
     message = ""
     appointed = ""
     if(pic):
+        neural = db.session.query(Cnnrec.Cnnrec.symp_id, Symptom.Symptom.symptom_name).filter(Cnnrec.Cnnrec.pic_id==pic[0], Symptom.Symptom.id==Cnnrec.Cnnrec.symp_id).group_by(Cnnrec.Cnnrec.symp_id, Symptom.Symptom.symptom_name).all()
         pic_local = "data/" + pic[1]
         appointed = pic[2]
     else:
-        message = "Вам не назначено снимков, обратитесь к администратору"
+        message = "No data"
+    symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
     pics_today = db.session.query(Recognized.Recognized.pic_id).filter_by(user_id=current_user.id,
-                                                                          date=datetime.datetime.now().date()).group_by(
-        Recognized.Recognized.pic_id)
+                                                                          date=datetime.datetime.now().date()).group_by(Recognized.Recognized.pic_id)
     pics_in_wait = Appoint.Appoint.query.filter_by(user_id=current_user.id)
+    if ('message' in request.args):
+        message = request.args['message']
     return render_template('rec.pug', symptoms=symptoms,
                            admin=current_user.admin, pic_local=pic_local,
                            message=message, appointed=appointed,
-                           today_rec=len(list(pics_today)), in_wait=len(list(pics_in_wait)),  neural = neural)
+                           today_rec=len(list(pics_today)), in_wait=len(list(pics_in_wait)),  neural=neural)
 
 @userApp.route('/rec', methods=['POST'])
 @login_required
 def sec_rec_post():
+    if(current_user.user_name == "demo"):
+        return redirect(url_for('sec_rec', message="Demo user, read only"))
     form = request.form
     if(form.has_key('appointed')):
         appointed = Appoint.Appoint.query.get(int(form['appointed']))
@@ -58,6 +60,8 @@ def sec_rec_post():
 @userApp.route('/rec/skip/<path:path>')
 @login_required
 def skip(path):
+    if(current_user.user_name == "demo"):
+        return redirect(url_for('sec_rec', message="Demo user, read only"))
     appointed = Appoint.Appoint.query.get(int(path))
     pic = Picture.Picture.query.get(appointed.pic_id)
     pic.skipped = True

@@ -3,28 +3,25 @@ currentPage = "/updates"
 include navBar
 
 
-.content.row
-    div.col.s12
-        if(admin)
-            .card
-                .card-content
-                    span.card-title="Новая запись"
-                    if(message)
-                        div.card.center-align.red.accent-1
-                            span.center-align=message
-                    form#messForm(method="post" action="#")
-                        div.row
-                            div.col.s12.input-field
-                                textarea#textarea1.materialize-textarea(placeholder="Сообщение", name="message" )
-                                label(for="textarea1")="Сообщение"
-                .card-action
-                    a.green-text(onclick="document.getElementById('messForm').submit()")="Добавить"
-        each message in messageHistory
-            .card
-                .card-content
-                    .card-title
-                        div.chip=message.user_name
-                    p=message.message
-                    p=message.date
+.content
+    .row
+        div.col-12
+            if(admin)
+                .card.card-block
+                    .card-body
+                        h5.card-title="Новая запись"
+                        if(message)
+                            div.alert.alert-danger(role="alert")=message
+                        form#messForm(method="post" action="#")
+                            div.form-group
+                                textarea#textarea1.form-control(placeholder="Сообщение", name="message", rows="3")
+                            button.btn.btn-primary(href="#" type="submit")="Добавить"
+            each mess in messageHistory
+                .card.card-block
+                    .card-body
+                        h5.card-title
+                            span.badge.badge-pill.badge-primary=mess.user_name
+                        p=mess.message
+                        span.badge.badge-secondary=mess.date
 
 

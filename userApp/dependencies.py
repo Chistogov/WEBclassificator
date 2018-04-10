@@ -17,6 +17,16 @@ def send_js(path):
     logging.info("Incude:" + path)
     return send_from_directory('templates/static/materialize/js', path)
 
+@userApp.route('/css2/<path:path>')
+def send_css2(path):
+    logging.info("Incude:" + path)
+    return send_from_directory('templates/static/bootstrap/css', path)
+
+@userApp.route('/js2/<path:path>')
+def send_js2(path):
+    logging.info("Incude:" + path)
+    return send_from_directory('templates/static/bootstrap/js', path)
+
 @userApp.route('/dev/js/<path:path>')
 def send_dev_js(path):
     logging.info("Incude:" + path)

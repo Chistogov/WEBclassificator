@@ -3,53 +3,53 @@ currentPage = "/settings"
 include navBar
 
 
-.content.row
-    div.col.s6
-        .card
-            .card-tabs
-                ul.tabs
-                    li.tab.col.s3
-                        a.active(href="#noseTab")="Нос"
-                    li.tab.col.s3
-                        a(href="#earTab")="Ухо"
-                    li.tab.col.s3
-                        a(href="#throatTab")="Горло"
-            .card-content
-                div#noseTab
-                    each symp in symptoms
-                        if(symp.symptom_name and symp.nose)
-                            div
-                                span=symp.symptom_name
-                div#earTab
-                    each symp in symptoms
-                        if(symp.symptom_name and symp.ear)
-                            div
-                                span=symp.symptom_name
-                div#throatTab
-                    each symp in symptoms
-                        if(symp.symptom_name and symp.throat)
-                            div
-                                span=symp.symptom_name
-    div.col.s6
-        .card
-            .card-content
-                span.card-title="Добавить признак"
-                form#addForm(method="post" action="#")
-                    div.row
-                        div.col.s3
-                            input.filled-in(type="checkbox", id='ear', name="ear")
-                            label(for='ear', style="{pointer-events: auto;}")="Ухо"
-                        div.col.s3
-                            input.filled-in(type="checkbox", id='throat', name="throat")
-                            label(for='throat', style="{pointer-events: auto;}")="Горло"
-                        div.col.s3
-                            input.filled-in(type="checkbox", id='nose', name="nose")
-                            label(for='nose', style="{pointer-events: auto;}")="Нос"
-                        div.col.s3
-                            input.filled-in(type="checkbox", id='ismedical', name="ismedical")
-                            label(for='ismedical', style="{pointer-events: auto;}")="Медицинский признак"
-                        div.col.s12.input-field
-                            input#diagnos.validate(placeholder="Признак", name="diagnos", type="text", required, aria-required="true")
-                            label(for="diagnos")="Признак"
-            .card-action
-                a.green-text(onclick="document.getElementById('addForm').submit()")="Добавить"
+.content
+    .row
+        div.col-md-6
+            .card.card-block
+                nav
+                    div#tabForm.nav.nav-tabs(role="tablist")
+                        a.nav-item.nav-link.active(href="#noseTab", data-toggle="tab",id="nose-tab", role="tab", aria-controls="noseTab", aria-selected="true")="Нос"
+                        a.nav-item.nav-link(href="#earTab", data-toggle="tab",id="ear-tab", aria-controls="earTab", aria-selected="false")="Ухо"
+                        a.nav-item.nav-link(href="#throatTab", data-toggle="tab",id="throat-tab", aria-controls="throatTab", aria-selected="false")="Горло"
+                    .tab-content.lightspace
+                        div#noseTab.tab-pane.fade.show.active(role="tabpanel", aria-labelledby="nose-tab")
+                            each symp in symptoms
+                                if(symp.symptom_name and symp.nose)
+                                    li=symp.symptom_name
+                        div#earTab.tab-pane.fade(role="tabpanel", aria-labelledby="ear-tab")
+                            each symp in symptoms
+                                if(symp.symptom_name and symp.ear)
+                                    li=symp.symptom_name
+                        div#throatTab.tab-pane.fade(role="tabpanel", aria-labelledby="throat-tab")
+                            each symp in symptoms
+                                if(symp.symptom_name and symp.throat)
+                                    li=symp.symptom_name
+        div.col-md-6
+            .card.card-block
+                .card-body
+                    h5.card-title="Добавить признак"
+                    form#addForm(method="post" action="#")
+                        if(message)
+                            div.alert.alert-danger(role="alert")=message
+                        .row
+                            div.col-md-3
+                                div.form-check
+                                    input.form-check-input(type="checkbox", id='ear', name="ear")
+                                    label.form-check-label(for='ear')="Ухо"
+                            div.col-md-3
+                                div.form-check
+                                    input.form-check-input(type="checkbox", id='throat', name="throat")
+                                    label.form-check-label(for='throat')="Горло"
+                            div.col-md-3
+                                div.form-check
+                                    input.form-check-input(type="checkbox", id='nose', name="nose")
+                                    label.form-check-label(for='nose')="Нос"
+                            div.col-md-3
+                                div.form-check
+                                    input.form-check-input(type="checkbox", id='ismedical', name="ismedical")
+                                    label.form-check-label(for='ismedical')="Медицинский признак"
+                            div.col-md-12
+                                div.form-group
+                                    input#diagnos.form-control(placeholder="Признак", name="diagnos", type="text", required, aria-required="true")
+                        button.btn.btn-primary(href="#" type="submit")="Добавить"

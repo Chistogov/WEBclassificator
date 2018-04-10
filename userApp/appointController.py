@@ -35,6 +35,8 @@ def appoint():
 def appoint_post():
     if not(current_user.admin):
         return redirect('/')
+    if(current_user.user_name == "demo"):
+        return redirect(url_for('appoint', message="Demo user, read only"))
     form = request.form
     if(appointService.validateForm(form)):
         message = appointService.validateForm(form)
@@ -63,9 +65,7 @@ def appoint_post():
     app = db.session.query(Appoint.Appoint.pic_id)
     pics = db.session.query(Picture.Picture).filter(~Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(app), ~Picture.Picture.id.in_(in_app)).limit(count)
     appointService.toAppDb(pics, forUser)
-    print ("Назначено")
     journalService.newMessaage(forUser, "Назначены новые снимки (" + str(len(list(pics))) + " шт.)")
-    print ("Журнал ++")
     return redirect('/appoint')
 
 

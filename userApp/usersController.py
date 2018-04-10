@@ -25,6 +25,8 @@ def users():
 def users_post():
     if not(current_user.admin):
         return redirect('/')
+    if(current_user.user_name == "demo"):
+        return redirect(url_for('users', message="Demo user, read only"))
     logging.info("Users Post")
     form = request.form
     if(form['password'] != form['password2']):

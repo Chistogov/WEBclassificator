@@ -3,25 +3,19 @@ currentPage = "/users"
 include navBar
 
 
-.content.row
-    div.col.s12
-        .card
-            form#regForm(method="post")
-                div.card-content.black-text
-                    if(message)
-                        div.card.center-align.red.accent-1
-                            span.center-align=message
-                    div.input-field
-                        i.material-icons.prefix account_circle
-                        input#username.validate(type="text" name="username")
-                        label(for="username") Имя пользователя
-                    div.input-field
-                        i.material-icons.prefix fingerprint
-                        input#password.validate(type="password" name="password")
-                        label(for="password") Пароль
-                    div.input-field
-                        i.material-icons.prefix fingerprint
-                        input#password2.validate(type="password" name="password2")
-                        label(for="password2") Пароль
-                div.card-action
-                    a.modal-trigger(onclick="document.getElementById('regForm').submit()")="ЗАРЕГИСТРИРОВАТЬ"
+.content
+    .row
+        div.col-12
+            .card.card-block
+                div.card-body
+                    h5.card-title="Регистрация"
+                    form#regForm(method="post")
+                        if(message)
+                            div.alert.alert-danger(role="alert")=message
+                        div.form-group
+                            input#username.form-control(placeholder="Имя пользователя", type="text", name="username", required)
+                        div.form-group
+                            input#password.form-control(placeholder="Пароль", type="password", name="password", required)
+                        div.form-group
+                            input#password2.form-control(placeholder="Пароль", type="password", name="password2", required)
+                        button.btn.btn-primary(href="#" type="submit")="Зарегистрировать"

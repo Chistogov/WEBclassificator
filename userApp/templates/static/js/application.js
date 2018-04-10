@@ -1,10 +1,11 @@
-$(function() {
-    $(".button-collapse").sideNav();
-    $('.modal').modal();
-    $('.tabs').tabs();
-    $('select').material_select();
-    $(".dropdown-trigger").dropdown();
-});
+$('.collapse').collapse()
 
+$('#modal').on('shown.bs.modal', function () {
+  $('#input').trigger('focus')
+})
 
+$('#tabForm a').on('click', function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
 

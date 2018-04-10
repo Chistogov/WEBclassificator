@@ -29,6 +29,8 @@ def indexing():
 @userApp.route('/indexing/now')
 @login_required
 def indexing_post():
+    if(current_user.user_name == "demo"):
+        return redirect(url_for('indexing', message="Demo user, read only"))
     i = 0
     os.chdir(userApp.config.get('DATA_PATH'))
     for file in glob.glob("*.jpg"):

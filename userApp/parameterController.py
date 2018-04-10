@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for
 from userApp import *
 from userApp.dbc import Symptom, db
 from flask_login import login_required, current_user
@@ -9,12 +9,17 @@ import logging
 @login_required
 def parameter():
     logging.info('parameter')
+    message = ""
+    if ('message' in request.args):
+        message = request.args['message']
     symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
-    return render_template('parameter.pug', symptoms=symptoms, admin=current_user.admin)
+    return render_template('parameter.pug', symptoms=symptoms, admin=current_user.admin, message=message)
 
 @userApp.route('/settings', methods=['POST'])
 @login_required
 def parameter_post():
+    if(current_user.user_name == "demo"):
+        return redirect(url_for('parameter', message="Demo user, read only"))
     form = request.form
     if(form['diagnos'] != ""):
         symptom = Symptom.Symptom()

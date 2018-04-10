@@ -2,21 +2,18 @@ include application
 include modals/info-modal
 
 - var currentPage = "/login"
-div.enterblock
-    .card.view-card.grey.lighten-4
-        form#loginform(method="post")
-            div.card-content.black-text
+
+.enterblock
+    div.card
+        .card-body
+            h5.card-title="Авторизация"
+            form#loginform(method="post")
                 if(error)
-                    div.card.center-align.red.accent-1
-                        span.center-align=error
-                div.input-field
-                    i.material-icons.prefix account_circle
-                    input#login.validate(type="text" name="login")
-                    label(for="login") Имя пользователя
-                div.input-field
-                    i.material-icons.prefix fingerprint
-                    input#loginpassword.validate(type="password" name="loginpassword")
-                    label(for="loginpassword") Пароль
-            div.card-action
-                a.black-text.modal-trigger(href="#info-modal")="Регистрация"
-                a.black-text(href="#" onclick="document.getElementById('loginform').submit()" )="Вход"
+                    div.alert.alert-danger(role="alert")=error
+                div.form-group
+                    input#login.form-control(type="text", name="login", placeholder="Имя пользователя", required)
+                div.form-group
+                    input#loginpassword.form-control(type="password", name="loginpassword", placeholder="Пароль", required)
+                button.btn.btn-primary(href="#" type="submit")="Вход"
+        .card-footer
+            button.btn.btn-secondary.btn-sm.modal-trigger(data-toggle="modal", data-target="#info-modal")="Регистрация"

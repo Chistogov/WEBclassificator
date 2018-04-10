@@ -2,48 +2,62 @@ include application
 currentPage = "/stats"
 include navBar
 
-.content.row
-    div.col.s12
-        .card-panel
-            table.striped
-                tbody
-                    tr
-                        td Размеченных снимков:
-                        td=infoForm.rec_pics
-                    tr
-                        td Снимков в ожидании:
-                        td=infoForm.wait_pics
-                    tr
-                        td Назначены пользователям:
-                        td=infoForm.app_pics
-            ul.collapsible
-                li
-                    .collapsible-header Снимки уха
-                    .collapsible-body
-                        table.striped
-                            tbody
-                                each item in pics_by_symp
-                                    if(item[1]==True)
-                                        tr
-                                            td=item[0]
-                                            td=item[4]
-                li
-                    .collapsible-header Снимки горла
-                    .collapsible-body
-                        table.striped
-                            tbody
-                                each item in pics_by_symp
-                                    if(item[2]==True)
-                                        tr
-                                            td=item[0]
-                                            td=item[4]
-                li
-                    .collapsible-header Снимки носа
-                    .collapsible-body
-                        table.striped
-                            tbody
-                                each item in pics_by_symp
-                                    if(item[3]==True)
-                                        tr
-                                            td=item[0]
-                                            td=item[4]
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                .card-body
+                    table.table.table-striped
+                        tbody
+                            tr
+                                td Размеченных снимков:
+                                td=infoForm.rec_pics
+                            tr
+                                td Снимков в ожидании:
+                                td=infoForm.wait_pics
+                            tr
+                                td Назначены пользователям:
+                                td=infoForm.app_pics
+                    div#accordion
+                        .card
+                            .card-header#ear-head
+                                button.btn.btn-link.collapsed(data-toggle="collapse", data-target="#ear-list", aria-expanded="false", aria-controls="collapse-ear")="Снимки уха"
+                            div#ear-list.collapse(aria-labelledby="ear-head" data-parent="#accordion")
+                                div.card-body
+                                    ul.list-group
+                                        each item in pics_by_symp
+                                            if(item[1]==True)
+                                                li.list-group-item.list-group-item-action
+                                                    .row
+                                                        .col-6
+                                                            h6.text-left=item[0]
+                                                        .col-6
+                                                            h6.text-right=item[4]
+                        .card
+                            .card-header#throat-head
+                                button.btn.btn-link.collapsed(data-toggle="collapse", data-target="#throat-list", aria-expanded="false", aria-controls="collapse-throat")="Снимки горла"
+                            div#throat-list.collapse(aria-labelledby="throat-head" data-parent="#accordion")
+                                div.card-body
+                                    ul.list-group
+                                        each item in pics_by_symp
+                                            if(item[2] == True)
+                                                li.list-group-item.list-group-item-action
+                                                    .row
+                                                        .col-6
+                                                            h6.text-left=item[0]
+                                                        .col-6
+                                                            h6.text-right=item[4]
+                        .card
+                            .card-header#nose-head
+                                button.btn.btn-link.collapsed(data-toggle="collapse", data-target="#nose-list", aria-expanded="false", aria-controls="collapse-nose")="Снимки носа"
+                            div#nose-list.collapse(aria-labelledby="nose-head" data-parent="#accordion")
+                                div.card-body
+                                    ul.list-group
+                                        each item in pics_by_symp
+                                            if(item[3] == True)
+                                                li.list-group-item.list-group-item-action
+                                                    .row
+                                                        .col-6
+                                                            h6.text-left=item[0]
+                                                        .col-6
+                                                            h6.text-right=item[4]
