@@ -46,7 +46,8 @@ def sec_rec_post():
                 new_tag.user_id=current_user.id
                 new_tag.symp_id=item
                 new_tag.pic_id=appointed.pic_id
-                new_tag.date=datetime.datetime.now().date()
+                new_tag.date=datetime.datetime.now()
+                new_tag.timer=form['timer']
                 db.session.add(new_tag)
         db.session.commit()
         pic = Picture.Picture.query.get(appointed.pic_id)

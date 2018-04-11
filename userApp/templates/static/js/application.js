@@ -12,11 +12,15 @@ $('#tabForm a').on('click', function (e) {
 
 $(document).ready(function() {
     console.log('ready');
-    if (document.getElementById("timer")){
+    if (document.getElementsByClassName("timer")[0]){
         sec = 0;
         setInterval(function(){
         sec++;
-        document.getElementById("timer").innerText = sec;
+        var timers = document.getElementsByClassName("timer");
+        for (var i = 0; i < timers.length; i++) {
+          timers[i].innerText=sec;
+          timers[i].setAttribute("value", sec);
+        }
         }, 1000);
     }
     $('.collapse').collapse()

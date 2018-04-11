@@ -8,6 +8,7 @@ class Recognized(db.Model):
     pic_id = db.Column(db.Integer, db.ForeignKey('pictures.id'), nullable=False)
     symp_id = db.Column(db.Integer, db.ForeignKey('symptoms.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    timer = db.Column(db.Integer, default=0)
     date = db.Column(db.Date)
 
 

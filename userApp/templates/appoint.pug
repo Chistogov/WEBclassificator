@@ -33,12 +33,12 @@ include navBar
                                     option(value=_user.id)=_user.user_name
                         div.form-group
                             input#count.form-control(placeholder="Количество", name="count", type="text", required)
-                        div.form-check
-                            input#fromApp.form-check-input(type = 'checkbox', name="fromApp")
-                            label.form-check-label(for='fromApp')="Из назначенных"
-                        div.form-check
-                            input#fromRec.form-check-input(type = 'checkbox', name="fromRec")
-                            label.form-check-label(for='fromRec')="Из распознанных пользователем:"
+                        div.custom-control.custom-checkbox.my-1.mr-sm-2
+                            input#fromApp.custom-control-input(type = 'checkbox', name="fromApp")
+                            label.custom-control-label(for='fromApp')="Из назначенных"
+                        div.custom-control.custom-checkbox.my-1.mr-sm-2
+                            input#fromRec.custom-control-input(type = 'checkbox', name="fromRec")
+                            label.custom-control-label(for='fromRec')="Из распознанных пользователем:"
                         div.form-group
                             select.form-control(name="fromUser")
                                 option(value="0", selected)="Любой пользователь"

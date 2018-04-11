@@ -5,9 +5,9 @@ class Symptom(db.Model):
     __tablename__ = "symptoms"
     id = db.Column(db.Integer, primary_key=True)
     symptom_name = db.Column(db.String(50), unique=True)
-    ear = db.Column(db.Boolean)
-    nose = db.Column(db.Boolean)
-    throat = db.Column(db.Boolean)
+    ear = db.Column(db.Boolean, default=False)
+    nose = db.Column(db.Boolean, default=False)
+    throat = db.Column(db.Boolean, default=False)
     ismedical = db.Column(db.Boolean, default=False)
     rec = db.relationship('Recognized', backref='symptom',
                             lazy='dynamic',

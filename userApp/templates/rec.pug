@@ -21,7 +21,7 @@ include navBar
                                 td=in_wait
                             tr
                                 td Время распознания:
-                                td#timer=0
+                                td.timer=0
         div.col-md-6
             .card.card-block
                 .card-body
@@ -38,19 +38,20 @@ include navBar
                         div#earTab.tab-pane.fade.show.active(role="tabpanel", aria-labelledby="ear-tab")
                             .card-body
                                 form#earform(method="post" action="#")
+                                    input.hidden.timer(name = "timer", hidden, value=0)
                                     if(appointed)
                                         input.hidden(name = "appointed", value=appointed, hidden)
                                     each symp in symptoms
                                         if(symp.symptom_name and symp.ear and symp.ismedical)
-                                            div.form-check
-                                                input.form-check-input(type="checkbox", id=symp.id~'ear', name=symp.id)
-                                                label.form-check-label(for=symp.id~'ear')=symp.symptom_name
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                input.custom-control-input(type="checkbox", id=symp.id~'ear', name=symp.id)
+                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
                                     hr
                                     each symp in symptoms
                                         if not(symp.ismedical)
-                                            div.form-check
-                                                input.form-check-input(type="checkbox", id=symp.id~'ear', name=symp.id)
-                                                label.form-check-label(for=symp.id~'ear')=symp.symptom_name
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                input.custom-control-input(type="checkbox", id=symp.id~'ear', name=symp.id)
+                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
                                     hr
                                     if(appointed)
                                         button.btn.btn-success(href="#" type="submit")="Сохранить"
@@ -62,15 +63,15 @@ include navBar
                                         input.hidden(name = "appointed", value=appointed, hidden)
                                     each symp in symptoms
                                         if(symp.symptom_name and symp.throat and symp.ismedical)
-                                            div.form-check
-                                                input.form-check-input(type="checkbox", id=symp.id~'throat', name=symp.id)
-                                                label.form-check-label(for=symp.id~'throat')=symp.symptom_name
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                input.custom-control-input(type="checkbox", id=symp.id~'throat', name=symp.id)
+                                                label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
                                     hr
                                     each symp in symptoms
                                         if not(symp.ismedical)
-                                            div.form-check
-                                                input.form-check-input(type="checkbox", id=symp.id~'throat', name=symp.id)
-                                                label.form-check-label(for=symp.id~'throat')=symp.symptom_name
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                input.custom-control-input(type="checkbox", id=symp.id~'throat', name=symp.id)
+                                                label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
 
                                     hr
                                     if(appointed)
@@ -83,15 +84,15 @@ include navBar
                                         input.hidden(name = "appointed", value=appointed, hidden)
                                     each symp in symptoms
                                         if(symp.symptom_name and symp.nose and symp.ismedical)
-                                            div.form-check
-                                                input.form-check-input(type="checkbox", id=symp.id~'nose', name=symp.id)
-                                                label.form-check-label(for=symp.id~'nose')=symp.symptom_name
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                input.custom-control-input(type="checkbox", id=symp.id~'nose', name=symp.id)
+                                                label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
                                     hr
                                     each symp in symptoms
                                         if not(symp.ismedical)
-                                            div.form-check
-                                                input.form-check-input(type="checkbox", id=symp.id~'nose', name=symp.id)
-                                                label.form-check-label(for=symp.id~'nose')=symp.symptom_name
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                input.custom-control-input(type="checkbox", id=symp.id~'nose', name=symp.id)
+                                                label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
                                     hr
                                     if(appointed)
                                         button.btn.btn-success(href="#" type="submit")="Сохранить"
