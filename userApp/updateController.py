@@ -22,6 +22,8 @@ def updates():
 @userApp.route('/updates', methods=['POST'])
 @login_required
 def update_post():
+    if (current_user.user_name == "demo"):
+        return redirect(url_for('updates', message="Demo user, read only"))
     form = request.form
     userTo = db.session.query(User.User).filter(User.User.user_name == "Updates").first()
     userFrom = current_user

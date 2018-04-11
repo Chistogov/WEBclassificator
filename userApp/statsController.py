@@ -15,10 +15,9 @@ def stats():
     all_pics = db.session.query(Picture.Picture).all()
     app_pics = db.session.query(Appoint.Appoint).all()
     rec_pics = db.session.query(Recognized.Recognized.pic_id).group_by(Recognized.Recognized.pic_id)
-    pics_by_symp = db.session.query(Symptom.Symptom.symptom_name, Symptom.Symptom.ear, Symptom.Symptom.throat, Symptom.Symptom.nose, db.func.count(Recognized.Recognized.pic_id))\
+    pics_by_symp = db.session.query(Symptom.Symptom.symptom_name, Symptom.Symptom.ear, Symptom.Symptom.throat, Symptom.Symptom.nose, db.func.count(Recognized.Recognized.pic_id).label('total'), Symptom.Symptom.ismedical)\
         .join(Recognized.Recognized) \
-        .group_by(Symptom.Symptom.symptom_name, Symptom.Symptom.nose, Symptom.Symptom.throat, Symptom.Symptom.ear)
-
+        .group_by(Symptom.Symptom.symptom_name, Symptom.Symptom.nose, Symptom.Symptom.throat, Symptom.Symptom.ear, Symptom.Symptom.ismedical).order_by(db.desc('total'))
     infoForm.all_pics = len(list(all_pics))
     infoForm.rec_pics = len(list(rec_pics))
     infoForm.app_pics = len(list(app_pics))
