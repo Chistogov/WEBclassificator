@@ -17,6 +17,9 @@ include navBar
                                 td Сегодня распознано:
                                 td=infoForm.today_rec
                             tr
+                                td Время работы сегодня:
+                                td=infoForm.time_today~" (ч)"
+                            tr
                                 td Снимков в ожидании:
                                 td=infoForm.in_wait
                             tr
@@ -40,3 +43,4 @@ include navBar
                                     tr
                                         td="Дата: "~item.date
                                         td="Распознано: "~item.count_rec
+                                        td="Время работы: "~item.time~" (ч)"

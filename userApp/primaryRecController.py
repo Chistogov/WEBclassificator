@@ -21,9 +21,11 @@ def sec_rec():
         appointed = pic[2]
     else:
         message = "No data"
-    symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
-    pics_today = db.session.query(Recognized.Recognized.pic_id).filter_by(user_id=current_user.id,
-                                                                          date=datetime.datetime.now().date()).group_by(Recognized.Recognized.pic_id)
+    symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id)
+    pics_today = db.session.query(Recognized.Recognized.pic_id).filter(db.func.DATE(Recognized.Recognized.date)==datetime.datetime.now().date(),
+                                                                      Recognized.Recognized.user_id==current_user.id)\
+                                                                    .group_by(Recognized.Recognized.pic_id)
+
     pics_in_wait = Appoint.Appoint.query.filter_by(user_id=current_user.id)
     if ('message' in request.args):
         message = request.args['message']
@@ -37,6 +39,7 @@ def sec_rec():
 def sec_rec_post():
     if(current_user.user_name == "demo"):
         return redirect(url_for('sec_rec', message="Demo user, read only"))
+    max_time_rec = userApp.config.get('MAX_TIME_REC')
     form = request.form
     if(form.has_key('appointed')):
         appointed = Appoint.Appoint.query.get(int(form['appointed']))
@@ -47,7 +50,11 @@ def sec_rec_post():
                 new_tag.symp_id=item
                 new_tag.pic_id=appointed.pic_id
                 new_tag.date=datetime.datetime.now()
-                new_tag.timer=form['timer']
+                if(form.has_key('timer')):
+                    if(int(form['timer'])>max_time_rec or int(form['timer'])==0):
+                        new_tag.timer = max_time_rec
+                    else:
+                        new_tag.timer = form['timer']
                 db.session.add(new_tag)
         db.session.commit()
         pic = Picture.Picture.query.get(appointed.pic_id)

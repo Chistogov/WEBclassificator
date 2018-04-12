@@ -38,7 +38,7 @@ include navBar
                         div#earTab.tab-pane.fade.show.active(role="tabpanel", aria-labelledby="ear-tab")
                             .card-body
                                 form#earform(method="post" action="#")
-                                    input.hidden.timer(name = "timer", hidden, value=0)
+                                    input.hidden.timer(name = "timer", value=0, hidden)
                                     if(appointed)
                                         input.hidden(name = "appointed", value=appointed, hidden)
                                     each symp in symptoms
@@ -59,6 +59,7 @@ include navBar
                         div#throatTab.tab-pane.fade(role="tabpanel", aria-labelledby="throat-tab")
                             .card-body
                                 form#throatform(method="post" action="#")
+                                    input.hidden.timer(name = "timer", value=0, hidden)
                                     if(appointed)
                                         input.hidden(name = "appointed", value=appointed, hidden)
                                     each symp in symptoms
@@ -80,6 +81,7 @@ include navBar
                         div#noseTab.tab-pane.fade(role="tabpanel", aria-labelledby="nose-tab")
                             .card-body
                                 form#noseform(method="post" action="#")
+                                    input.hidden.timer(name = "timer", value=0, hidden)
                                     if(appointed)
                                         input.hidden(name = "appointed", value=appointed, hidden)
                                     each symp in symptoms
