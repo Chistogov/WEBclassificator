@@ -19,3 +19,12 @@ include navBar
                         div.form-group
                             input#password2.form-control(placeholder="Пароль", type="password", name="password2", required)
                         button.btn.btn-primary(href="#" type="submit")="Зарегистрировать"
+
+        div.col-12
+            .card.card-block
+                div.card-body
+                    ul.list-group
+                        each user in users
+                            a(href='users/'~user.id)
+                                li.list-group-item.list-group-item-action
+                                    span=user.user_name

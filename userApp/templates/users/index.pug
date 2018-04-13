@@ -1,0 +1,18 @@
+include application
+currentPage = "/users"
+include navBar
+
+
+.content
+    .row
+        div.col-12
+            .card.card-block
+                .card-body
+                    h5.card-title=user.user_name
+                    table.table.table-striped
+                        tbody
+                            each item in recHistory
+                                tr
+                                    td="Дата: "~item.date
+                                    td="Распознано: "~item.count_rec
+                                    td="Время работы: "~item.time~" (ч)"

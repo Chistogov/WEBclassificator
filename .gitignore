@@ -2,7 +2,7 @@
 __pycache__/
 venv/
 test/
-*.pyc\
+*.pyc
 *.h5py
 *.json
 config.py
