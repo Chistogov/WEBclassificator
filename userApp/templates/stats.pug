@@ -27,20 +27,22 @@ include navBar
                                     ul.list-group
                                         each item in pics_by_symp
                                             if(item[1]==True and item[5]==True)
-                                                li.list-group-item.list-group-item-action
-                                                    .row
-                                                        .col-6
-                                                            h6.text-left=item[0]
-                                                        .col-6
-                                                            h6.text-right=item[4]
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
                                         each item in pics_by_symp
                                             if(item[1] == True and item[5]==False)
-                                                li.list-group-item.list-group-item-action
-                                                    .row
-                                                        .col-6
-                                                            h6.text-left=item[0]
-                                                        .col-6
-                                                            h6.text-right=item[4]
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
                         .card
                             .card-header#throat-head
                                 button.btn.btn-link.collapsed(data-toggle="collapse", data-target="#throat-list", aria-expanded="false", aria-controls="collapse-throat")="Снимки горла"
@@ -49,20 +51,22 @@ include navBar
                                     ul.list-group
                                         each item in pics_by_symp
                                             if(item[2] == True and item[5]==True)
-                                                li.list-group-item.list-group-item-action
-                                                    .row
-                                                        .col-6
-                                                            h6.text-left=item[0]
-                                                        .col-6
-                                                            h6.text-right=item[4]
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
                                         each item in pics_by_symp
                                             if(item[2] == True and item[5]==False)
-                                                li.list-group-item.list-group-item-action
-                                                    .row
-                                                        .col-6
-                                                            h6.text-left=item[0]
-                                                        .col-6
-                                                            h6.text-right=item[4]
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
                         .card
                             .card-header#nose-head
                                 button.btn.btn-link.collapsed(data-toggle="collapse", data-target="#nose-list", aria-expanded="false", aria-controls="collapse-nose")="Снимки носа"
@@ -71,17 +75,19 @@ include navBar
                                     ul.list-group
                                         each item in pics_by_symp
                                             if(item[3] == True and item[5]==True)
-                                                li.list-group-item.list-group-item-action
-                                                    .row
-                                                        .col-6
-                                                            h6.text-left=item[0]
-                                                        .col-6
-                                                            h6.text-right=item[4]
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
                                         each item in pics_by_symp
                                             if(item[3] == True and item[5]==False)
-                                                li.list-group-item.list-group-item-action
-                                                    .row
-                                                        .col-6
-                                                            h6.text-left=item[0]
-                                                        .col-6
-                                                            h6.text-right=item[4]
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]

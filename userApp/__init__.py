@@ -22,6 +22,8 @@ from userApp import primaryRecController
 from userApp import statsController
 from userApp import usersController
 from userApp import picsController
+from userApp import Pagination
+from userApp import AlchemyEncoder
 
 from userApp import updateController
 

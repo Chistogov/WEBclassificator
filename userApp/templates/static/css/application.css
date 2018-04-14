@@ -20,6 +20,12 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
+.pagination-center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+}
 .lightspace{
     padding: 10px;
 }
