@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, url_for
 from userApp import Pagination
 from userApp import *
 from userApp.dbc import User, db, Recognized, Symptom, Picture
@@ -22,6 +22,7 @@ def pic_view(path, page):
         .group_by(Recognized.Recognized.symp_id, Picture.Picture.pic_name)
     count = len(list(pics_by_symp))
     pics = get_pics_for_page(page, symptomId)
+    message = ""
     pagination = Pagination.Pagination(page, PER_PAGE, count)
     return render_template('/pics_viewer/index.pug', admin=current_user.admin, pictures=pics, pagination=pagination, symptom=symptom)
 
@@ -39,8 +40,11 @@ def get_pics_for_page(page, symptomId):
 @userApp.route('/pics/<int:pic>/<int:symp>/remove')
 @login_required
 def pic_remove(pic, symp):
+    if (current_user.user_name == "demo"):
+        return redirect(request.referrer)
     if not(current_user.admin):
         return redirect('/')
+
     deleting = db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id==pic, Recognized.Recognized.symp_id==symp).all()
     for item in deleting:
         logging.info("Deleting Recognized - id=" + str(item.id))

@@ -5,6 +5,9 @@ include navBar
 .content
     h3=symptom.symptom_name
     .row
+        if(message)
+            div.col-12
+                div.alert.alert-danger(role="alert")=message
         each pic in pictures
             div.col-4
                 .card.card-block
