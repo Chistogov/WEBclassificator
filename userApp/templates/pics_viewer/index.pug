@@ -9,6 +9,7 @@ include navBar
             div.col-4
                 .card.card-block
                     .card-body
+                        a(href="/pics/"~pic.id~"/"~symptom.id~"/remove")="Удалить"
                         img.materialboxed(src='/data/'~pic.pic_name, width="100%")
 
 .content

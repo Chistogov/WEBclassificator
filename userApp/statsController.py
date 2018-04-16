@@ -29,9 +29,8 @@ def stats():
 @userApp.route('/stats/json')
 def stats_json():
     logging.info("Stats_Json")
-    pics_by_symp = db.session.query(Symptom.Symptom.symptom_name, Symptom.Symptom.ear, Symptom.Symptom.throat, Symptom.Symptom.nose, db.func.count(Recognized.Recognized.pic_id).label('total'), Symptom.Symptom.ismedical, Symptom.Symptom.id)\
-        .join(Recognized.Recognized) \
-        .group_by(Symptom.Symptom.symptom_name, Symptom.Symptom.nose, Symptom.Symptom.throat, Symptom.Symptom.ear, Symptom.Symptom.ismedical, Symptom.Symptom.id).order_by(db.desc('total'))
+    pics_by_symp = db.session.query(Symptom.Symptom.symptom_name, Picture.Picture.pic_name, Symptom.Symptom.ear, Symptom.Symptom.throat, Symptom.Symptom.nose, Symptom.Symptom.ismedical)\
+        .join(Recognized.Recognized).filter(Symptom.Symptom.id==Recognized.Recognized.symp_id, Picture.Picture.id==Recognized.Recognized.pic_id)
     return json.dumps(pics_by_symp.all(), cls=AlchemyEncoder.AlchemyEncoder, ensure_ascii=False).encode('utf8')
 
 
