@@ -24,6 +24,7 @@ from userApp import usersController
 from userApp import picsController
 from userApp import Pagination
 from userApp import AlchemyEncoder
+from userApp import rejectionController
 
 from userApp import updateController
 
@@ -35,3 +36,14 @@ userApp.config.from_object('config')
 userApp.secret_key = '2240641'
 logging.basicConfig(level = logging.INFO)
 db.create_all()
+
+# request.url:                 http://127.0.0.1:5000/alert/dingding/test?x=y
+# request.base_url:            http://127.0.0.1:5000/alert/dingding/test
+# request.url_charset:         utf-8
+# request.url_root:            http://127.0.0.1:5000/
+# str(request.url_rule):       /alert/dingding/test
+# request.host_url:            http://127.0.0.1:5000/
+# request.host:                127.0.0.1:5000
+# request.script_root:
+# request.path:                /alert/dingding/test
+# request.full_path:           /alert/dingding/test?x=y

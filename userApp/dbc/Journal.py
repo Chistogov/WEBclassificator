@@ -10,6 +10,10 @@ class Journal(db.Model):
     userTo = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     date = db.Column(db.Date)
 
+    fromUser = db.relationship("User", back_populates="journalFrom", foreign_keys=[userFrom])
+
+    toUser = db.relationship("User", back_populates="journalTo", foreign_keys=[userTo])
+
 
     # def __init__(self, id, pic_name, index_date, note, hash, first_rec, skipped):
     #     self.id = id

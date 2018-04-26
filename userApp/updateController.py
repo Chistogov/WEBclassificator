@@ -15,8 +15,8 @@ def updates():
     if ('message' in request.args):
         message = request.args['message']
     user = db.session.query(User.User.id).filter(User.User.user_name=="Updates").first()
-    messageHistory =db.session.query(Journal.Journal.user_From ,User.User.user_name, Journal.Journal.date, Journal.Journal.message)\
-        .filter(Journal.Journal.userTo==user.id, Journal.Journal.user_To).order_by(Journal.Journal.id.desc()).limit(10)
+    messageHistory =db.session.query(Journal.Journal.fromUser ,User.User.user_name, Journal.Journal.date, Journal.Journal.message)\
+        .filter(Journal.Journal.userTo==user.id, Journal.Journal.fromUser).order_by(Journal.Journal.id.desc()).limit(10)
     return render_template('updates.pug', admin=current_user.admin, messageHistory=messageHistory, message=message)
 
 @userApp.route('/updates', methods=['POST'])

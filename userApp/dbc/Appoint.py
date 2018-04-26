@@ -9,6 +9,9 @@ class Appoint(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     date = db.Column(db.Date)
 
+    user = db.relationship("User", back_populates="app")
+
+    picture = db.relationship("Picture", back_populates="app")
 
     # def __init__(self, id, pic_name, index_date, note, hash, first_rec, skipped):
     #     self.id = id

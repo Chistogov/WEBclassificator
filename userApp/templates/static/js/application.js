@@ -1,4 +1,5 @@
 
+$('.dropdown-toggle').dropdown();
 
 $('#modal').on('shown.bs.modal', function () {
   $('#input').trigger('focus')
@@ -23,7 +24,12 @@ $(document).ready(function() {
         }
         }, 1000);
     }
-    $('.collapse').collapse()
+    $('.collapse').collapse();
+    $('.dropdown-toggle').dropdown();
+    $('.datepicker').datepicker({
+    format: 'mm/dd/yyyy',
+    startDate: '-3d'
+    });
 });
 
 $('#timer').on('click', function(e)

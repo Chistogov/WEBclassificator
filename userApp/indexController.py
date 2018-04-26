@@ -31,8 +31,8 @@ def index():
     infoForm.in_wait = len(list(pics_in_wait))
     infoForm.all_rec = len(list(rec_pics))
     infoForm.time_today = time_today
-    messageHistory =db.session.query(Journal.Journal.user_From ,User.User.user_name, Journal.Journal.date, Journal.Journal.message)\
-        .filter(Journal.Journal.userTo==current_user.id, Journal.Journal.user_From).order_by(Journal.Journal.date.desc()).limit(10)
+    messageHistory =db.session.query(Journal.Journal.fromUser ,User.User.user_name, Journal.Journal.date, Journal.Journal.message)\
+        .filter(Journal.Journal.userTo==current_user.id, Journal.Journal.fromUser).order_by(Journal.Journal.date.desc()).limit(10)
     user_dates = db.session.query(db.func.DATE(Recognized.Recognized.date)).filter_by(user_id=current_user.id).group_by(Recognized.Recognized.date).order_by(Recognized.Recognized.date.desc())
     rechistorylist = list()
     user_dates = list(set(user_dates))

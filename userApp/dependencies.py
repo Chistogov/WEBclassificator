@@ -22,6 +22,11 @@ def send_css2(path):
     logging.info("Incude:" + path)
     return send_from_directory('templates/static/bootstrap/css', path)
 
+@userApp.route('/icons/<path:path>')
+def send_icons(path):
+    logging.info("Incude:" + path)
+    return send_from_directory('templates/octicons/css', path)
+
 @userApp.route('/js2/<path:path>')
 def send_js2(path):
     logging.info("Incude:" + path)

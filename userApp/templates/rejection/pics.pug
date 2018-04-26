@@ -1,0 +1,58 @@
+include application
+include navBar
+
+
+.content
+    .row
+        if(message)
+            div.col-12
+                div.alert.alert-danger(role="alert")=message
+        each pic in pictures
+            div.col-4
+                .card.card-block
+                    .card-body
+                        img.materialboxed(src='/data/'~pic.pic_name, width="100%")
+                        p=pic.recognized.first().user.user_name~' ('~pic.recognized.first().date~')'
+                        each item in pic.recognized
+                            p=item.symptom.symptom_name
+                                a(href="/pics/"~pic.id~"/"~item.symptom.id~"/remove")
+                                    i.material-icons.tiny close
+                        div.dropdown
+                            button.btn.btn-secondary.dropdown-toggle(type="button", id="dropdownMenu"~pic.id, data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Добавить признак"
+                            div.dropdown-menu(aria-labelledby="dropdownMenu"~pic.id)
+                                each symp in symptoms
+                                    if not(symp.ismedical)
+                                        a.dropdown-item(style="color:black;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
+                                    else
+                                        if (symp.ear)
+                                            a.dropdown-item(style="color:red;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
+                                        else
+                                            if (symp.nose)
+                                                a.dropdown-item(style="color:green;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
+                                            else
+                                                if (symp.throat)
+                                                    a.dropdown-item(style="color:blue;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
+
+
+.content
+    .row
+        div.col-s4.pagination-center
+            ul.pagination
+                li.page-item
+                    a.page-link(href=url_for('rejection_search', page=0, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) Первая
+                if(pagination.page == 0)
+                    li.page-item(hidden=true)
+                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) &laquo;
+                else
+                    li.page-item
+                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) &laquo;
+                li.page-item
+                    a.page-link(href='')=(pagination.page+1)
+                if(pagination.page == pagination.total_pages)
+                    li.page-item(hidden=true)
+                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) &raquo;
+                else
+                    li.page-item
+                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) &raquo;
+                li.page-item
+                    a.page-link(href=url_for('rejection_search', page=pagination.total_pages, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) Последняя

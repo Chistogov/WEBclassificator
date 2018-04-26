@@ -9,10 +9,10 @@ class Symptom(db.Model):
     nose = db.Column(db.Boolean, default=False)
     throat = db.Column(db.Boolean, default=False)
     ismedical = db.Column(db.Boolean, default=False)
-    rec = db.relationship('Recognized', backref='symptom',
+    recognized = db.relationship('Recognized', back_populates='symptom',
                             lazy='dynamic',
                             primaryjoin=id == Recognized.Recognized.symp_id)
-    rec = db.relationship('Cnnrec', backref='symptom',
+    cnnRecognized = db.relationship('Cnnrec', back_populates='cnnSymptom',
                           lazy='dynamic',
                           primaryjoin=id == Cnnrec.Cnnrec.symp_id)
 

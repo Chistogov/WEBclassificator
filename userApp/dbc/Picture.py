@@ -10,13 +10,14 @@ class Picture(db.Model):
     hash = db.Column(db.String(100), unique=True)
     first_rec = db.Column(db.Boolean)
     skipped = db.Column(db.Boolean)
-    rec = db.relationship('Recognized', backref='picture',
+
+    recognized = db.relationship('Recognized', back_populates='picture',
                             lazy='dynamic',
                          primaryjoin=id == Recognized.Recognized.pic_id)
-    app = db.relationship('Appoint', backref='picture',
+    app = db.relationship('Appoint', back_populates='picture',
                           lazy='dynamic',
                           primaryjoin=id == Appoint.Appoint.pic_id)
-    cnn = db.relationship('Cnnrec', backref='picture',
+    cnnRecognized = db.relationship('Cnnrec', back_populates='cnnPicture',
                           lazy='dynamic',
                           primaryjoin=id == Cnnrec.Cnnrec.pic_id)
 

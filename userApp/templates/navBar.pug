@@ -52,6 +52,13 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                     li.nav-item
                         a.nav-link(href="/appoint", target="_self") Назначить
             if(admin)
+                if(currentPage == "/rejection")
+                    li.nav-item
+                        a.nav-link.active(href="/rejection", target="_self") Отбраковка
+                else
+                    li.nav-item
+                        a.nav-link(href="/rejection", target="_self") Отбраковка
+            if(admin)
                 if(currentPage == "/users")
                     li.nav-item
                         a.nav-link.active(href="/users", target="_self") Пользователи

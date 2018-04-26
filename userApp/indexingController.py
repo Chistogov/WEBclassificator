@@ -22,7 +22,7 @@ def indexing():
     list_folder = list()
     for file in glob.glob("*.jpg"):
         list_folder.append(file)
-    infoForm.folder = len(list_folder)
+    infoForm.folder = len(glob.glob("*.jpg"))
     infoForm.ready = len(list_folder)-(db.session.query(db.func.count(Picture.Picture.id)).filter(Picture.Picture.pic_name.in_(list_folder)).first()[0])
     return render_template('indexing.pug', admin=current_user.admin, infoForm=infoForm, message=message)
 

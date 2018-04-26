@@ -10,7 +10,7 @@ toc: true
 
 Things to know when using the tooltip plugin:
 
-- Tooltips rely on the 3rd party library [Popper.js](https://popper.js.org/) for positioning. You must include [popper.min.js]({{ site.cdn.popper }}) before bootstrap.js or use `bootstrap.bundle.min.js` / `bootstrap.bundle.js` which contains Popper.js in order for tooltips to work!
+- Tooltips rely on the 3rd party library [Popper.js](https://popper.min.js.org/) for positioning. You must include [popper.min.js]({{ site.cdn.popper }}) before bootstrap.js or use `bootstrap.bundle.min.js` / `bootstrap.bundle.js` which contains Popper.js in order for tooltips to work!
 - If you're building our JavaScript from source, it [requires `util.js`]({{ site.baseurl }}/docs/{{ site.docs_version }}/getting-started/javascript/#util).
 - Tooltips are opt-in for performance reasons, so **you must initialize them yourself**.
 - Tooltips with zero-length titles are never displayed.
@@ -220,20 +220,20 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
       <td>offset</td>
       <td>number | string</td>
       <td>0</td>
-      <td>Offset of the tooltip relative to its target. For more information refer to Popper.js's <a href="https://popper.js.org/popper-documentation.html#modifiers..offset.offset">offset docs</a>.</td>
+      <td>Offset of the tooltip relative to its target. For more information refer to Popper.js's <a href="https://popper.min.js.org/popper-documentation.html#modifiers..offset.offset">offset docs</a>.</td>
     </tr>
     <tr>
       <td>fallbackPlacement</td>
       <td>string | array</td>
       <td>'flip'</td>
       <td>Allow to specify which position Popper will use on fallback. For more information refer to
-      Popper.js's <a href="https://popper.js.org/popper-documentation.html#modifiers..flip.behavior">behavior docs</a></td>
+      Popper.js's <a href="https://popper.min.js.org/popper-documentation.html#modifiers..flip.behavior">behavior docs</a></td>
     </tr>
     <tr>
       <td>boundary</td>
       <td>string | element</td>
       <td>'scrollParent'</td>
-      <td>Overflow constraint boundary of the tooltip. Accepts the values of <code>'viewport'</code>, <code>'window'</code>, <code>'scrollParent'</code>, or an HTMLElement reference (JavaScript only). For more information refer to Popper.js's <a href="https://popper.js.org/popper-documentation.html#modifiers..preventOverflow.boundariesElement">preventOverflow docs</a>.</td>
+      <td>Overflow constraint boundary of the tooltip. Accepts the values of <code>'viewport'</code>, <code>'window'</code>, <code>'scrollParent'</code>, or an HTMLElement reference (JavaScript only). For more information refer to Popper.js's <a href="https://popper.min.js.org/popper-documentation.html#modifiers..preventOverflow.boundariesElement">preventOverflow docs</a>.</td>
     </tr>
   </tbody>
 </table>

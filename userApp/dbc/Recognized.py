@@ -11,7 +11,11 @@ class Recognized(db.Model):
     timer = db.Column(db.Integer, default=0)
     date = db.Column(db.Date)
 
+    symptom = db.relationship("Symptom", back_populates="recognized")
 
+    user = db.relationship("User", back_populates="recognized")
+
+    picture = db.relationship("Picture", back_populates="recognized")
     # def __init__(self, id, pic_name, index_date, note, hash, first_rec, skipped):
     #     self.id = id
     #     self.pic_name = pic_name

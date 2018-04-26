@@ -25,7 +25,7 @@ Copy-paste the stylesheet `<link>` into your `<head>` before all other styleshee
 
 ### JS
 
-Many of our components require the use of JavaScript to function. Specifically, they require [jQuery](https://jquery.com), [Popper.js](https://popper.js.org/), and our own JavaScript plugins. Place the following `<script>`s near the end of your pages, right before the closing `</body>` tag, to enable them. jQuery must come first, then Popper.js, and then our JavaScript plugins.
+Many of our components require the use of JavaScript to function. Specifically, they require [jQuery](https://jquery.com), [Popper.js](https://popper.min.js.org/), and our own JavaScript plugins. Place the following `<script>`s near the end of your pages, right before the closing `</body>` tag, to enable them. jQuery must come first, then Popper.js, and then our JavaScript plugins.
 
 We use [jQuery's slim build](https://blog.jquery.com/2016/06/09/jquery-3-0-final-released/), but the full version is also supported.
 
@@ -44,10 +44,10 @@ Curious which components explicitly require jQuery, our JS, and Popper.js? Click
 - Buttons for toggling states and checkbox/radio functionality
 - Carousel for all slide behaviors, controls, and indicators
 - Collapse for toggling visibility of content
-- Dropdowns for displaying and positioning (also requires [Popper.js](https://popper.js.org/))
+- Dropdowns for displaying and positioning (also requires [Popper.js](https://popper.min.js.org/))
 - Modals for displaying, positioning, and scroll behavior
 - Navbar for extending our Collapse plugin to implement responsive behavior
-- Tooltips and popovers for displaying and positioning (also requires [Popper.js](https://popper.js.org/))
+- Tooltips and popovers for displaying and positioning (also requires [Popper.js](https://popper.min.js.org/))
 - Scrollspy for scroll behavior and navigation updates
 {% endmarkdown %}
 </details>
