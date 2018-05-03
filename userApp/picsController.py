@@ -2,7 +2,7 @@
 from flask import render_template, redirect, request, url_for
 from userApp import Pagination
 from userApp import *
-from userApp.dbc import User, db, Recognized, Symptom, Picture
+from userApp.dbc import User, db, Recognized, Symptom, Picture, Mistakes
 from flask_login import login_required, current_user
 import datetime
 import logging
@@ -49,7 +49,14 @@ def pic_remove(pic, symp):
         return redirect('/')
 
     deleting = db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id==pic, Recognized.Recognized.symp_id==symp).all()
+
     for item in deleting:
+        new_mistake = Mistakes.Mistakes()
+        new_mistake.symp_id = item.symp_id
+        new_mistake.user_id = item.user_id
+        new_mistake.pic_id = item.pic_id
+        new_mistake.date = item.date
+        db.session.add(new_mistake)
         logging.info("Deleting Recognized - id=" + str(item.id))
     db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id==pic, Recognized.Recognized.symp_id==symp).delete()
     db.session.commit()

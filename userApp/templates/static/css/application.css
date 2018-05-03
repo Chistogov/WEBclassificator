@@ -38,3 +38,22 @@ a:hover {
     width: 50px;
     height: 50px;
 }
+
+.zoom {
+    /*padding: 50px;*/
+    /*background-color: green;*/
+    transition: transform .2s;
+    /*width: 200px;*/
+    /*height: 200px;*/
+    margin: 0 auto;
+    z-index: 1 !important;
+}
+
+.zoom:active {
+    z-index: 2 !important;
+    -ms-transform: scale(2); /* IE 9 */
+    -webkit-transform: scale(2); /* Safari 3-8 */
+    transform: scale(2);
+    overflow: visible;
+}
+

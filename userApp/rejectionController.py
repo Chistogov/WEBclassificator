@@ -28,50 +28,55 @@ def rejection_post():
     if(current_user.user_name == "demo"):
         return redirect(url_for('rejection', message="Demo user, read only"))
     symptoms = list()
-    user = None
-    date = None
     form = request.form
     for item in form:
         if (item.isdigit()):
             symptoms.append(item)
+
+    pics = db.session.query(Picture.Picture).join(Recognized.Recognized)
+    if (len(symptoms) != 0):
+        print ('symptoms')
+        for item in symptoms:
+            rec = list(db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.symp_id == item))
+            pics = pics.filter(Picture.Picture.id.in_(rec))
+            print str(len(list(pics)))
     if (form.has_key('forUser')):
-        user = form['forUser']
-    if (form.has_key('dateRec')):
-        date = form['dateRec']
+        print ('user')
+        pics = pics.filter(Recognized.Recognized.user_id == form['forUser'])
+    if (form['dateRec']):
+        print (form['dateRec'])
+        date = datetime.datetime.strptime(form['dateRec'], "%Y-%m-%d")
+        pics = pics.filter(db.func.DATE(Recognized.Recognized.date) == date)
+    picslist = list()
+    for item in pics:
+        picslist.append(item.id)
+    symp_type = ""
+    if (form['type']):
+        symp_type = form['type']
+    return redirect(url_for('rejection_search', page=0, pics=picslist, symp_type=symp_type))
 
-    return redirect(url_for('rejection_search', page=0, user=user, date=date, symptoms=symptoms))
 
 
 
-
-PER_PAGE = 21
+PER_PAGE = 12
 
 @userApp.route('/rejection/search/', methods=['GET'])
 @login_required
 def rejection_search():
     page=int(request.args.get('page'))
-    pics = db.session.query(Picture.Picture).join(Recognized.Recognized)
-    print str(len(list(pics)))
-    if (len(request.args.getlist('symptoms'))!=0):
-        print ('symptoms')
-        pics = pics.filter(Recognized.Recognized.symp_id.in_(request.args.getlist('symptoms')))
-    if(request.args.get('user')):
-        print ('user')
-        pics = pics.filter(Recognized.Recognized.user_id==request.args.get('user'))
-    if (request.args.get('date')):
-        print ('date')
-        date = datetime.datetime.strptime(request.args.get('date'), "%Y-%m-%d")
-        pics = pics.filter(db.func.DATE(Recognized.Recognized.date) == date)
-    # for item in pics:
-    #     print item.recognized.first().date
-    #     print item.recognized.first().user.user_name
-    #     for i in item.recognized:
-    #         print i.symptom.symptom_name
-    #     print "--------"
+    picslist = request.args.getlist('pics')
+    symp_type = request.args.get('symp_type')
+    pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(picslist))
     count = len(list(pics))
     pics = get_pics_for_page(page, pics)
     pagination = Pagination.Pagination(page, PER_PAGE, count)
     symptoms = db.session.query(Symptom.Symptom)
+    if(symp_type == "nose"):
+        symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.nose == True)
+    elif (symp_type == "throat"):
+        symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.throat == True)
+    elif (symp_type == "ear"):
+        symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.ear == True)
     return render_template('/rejection/pics.pug', admin=current_user.admin, pictures=pics, pagination=pagination, request=request, symptoms=symptoms)
 
 def get_pics_for_page(page, pics):

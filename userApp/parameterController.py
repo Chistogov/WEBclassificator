@@ -8,6 +8,8 @@ import logging
 @userApp.route('/settings', methods=['GET'])
 @login_required
 def parameter():
+    if not(current_user.admin):
+        return redirect('/')
     logging.info('parameter')
     message = ""
     if ('message' in request.args):
@@ -18,6 +20,8 @@ def parameter():
 @userApp.route('/settings', methods=['POST'])
 @login_required
 def parameter_post():
+    if not(current_user.admin):
+        return redirect('/')
     if(current_user.user_name == "demo"):
         return redirect(url_for('parameter', message="Demo user, read only"))
     form = request.form

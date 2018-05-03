@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, redirect, url_for
 from userApp import *
-from userApp.dbc import User, db, Recognized
+from userApp.dbc import User, db, Recognized, Mistakes
 from flask_login import login_required, current_user
 import logging
 
@@ -75,7 +75,12 @@ def user_page(path):
             else:
                 tmp.time += timer
         tmp.time = round(tmp.time / 60 / 60, 2)
+        tmp.mistakes = len(list(db.session.query(db.func.count(Mistakes.Mistakes.pic_id)).filter(
+            Mistakes.Mistakes.user_id == userId,
+            db.func.DATE(Mistakes.Mistakes.date) == item[0]).group_by(Mistakes.Mistakes.pic_id)))
+        tmp.mpercentage = round(((100/(tmp.count_rec+tmp.mistakes))*tmp.mistakes), 2)
         rechistorylist.append(tmp)
+
     return render_template('/users/index.pug', admin=current_user.admin, recHistory=rechistorylist, user=user)
 
 
@@ -83,6 +88,8 @@ class recHistory():
     date = ""
     count_rec = 0
     time = 0.0
+    mistakes = 0
+    mpercentage = 0.00
 
 
 

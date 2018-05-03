@@ -17,12 +17,13 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
             else
                 li.nav-item
                     a.nav-link(href="/rec", target="_self") Разметка
-            if(currentPage == "/settings")
-                li.nav-item
-                    a.nav-link.active(href="/settings", target="_self") Параметры
-            else
-                li.nav-item
-                    a.nav-link(href="/settings", target="_self") Параметры
+            if(admin)
+                if(currentPage == "/settings")
+                    li.nav-item
+                        a.nav-link.active(href="/settings", target="_self") Параметры
+                else
+                    li.nav-item
+                        a.nav-link(href="/settings", target="_self") Параметры
             if(admin)
                 if(currentPage == "/stats")
                     li.nav-item

@@ -15,6 +15,7 @@ include navBar
                         div#earTab.tab-pane.fade.show.active(role="tabpanel", aria-labelledby="ear-tab")
                             .card-body
                                 form#earform(method="post" action="#")
+                                    input(type=text, name='type', value = "ear", hidden=true)
                                     each symp in symptoms
                                         if(symp.symptom_name and symp.ear and symp.ismedical)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
@@ -40,6 +41,7 @@ include navBar
                         div#throatTab.tab-pane.fade(role="tabpanel", aria-labelledby="throat-tab")
                             .card-body
                                 form#throatform(method="post" action="#")
+                                    input(type=text, name='type', value = "throat", hidden=true)
                                     each symp in symptoms
                                         if(symp.symptom_name and symp.throat and symp.ismedical)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
@@ -66,6 +68,7 @@ include navBar
                         div#noseTab.tab-pane.fade(role="tabpanel", aria-labelledby="nose-tab")
                             .card-body
                                 form#noseform(method="post" action="#")
+                                    input(type=text, name='type', value = "nose", hidden=true)
                                     each symp in symptoms
                                         if(symp.symptom_name and symp.nose and symp.ismedical)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2

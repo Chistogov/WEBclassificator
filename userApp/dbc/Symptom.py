@@ -1,4 +1,4 @@
-from userApp.dbc import db, Recognized, Cnnrec
+from userApp.dbc import db, Recognized, Cnnrec, Mistakes
 
 
 class Symptom(db.Model):
@@ -9,12 +9,17 @@ class Symptom(db.Model):
     nose = db.Column(db.Boolean, default=False)
     throat = db.Column(db.Boolean, default=False)
     ismedical = db.Column(db.Boolean, default=False)
+
     recognized = db.relationship('Recognized', back_populates='symptom',
                             lazy='dynamic',
                             primaryjoin=id == Recognized.Recognized.symp_id)
     cnnRecognized = db.relationship('Cnnrec', back_populates='cnnSymptom',
                           lazy='dynamic',
                           primaryjoin=id == Cnnrec.Cnnrec.symp_id)
+
+    mistakes = db.relationship('Mistakes', back_populates='symptom',
+                               lazy='dynamic',
+                               primaryjoin=id == Mistakes.Mistakes.symp_id)
 
     # def __init__(self, id, symptom_name):
     #     self.id = id

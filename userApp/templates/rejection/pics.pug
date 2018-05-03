@@ -8,15 +8,15 @@ include navBar
             div.col-12
                 div.alert.alert-danger(role="alert")=message
         each pic in pictures
-            div.col-4
+            div.col-3
                 .card.card-block
+                    img.card-img-top.zoom(src='/data/'~pic.pic_name, width="100%")
                     .card-body
-                        img.materialboxed(src='/data/'~pic.pic_name, width="100%")
-                        p=pic.recognized.first().user.user_name~' ('~pic.recognized.first().date~')'
-                        each item in pic.recognized
-                            p=item.symptom.symptom_name
-                                a(href="/pics/"~pic.id~"/"~item.symptom.id~"/remove")
-                                    i.material-icons.tiny close
+                        if (pic.recognized.first())
+                            each item in pic.recognized
+                                p(data-toggle="tooltip", data-placement="top", title=item.user.user_name)=item.symptom.symptom_name
+                                    a(href="/pics/"~pic.id~"/"~item.symptom.id~"/remove")
+                                        i.material-icons.tiny close
                         div.dropdown
                             button.btn.btn-secondary.dropdown-toggle(type="button", id="dropdownMenu"~pic.id, data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Добавить признак"
                             div.dropdown-menu(aria-labelledby="dropdownMenu"~pic.id)
@@ -32,27 +32,28 @@ include navBar
                                             else
                                                 if (symp.throat)
                                                     a.dropdown-item(style="color:blue;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
-
+                        hr
+                        button.btn.btn-success(href = "")="Подтвердить"
 
 .content
     .row
         div.col-s4.pagination-center
             ul.pagination
                 li.page-item
-                    a.page-link(href=url_for('rejection_search', page=0, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) Первая
+                    a.page-link(href=url_for('rejection_search', page=0, pics=request.args.getlist('pics'))) Первая
                 if(pagination.page == 0)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) &laquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, pics=request.args.getlist('pics'))) &laquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) &laquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, pics=request.args.getlist('pics'))) &laquo;
                 li.page-item
                     a.page-link(href='')=(pagination.page+1)
                 if(pagination.page == pagination.total_pages)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) &raquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, pics=request.args.getlist('pics'))) &raquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) &raquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, pics=request.args.getlist('pics'))) &raquo;
                 li.page-item
-                    a.page-link(href=url_for('rejection_search', page=pagination.total_pages, user=request.args.get('user'), date=request.args.get('date'), symptoms=request.args.get('symptoms'))) Последняя
+                    a.page-link(href=url_for('rejection_search', page=pagination.total_pages, pics=request.args.getlist('pics'))) Последняя

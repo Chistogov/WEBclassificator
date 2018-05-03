@@ -1,5 +1,6 @@
 
 $('.dropdown-toggle').dropdown();
+$('[data-toggle="tooltip"]').tooltip()
 
 $('#modal').on('shown.bs.modal', function () {
   $('#input').trigger('focus')
@@ -10,6 +11,7 @@ $('#tabForm a').on('click', function (e) {
   e.preventDefault()
   $(this).tab('show')
 })
+
 
 $(document).ready(function() {
     console.log('ready');
@@ -26,6 +28,7 @@ $(document).ready(function() {
     }
     $('.collapse').collapse();
     $('.dropdown-toggle').dropdown();
+    $('[data-toggle="tooltip"]').tooltip()
     $('.datepicker').datepicker({
     format: 'mm/dd/yyyy',
     startDate: '-3d'
