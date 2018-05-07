@@ -1,4 +1,4 @@
-from userApp.dbc import db
+from userApp.dbc import db, Confirmed
 
 
 
@@ -16,6 +16,10 @@ class Recognized(db.Model):
     user = db.relationship("User", back_populates="recognized")
 
     picture = db.relationship("Picture", back_populates="recognized")
+
+    confirmed = db.relationship('Confirmed', back_populates='recognized',
+                                lazy='dynamic',
+                                primaryjoin=id == Confirmed.Confirmed.rec_id)
     # def __init__(self, id, pic_name, index_date, note, hash, first_rec, skipped):
     #     self.id = id
     #     self.pic_name = pic_name

@@ -28,6 +28,10 @@ include navBar
                                                 input.custom-control-input(type="checkbox", id=symp.id~'ear', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
                                     hr
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        input.custom-control-input(type="checkbox", id='oEar', name="opticalExclude")
+                                        label.custom-control-label(for='oEar')="Исключить все оптически неверные"
+                                    hr
                                     div.form-group
                                         select.form-control(name="forUser")
                                             option(value="", disabled, selected)="Пользователь"
@@ -53,7 +57,10 @@ include navBar
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'throat', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
-
+                                    hr
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        input.custom-control-input(type="checkbox", id='oThroat', name="opticalExclude")
+                                        label.custom-control-label(for='oThroat')="Исключить все оптически неверные"
                                     hr
                                     div.form-group
                                         select.form-control(name="forUser")
@@ -80,6 +87,10 @@ include navBar
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'nose', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
+                                    hr
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                        input.custom-control-input(type="checkbox", id='oNose', name="opticalExclude")
+                                        label.custom-control-label(for='oNose')="Исключить все оптически неверные"
                                     hr
                                     div.form-group
                                         select.form-control(name="forUser")

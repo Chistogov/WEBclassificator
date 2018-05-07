@@ -1,17 +1,14 @@
-
-$('.dropdown-toggle').dropdown();
-$('[data-toggle="tooltip"]').tooltip()
-
 $('#modal').on('shown.bs.modal', function () {
   $('#input').trigger('focus')
-})
+});
 
 $('#tabForm a').on('click', function (e) {
     console.log('ready');
-  e.preventDefault()
+  e.preventDefault();
   $(this).tab('show')
-})
+});
 
+$('.dropdown-toggle').dropdown();
 
 $(document).ready(function() {
     console.log('ready');

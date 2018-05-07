@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from userApp.dbc import db, Recognized, Appoint, Journal, Mistakes
+from userApp.dbc import db, Recognized, Appoint, Journal, Mistakes, Confirmed
 
 
 class User(db.Model, UserMixin):
@@ -25,6 +25,10 @@ class User(db.Model, UserMixin):
     mistakes = db.relationship('Mistakes', back_populates='user',
                             lazy='dynamic',
                          primaryjoin=id == Mistakes.Mistakes.user_id)
+
+    confirmed = db.relationship('Confirmed', back_populates='user',
+                            lazy='dynamic',
+                         primaryjoin=id == Confirmed.Confirmed.user_id)
 
     def is_active(self):
         return True

@@ -33,7 +33,7 @@ include navBar
                                                 if (symp.throat)
                                                     a.dropdown-item(style="color:blue;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
                         hr
-                        button.btn.btn-success(href = "")="Подтвердить"
+                        a.btn.btn-success(href = "/rejection/submit/"~pic.id)="Подтвердить"
 
 .content
     .row

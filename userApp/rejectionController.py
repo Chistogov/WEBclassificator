@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, redirect, url_for
 from userApp import *
-from userApp.dbc import User, db, Picture, Symptom, Recognized, Appoint
-from userApp.Service import appointService, journalService
+from userApp.dbc import User, db, Picture, Symptom, Recognized, Confirmed
 from flask_login import login_required, current_user
 import logging, datetime
 
@@ -35,18 +34,25 @@ def rejection_post():
 
     pics = db.session.query(Picture.Picture).join(Recognized.Recognized)
     if (len(symptoms) != 0):
-        print ('symptoms')
         for item in symptoms:
             rec = list(db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.symp_id == item))
             pics = pics.filter(Picture.Picture.id.in_(rec))
             print str(len(list(pics)))
+    if (form.has_key('opticalExclude')):
+        rec = list(db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.symp_id.in_([23,37,49,53])))
+        pics = pics.filter(Picture.Picture.id.notin_(rec))
     if (form.has_key('forUser')):
-        print ('user')
         pics = pics.filter(Recognized.Recognized.user_id == form['forUser'])
     if (form['dateRec']):
-        print (form['dateRec'])
         date = datetime.datetime.strptime(form['dateRec'], "%Y-%m-%d")
         pics = pics.filter(db.func.DATE(Recognized.Recognized.date) == date)
+
+    conf = db.session.query(Confirmed.Confirmed).filter(Confirmed.Confirmed.user_id==current_user.id)
+    conflist = list()
+    for item in conf:
+        conflist.append(item.recognized.pic_id)
+    pics = pics.filter(Picture.Picture.id.notin_(conflist))
+
     picslist = list()
     for item in pics:
         picslist.append(item.id)
@@ -56,7 +62,29 @@ def rejection_post():
     return redirect(url_for('rejection_search', page=0, pics=picslist, symp_type=symp_type))
 
 
+@userApp.route('/rejection/submit/<int:pic>')
+@login_required
+def pic_submit(pic):
+    if (current_user.user_name == "demo"):
+        return redirect(request.referrer)
+    if not(current_user.admin):
+        return redirect('/')
+    recs = db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id == pic)
 
+    conf = db.session.query(Confirmed.Confirmed).filter(Confirmed.Confirmed.user_id == current_user.id)
+    for item in conf:
+        if (item.recognized.pic_id==pic):
+            print ("Double Click Error")
+            return redirect(request.referrer)
+
+    for rec in recs:
+        confirmed = Confirmed.Confirmed()
+        confirmed.user_id = current_user.id
+        confirmed.rec_id = rec.id
+        confirmed.date = datetime.datetime.now()
+        db.session.add(confirmed)
+        db.session.commit()
+    return redirect(request.referrer)
 
 PER_PAGE = 12
 
