@@ -59,7 +59,7 @@ def rejection_post():
     symp_type = ""
     if (form['type']):
         symp_type = form['type']
-    return redirect(url_for('rejection_search', page=0, pics=picslist, symp_type=symp_type))
+    return redirect(url_for('rejection_search', page=0, p=picslist, symp_type=symp_type))
 
 
 @userApp.route('/rejection/submit/<int:pic>')
@@ -82,6 +82,7 @@ def pic_submit(pic):
         confirmed.user_id = current_user.id
         confirmed.rec_id = rec.id
         confirmed.date = datetime.datetime.now()
+        confirmed.pic_id = rec.pic_id
         db.session.add(confirmed)
         db.session.commit()
     return redirect(request.referrer)
@@ -92,9 +93,10 @@ PER_PAGE = 12
 @login_required
 def rejection_search():
     page=int(request.args.get('page'))
-    picslist = request.args.getlist('pics')
+    picslist = request.args.getlist('p')
     symp_type = request.args.get('symp_type')
     pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(picslist))
+
     count = len(list(pics))
     pics = get_pics_for_page(page, pics)
     pagination = Pagination.Pagination(page, PER_PAGE, count)
@@ -105,7 +107,9 @@ def rejection_search():
         symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.throat == True)
     elif (symp_type == "ear"):
         symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.ear == True)
-    return render_template('/rejection/pics.pug', admin=current_user.admin, pictures=pics, pagination=pagination, request=request, symptoms=symptoms)
+
+    confirmed = db.session.query(Confirmed.Confirmed.pic_id).filter(Confirmed.Confirmed.user_id == current_user.id).group_by(Confirmed.Confirmed.pic_id)
+    return render_template('/rejection/pics.pug', confirmed = confirmed,admin=current_user.admin, pictures=pics, pagination=pagination, request=request, symptoms=symptoms)
 
 def get_pics_for_page(page, pics):
     pics = pics.group_by(Picture.Picture.id)

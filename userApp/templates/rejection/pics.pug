@@ -34,6 +34,10 @@ include navBar
                                                     a.dropdown-item(style="color:blue;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
                         hr
                         a.btn.btn-success(href = "/rejection/submit/"~pic.id)="Подтвердить"
+                        each conf in confirmed
+                            if(conf.pic_id == pic.id)
+                                i.material-icons.tiny check
+
 
 .content
     .row

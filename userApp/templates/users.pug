@@ -27,4 +27,4 @@ include navBar
                         each user in users
                             a(href='users/'~user.id)
                                 li.list-group-item.list-group-item-action
-                                    span=user.user_name
+                                    span=user.user_name~" (Назначено: "~user.app~")"

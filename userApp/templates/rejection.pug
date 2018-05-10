@@ -17,7 +17,13 @@ include navBar
                                 form#earform(method="post" action="#")
                                     input(type=text, name='type', value = "ear", hidden=true)
                                     each symp in symptoms
-                                        if(symp.symptom_name and symp.ear and symp.ismedical)
+                                        if(symp.symptom_name and symp.ear and symp.ismedical and symp.diagnos)
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                input.custom-control-input(type="checkbox", id=symp.id~'ear', name=symp.id)
+                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.ear and symp.ismedical and not(symp.diagnos))
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'ear', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
@@ -47,7 +53,13 @@ include navBar
                                 form#throatform(method="post" action="#")
                                     input(type=text, name='type', value = "throat", hidden=true)
                                     each symp in symptoms
-                                        if(symp.symptom_name and symp.throat and symp.ismedical)
+                                        if(symp.symptom_name and symp.throat and symp.ismedical and symp.diagnos)
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                input.custom-control-input(type="checkbox", id=symp.id~'throat', name=symp.id)
+                                                label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.throat and symp.ismedical and not(symp.diagnos))
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'throat', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
@@ -77,7 +89,13 @@ include navBar
                                 form#noseform(method="post" action="#")
                                     input(type=text, name='type', value = "nose", hidden=true)
                                     each symp in symptoms
-                                        if(symp.symptom_name and symp.nose and symp.ismedical)
+                                        if(symp.symptom_name and symp.nose and symp.ismedical and symp.diagnos)
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                input.custom-control-input(type="checkbox", id=symp.id~'nose', name=symp.id)
+                                                label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.nose and symp.ismedical and not(symp.diagnos))
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'nose', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'nose')=symp.symptom_name

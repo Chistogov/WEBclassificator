@@ -9,6 +9,7 @@ class Symptom(db.Model):
     nose = db.Column(db.Boolean, default=False)
     throat = db.Column(db.Boolean, default=False)
     ismedical = db.Column(db.Boolean, default=False)
+    diagnos = db.Column(db.Boolean, default=False)
 
     recognized = db.relationship('Recognized', back_populates='symptom',
                             lazy='dynamic',

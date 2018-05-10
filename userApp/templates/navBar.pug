@@ -7,10 +7,10 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
         ul.navbar-nav.mr-auto
             if(currentPage == "/")
                 li.nav-item
-                    a.nav-link.active(href="/", target="_self") Информация
+                    a.nav-link.active(href="/", target="_self") Главная
             else
                 li.nav-item
-                    a.nav-link(href="/", target="_self") Информация
+                    a.nav-link(href="/", target="_self") Главная
             if(currentPage=="/rec")
                 li.nav-item
                     a.nav-link.active(href="/rec", target="_self") Разметка
@@ -55,10 +55,10 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
             if(admin)
                 if(currentPage == "/rejection")
                     li.nav-item
-                        a.nav-link.active(href="/rejection", target="_self") Отбраковка
+                        a.nav-link.active(href="/rejection", target="_self") Подтверждение
                 else
                     li.nav-item
-                        a.nav-link(href="/rejection", target="_self") Отбраковка
+                        a.nav-link(href="/rejection", target="_self") Подтверждение
             if(admin)
                 if(currentPage == "/users")
                     li.nav-item

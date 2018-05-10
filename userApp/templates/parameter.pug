@@ -33,22 +33,26 @@ include navBar
                         if(message)
                             div.alert.alert-danger(role="alert")=message
                         .row
-                            div.col-md-3
+                            div.col-md-4
                                 div.custom-control.custom-checkbox.my-1.mr-sm-2
                                     input.custom-control-input(type="checkbox", id='ear', name="ear")
                                     label.custom-control-label(for='ear')="Ухо"
-                            div.col-md-3
+                            div.col-md-4
                                 div.custom-control.custom-checkbox.my-1.mr-sm-2
                                     input.custom-control-input(type="checkbox", id='throat', name="throat")
                                     label.custom-control-label(for='throat')="Горло"
-                            div.col-md-3
+                            div.col-md-4
                                 div.custom-control.custom-checkbox.my-1.mr-sm-2
                                     input.custom-control-input(type="checkbox", id='nose', name="nose")
                                     label.custom-control-label(for='nose')="Нос"
-                            div.col-md-3
+                            div.col-md-4
                                 div.custom-control.custom-checkbox.my-1.mr-sm-2
                                     input.custom-control-input(type="checkbox", id='ismedical', name="ismedical")
                                     label.custom-control-label(for='ismedical')="Медицинский признак"
+                            div.col-md-4
+                                div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                    input.custom-control-input(type="checkbox", id='primary', name="primary")
+                                    label.custom-control-label(for='primary')="Диагноз"
                             div.col-md-12
                                 div.form-group
                                     input#diagnos.form-control(placeholder="Признак", name="diagnos", type="text", required, aria-required="true")

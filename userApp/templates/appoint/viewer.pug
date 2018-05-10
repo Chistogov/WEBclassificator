@@ -1,0 +1,40 @@
+include application
+include navBar
+
+
+.content
+    .row
+        if(message)
+            div.col-12
+                div.alert.alert-danger(role="alert")=message
+        each pic in pictures
+            div.col-4
+                .card.card-block
+                    .card-title
+                        a(href="/pics/"~pic.id~"/"~user.id~"/appclear")
+                            i.material-icons.tiny close
+                    .card-body
+                        img.materialboxed(src='/data/'~pic.pic_name, width="100%")
+
+.content
+    .row
+        div.col-s4.pagination-center
+            ul.pagination
+                li.page-item
+                    a.page-link(href='/appointed/'~user.id~'/0') Первая
+                if(pagination.page == 0)
+                    li.page-item(hidden=true)
+                        a.page-link(href='/appointed/'~user.id~'/'~(pagination.page - 1)) &laquo;
+                else
+                    li.page-item
+                        a.page-link(href='/appointed/'~user.id~'/'~(pagination.page - 1)) &laquo;
+                li.page-item
+                    a.page-link(href='')=(pagination.page+1)
+                if(pagination.page == pagination.total_pages)
+                    li.page-item(hidden=true)
+                        a.page-link(href='/appointed/'~user.id~'/'~(pagination.page + 1)) &raquo;
+                else
+                    li.page-item
+                        a.page-link(href='/appointed/'~user.id~'/'~(pagination.page + 1)) &raquo;
+                li.page-item
+                    a.page-link(href='/appointed/'~user.id~'/'~(pagination.total_pages)) Последняя

@@ -8,7 +8,7 @@ include navBar
         div.col-12
             .card.card-block
                 .card-body
-                    h5.card-title=user.user_name
+                    h5.card-title=user.user_name~" (Назначено: "~app_count~")"
                     table.table.table-striped
                         tbody
                             each item in recHistory
@@ -18,3 +18,4 @@ include navBar
                                     td="Ошибки: "~item.mistakes
                                     td="Процент ошибок: "~item.mpercentage~"%"
                                     td="Время работы: "~item.time~" (ч)"
+                    a.btn.btn-success(href = '/appointed/'~user.id~'/0')="Просмотр/Редактирование назначенных снимков"

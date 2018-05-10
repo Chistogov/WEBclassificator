@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, redirect, url_for
 from userApp import *
+from userApp import Pagination
 from userApp.dbc import User, db, Picture, Symptom, Recognized, Appoint
 from userApp.Service import appointService, journalService
 from flask_login import login_required, current_user
@@ -68,6 +69,50 @@ def appoint_post():
     journalService.newMessaage(forUser, "Назначены новые снимки (" + str(len(list(pics))) + " шт.)")
     return redirect('/appoint')
 
+@userApp.route('/appointed/', defaults={'page': 0})
+@userApp.route('/appointed/<path:path>/<int:page>')
+@login_required
+def app_view(path, page):
+    app_user = path
+    pics = db.session.query(Picture.Picture.pic_name, Picture.Picture.id, User.User.user_name)\
+        .join(Appoint.Appoint, User.User) \
+        .filter(Appoint.Appoint.user_id == app_user, Picture.Picture.id == Appoint.Appoint.pic_id) \
+        .group_by(Picture.Picture.pic_name,  Picture.Picture.id,  User.User.user_name)
+    count = len(list(pics))
+    pics = get_pics_for_page(page, app_user)
+    message = ""
+    pagination = Pagination.Pagination(page, PER_PAGE, count)
+    user = User.User.query.get(app_user)
+    return render_template('/appoint/viewer.pug', admin=current_user.admin, pictures=pics, pagination=pagination, user=user)
+
+PER_PAGE = 21
+
+def get_pics_for_page(page, app_user):
+    pics = db.session.query(Picture.Picture.pic_name, Picture.Picture.id, User.User.user_name)\
+        .join(Appoint.Appoint, User.User) \
+        .filter(Appoint.Appoint.user_id == app_user, Picture.Picture.id == Appoint.Appoint.pic_id) \
+        .group_by(Picture.Picture.pic_name,  Picture.Picture.id,  User.User.user_name)
+    print str(len(list(pics)))
+    if PER_PAGE:
+        pics = pics.limit(PER_PAGE)
+    print str(len(list(pics)))
+    if page:
+        pics = pics.offset(page * PER_PAGE)
+    print str(len(list(pics)))
+    return pics
+
+@userApp.route('/pics/<int:pic>/<int:user>/appclear')
+@login_required
+def appclear_pic(pic, user):
+    if (current_user.user_name == "demo"):
+        return redirect(request.referrer)
+    if not(current_user.admin):
+        return redirect('/')
+
+    db.session.query(Appoint.Appoint).filter(Appoint.Appoint.pic_id==pic, Appoint.Appoint.user_id==user).delete()
+    db.session.commit()
+
+    return redirect(request.referrer)
 
 class infoForm():
     rec_pics = 0

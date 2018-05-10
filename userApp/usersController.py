@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, redirect, url_for
 from userApp import *
-from userApp.dbc import User, db, Recognized, Mistakes
+from userApp.dbc import User, db, Recognized, Mistakes, Appoint
 from flask_login import login_required, current_user
 import logging
 
@@ -18,8 +18,15 @@ def users():
         message = request.args['message']
     logging.info("Users")
     #AllUsers
+    userList = list()
     users = User.User.query.all()
-    return render_template('users.pug', admin=current_user.admin, message=message, users=users)
+    for user in users:
+        tmp = userForm()
+        tmp.id = user.id
+        tmp.user_name = user.user_name
+        tmp.app = len(db.session.query(Appoint.Appoint.id).filter(user.id == Appoint.Appoint.user_id).all())
+        userList.append(tmp)
+    return render_template('users.pug', admin=current_user.admin, message=message, users=userList)
 
 
 @userApp.route('/users', methods=['POST'])
@@ -81,7 +88,9 @@ def user_page(path):
         tmp.mpercentage = round(((100/(tmp.count_rec+tmp.mistakes))*tmp.mistakes), 2)
         rechistorylist.append(tmp)
 
-    return render_template('/users/index.pug', admin=current_user.admin, recHistory=rechistorylist, user=user)
+    app_count = len(db.session.query(Appoint.Appoint.id).filter(user.id == Appoint.Appoint.user_id).all())
+
+    return render_template('/users/index.pug', admin=current_user.admin, recHistory=rechistorylist, user=user, app_count=app_count)
 
 
 class recHistory():
@@ -90,6 +99,10 @@ class recHistory():
     time = 0.0
     mistakes = 0
     mpercentage = 0.00
+
+class userForm():
+    user_name = ""
+    app = 0
 
 
 
