@@ -44,20 +44,20 @@ include navBar
         div.col-s4.pagination-center
             ul.pagination
                 li.page-item
-                    a.page-link(href=url_for('rejection_search', page=0, pics=request.args.getlist('pics'))) Первая
+                    a.page-link(href=url_for('rejection_search', page=0, p=request.args.getlist('p'))) Первая
                 if(pagination.page == 0)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, pics=request.args.getlist('pics'))) &laquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, p=request.args.getlist('p'))) &laquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, pics=request.args.getlist('pics'))) &laquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, p=request.args.getlist('p'))) &laquo;
                 li.page-item
                     a.page-link(href='')=(pagination.page+1)
                 if(pagination.page == pagination.total_pages)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, pics=request.args.getlist('pics'))) &raquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, p=request.args.getlist('p'))) &raquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, pics=request.args.getlist('pics'))) &raquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, p=request.args.getlist('p'))) &raquo;
                 li.page-item
-                    a.page-link(href=url_for('rejection_search', page=pagination.total_pages, pics=request.args.getlist('pics'))) Последняя
+                    a.page-link(href=url_for('rejection_search', page=pagination.total_pages, p=request.args.getlist('p'))) Последняя

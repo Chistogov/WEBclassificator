@@ -6,7 +6,6 @@ class Confirmed(db.Model):
     pic_id = db.Column(db.Integer, db.ForeignKey('pictures.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     rec_id = db.Column(db.Integer, db.ForeignKey('recognized.id'), nullable=False)
-    test_id = db.Column(db.Integer, db.ForeignKey('testtypes.id'))
     date = db.Column(db.Date)
 
     # test = db.relationship('Testtypes', back_populates="confirmed")
