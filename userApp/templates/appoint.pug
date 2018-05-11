@@ -26,6 +26,19 @@ include navBar
                     if(message)
                         div.alert.alert-danger(role="alert")=message
                     form#addForm(method="post" action="#")
+                        .row
+                            div.col-md-2
+                                div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                    input.custom-control-input(type="checkbox", id='ear', name="ear")
+                                    label.custom-control-label(for='ear')="Ухо"
+                            div.col-md-2
+                                div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                    input.custom-control-input(type="checkbox", id='throat', name="throat")
+                                    label.custom-control-label(for='throat')="Горло"
+                            div.col-md-2
+                                div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                    input.custom-control-input(type="checkbox", id='nose', name="nose")
+                                    label.custom-control-label(for='nose')="Нос"
                         div.form-group
                             select.form-control(name="forUser")
                                 option(value="", disabled, selected)="Пользователь"

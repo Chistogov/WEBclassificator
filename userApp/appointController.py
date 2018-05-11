@@ -2,7 +2,7 @@
 from flask import render_template, request, redirect, url_for
 from userApp import *
 from userApp import Pagination
-from userApp.dbc import User, db, Picture, Symptom, Recognized, Appoint
+from userApp.dbc import User, db, Picture, Symptom, Recognized, Appoint, Cnnrec
 from userApp.Service import appointService, journalService
 from flask_login import login_required, current_user
 import logging
@@ -60,6 +60,30 @@ def appoint_post():
         if (item == 'fromApp'):
             app = db.session.query(Appoint.Appoint.pic_id)
             pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(app), ~Picture.Picture.id.in_(in_app)).limit(count)
+            appointService.toAppDb(pics, forUser)
+            return redirect('/appoint')
+        if(item == 'ear'):
+            rec = db.session.query(Recognized.Recognized.pic_id)
+            app = db.session.query(Appoint.Appoint.pic_id)
+            ear = db.session.query(Cnnrec.Cnnrec.pic_id).filter(Cnnrec.Cnnrec.symp_id == 20)
+            pics = db.session.query(Picture.Picture).filter(~Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(app),
+                                                            ~Picture.Picture.id.in_(in_app), Picture.Picture.id.in_(ear)).limit(count)
+            appointService.toAppDb(pics, forUser)
+            return redirect('/appoint')
+        if (item == 'nose'):
+            rec = db.session.query(Recognized.Recognized.pic_id)
+            app = db.session.query(Appoint.Appoint.pic_id)
+            nose = db.session.query(Cnnrec.Cnnrec.pic_id).filter(Cnnrec.Cnnrec.symp_id == 22)
+            pics = db.session.query(Picture.Picture).filter(~Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(app),
+                                                            ~Picture.Picture.id.in_(in_app), Picture.Picture.id.in_(nose)).limit(count)
+            appointService.toAppDb(pics, forUser)
+            return redirect('/appoint')
+        if (item == 'throat'):
+            rec = db.session.query(Recognized.Recognized.pic_id)
+            app = db.session.query(Appoint.Appoint.pic_id)
+            throat = db.session.query(Cnnrec.Cnnrec.pic_id).filter(Cnnrec.Cnnrec.symp_id == 21)
+            pics = db.session.query(Picture.Picture).filter(~Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(app),
+                                                            ~Picture.Picture.id.in_(in_app), Picture.Picture.id.in_(throat)).limit(count)
             appointService.toAppDb(pics, forUser)
             return redirect('/appoint')
     rec = db.session.query(Recognized.Recognized.pic_id)

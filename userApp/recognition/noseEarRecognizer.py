@@ -18,22 +18,23 @@ nb_test_samples = 100
 
 print("Загружаю сеть из файлов")
 # Загружаем данные об архитектуре сети из файла json
-json_file = open("ear_nose/mnist_model.json", "r")
+json_file = open("E_N_T/mnist_model92.json", "r")
 loaded_model_json = json_file.read()
 json_file.close()
 # Создаем модель на основе загруженных данных
 loaded_model = model_from_json(loaded_model_json)
 # Загружаем веса в модель
-loaded_model.load_weights("ear_nose/mnist_model.h5py")
+loaded_model.load_weights("E_N_T/mnist_model92.h5py")
 print("Загрузка сети завершена")
 
 # Компилируем модель
-loaded_model.compile(loss='binary_crossentropy',
+loaded_model.compile(loss='categorical_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
 
 c = 0
 d = 0
+l = 0
 
 all_pics = db.session.query(Picture.Picture).all()
 print str(len(all_pics))
@@ -43,27 +44,40 @@ for pic in all_pics:
     img = image.load_img(path=test_dir +"/"+ pic.pic_name,target_size=(150,150,3))
     img = image.img_to_array(img)
     test_img = np.expand_dims(img, axis=0)
-    img_class = loaded_model.predict_classes(test_img)
-    print (img_class)
-    classname = img_class[0]
+    datagen = ImageDataGenerator(rescale=1. / 255)
+    pred_0 = loaded_model.predict_generator(
+        datagen.flow(test_img, batch_size=50),
+        steps=(len(test_img) // 50) + 1,
+        workers=1,
+        use_multiprocessing=True
+    )
+    predicted = np.argmax(pred_0, axis=-1)
+    # print (pred_0)
     cnn = Cnnrec.Cnnrec()
     cnn.pic_id = pic.id
-    #Нос
-    if(classname < 0.5):
-        cnn.symp_id = 22
+    #Горло
+    if(predicted == 0):
+        cnn.symp_id = 21
         c+=1
-    #Ухо
-    if (classname > 0.5):
-        cnn.symp_id = 20
+    #Нос
+    if (predicted == 1):
+        cnn.symp_id = 22
         d+=1
+    #Ухо
+    if (predicted == 2):
+        cnn.symp_id = 20
+        l += 1
     db.session.add(cnn)
     if(d%1000==0):
-        print ("Нос: " + str(c))
-        print ("Ухо: " + str(d))
+        db.session.commit()
+        print ("Нос: " + str(d))
+        print ("Ухо: " + str(l))
+        print ("Горло: " + str(c))
 
 db.session.commit()
-print ("Нос: "+str(c))
-print ("Ухо: "+str(d))
+print ("Нос: "+str(d))
+print ("Ухо: "+str(l))
+print ("Горло: "+str(c))
 
 
 # plt.imshow(img)
