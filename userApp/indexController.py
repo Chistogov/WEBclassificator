@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template
 from userApp import *
-from userApp.dbc import User, db, Recognized, Appoint, Journal
+from userApp.dbc import User, db, Recognized, Appoint, Journal, Category
 from flask_login import login_required, current_user
 import datetime
 import logging
@@ -9,9 +9,10 @@ import logging
 
 @userApp.route('/')
 @login_required
-def index():
+def index():    
     max_time_rec=userApp.config.get('MAX_TIME_REC')
     logging.info("Index")
+
     pics_today = db.session.query(Recognized.Recognized.pic_id).filter(
         db.func.DATE(Recognized.Recognized.date) == datetime.datetime.now().date(),
         Recognized.Recognized.user_id == current_user.id) \

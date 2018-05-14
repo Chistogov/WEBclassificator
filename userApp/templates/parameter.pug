@@ -56,4 +56,9 @@ include navBar
                             div.col-md-12
                                 div.form-group
                                     input#diagnos.form-control(placeholder="Признак", name="diagnos", type="text", required, aria-required="true")
+                                div.form-group
+                                    select.form-control(name="category")
+                                        option(value="", disabled, selected)="Категория"
+                                        for cat in category
+                                            option(value=cat.id)=cat.category_name
                         button.btn.btn-primary(href="#" type="submit")="Добавить"

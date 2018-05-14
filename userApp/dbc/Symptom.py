@@ -10,6 +10,9 @@ class Symptom(db.Model):
     throat = db.Column(db.Boolean, default=False)
     ismedical = db.Column(db.Boolean, default=False)
     diagnos = db.Column(db.Boolean, default=False)
+    cat_id = db.Column(db.ForeignKey('category.id'))
+
+    category = db.relationship('Category', back_populates='symptom')
 
     recognized = db.relationship('Recognized', back_populates='symptom',
                             lazy='dynamic',

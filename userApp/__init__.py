@@ -28,7 +28,7 @@ from userApp import rejectionController
 
 from userApp import updateController
 
-from userApp.dbc import db
+from userApp.dbc import *
 
 # Load the config file
 userApp.jinja_env.add_extension('pypugjs.ext.jinja.PyPugJSExtension')

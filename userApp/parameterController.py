@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, redirect, url_for
 from userApp import *
-from userApp.dbc import Symptom, db
+from userApp.dbc import Symptom, db, Category
 from flask_login import login_required, current_user
 import logging
 
@@ -15,7 +15,8 @@ def parameter():
     if ('message' in request.args):
         message = request.args['message']
     symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
-    return render_template('parameter.pug', symptoms=symptoms, admin=current_user.admin, message=message)
+    categories = Category.Category.query.order_by(Category.Category.id).all()
+    return render_template('parameter.pug', symptoms=symptoms, admin=current_user.admin, message=message, category=categories)
 
 @userApp.route('/settings', methods=['POST'])
 @login_required
@@ -28,6 +29,8 @@ def parameter_post():
     if(form['diagnos'] != ""):
         symptom = Symptom.Symptom()
         symptom.symptom_name = form['diagnos']
+        if(form.has_key('category')):
+            symptom.cat_id = form['category']
         for item in form:
             if(item == 'ear'):
                 symptom.ear = True
