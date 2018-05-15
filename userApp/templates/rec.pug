@@ -42,24 +42,36 @@ include navBar
                                     if(appointed)
                                         input.hidden(name = "appointed", value=appointed, hidden)
                                     each symp in symptoms
-                                        if(symp.symptom_name and symp.ear and symp.ismedical and symp.diagnos)
+                                        if not(symp.ismedical)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'ear', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
                                     hr
                                     each cat in categories
-                                        a.btn.btn-link(data-toggle="collapse", href="#nose"~cat.id, aria-expanded="false", aria-controls="#nose"~cat.id)=cat.category_name
+                                        if(cat.id == 1)
+                                            a.btn.btn-link(data-toggle="collapse", href="#nose"~cat.id, aria-expanded="true", aria-controls="#nose"~cat.id)=cat.category_name
+                                        else
+                                            a.btn.btn-link(data-toggle="collapse", href="#nose"~cat.id, aria-expanded="true", aria-controls="#nose"~cat.id)=cat.category_name
                                     each cat in categories
-                                        div.collapse(id="nose"~cat.id)
-                                            each symp in symptoms
-                                                if(symp.symptom_name and symp.ear and symp.ismedical and not(symp.diagnos))
-                                                    if(symp.cat_id==cat.id)
-                                                        div.custom-control.custom-checkbox.my-1.mr-sm-2
-                                                            input.custom-control-input(type="checkbox", id=symp.id~'ear', name=symp.id)
-                                                            label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
+                                        if(cat.id == 1)
+                                            div.collapse.show(id="nose"~cat.id)
+                                                each symp in symptoms
+                                                    if(symp.symptom_name and symp.ear and symp.ismedical and not(symp.diagnos))
+                                                        if(symp.cat_id == cat.id)
+                                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                                input.custom-control-input(type="checkbox", id=symp.id~'ear', name=symp.id)
+                                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
+                                        else
+                                            div.collapse(id="nose"~cat.id)
+                                                each symp in symptoms
+                                                    if(symp.symptom_name and symp.ear and symp.ismedical and not(symp.diagnos))
+                                                        if(symp.cat_id == cat.id)
+                                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                                input.custom-control-input(type="checkbox", id=symp.id~'ear', name=symp.id)
+                                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
                                     hr
                                     each symp in symptoms
-                                        if not(symp.ismedical)
+                                        if(symp.symptom_name and symp.ear and symp.ismedical and symp.diagnos)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'ear', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
@@ -74,7 +86,7 @@ include navBar
                                     if(appointed)
                                         input.hidden(name = "appointed", value=appointed, hidden)
                                     each symp in symptoms
-                                        if(symp.symptom_name and symp.throat and symp.ismedical and symp.diagnos)
+                                        if not(symp.ismedical)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'throat', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
@@ -86,11 +98,10 @@ include navBar
                                                 label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
                                     hr
                                     each symp in symptoms
-                                        if not(symp.ismedical)
+                                        if(symp.symptom_name and symp.throat and symp.ismedical and symp.diagnos)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'throat', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
-
                                     hr
                                     if(appointed)
                                         button.btn.btn-success(href="#" type="submit")="Сохранить"
@@ -102,7 +113,7 @@ include navBar
                                     if(appointed)
                                         input.hidden(name = "appointed", value=appointed, hidden)
                                     each symp in symptoms
-                                        if(symp.symptom_name and symp.nose and symp.ismedical and symp.diagnos)
+                                        if not(symp.ismedical)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'nose', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
@@ -114,7 +125,7 @@ include navBar
                                                 label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
                                     hr
                                     each symp in symptoms
-                                        if not(symp.ismedical)
+                                        if(symp.symptom_name and symp.nose and symp.ismedical and symp.diagnos)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2
                                                 input.custom-control-input(type="checkbox", id=symp.id~'nose', name=symp.id)
                                                 label.custom-control-label(for=symp.id~'nose')=symp.symptom_name

@@ -9,7 +9,7 @@ import logging
 
 @userApp.route('/')
 @login_required
-def index():    
+def index():
     max_time_rec=userApp.config.get('MAX_TIME_REC')
     logging.info("Index")
 

@@ -8,7 +8,7 @@ $('#tabForm a').on('click', function (e) {
   $(this).tab('show')
 });
 
-$('.dropdown-toggle').dropdown();
+// $('.dropdown-toggle').dropdown();
 
 $(document).ready(function() {
     console.log('ready');
@@ -23,7 +23,11 @@ $(document).ready(function() {
         }
         }, 1000);
     }
-    $('.collapse').collapse();
+    $('.collapse').on('show.bs.collapse', function (e) {
+        console.log('wef');
+        $('.collapse').collapse("hide")
+    })
+    // $('.collapse').collapse('hide');
     $('.dropdown-toggle').dropdown();
     $('[data-toggle="tooltip"]').tooltip()
     $('.datepicker').datepicker({
@@ -42,6 +46,3 @@ $('#timer').on('click', function(e)
     // document.getElementById("timer").innerText = sec;
     // }, 1000);
 });
-
-
-
