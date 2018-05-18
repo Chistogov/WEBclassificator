@@ -1,5 +1,5 @@
 include application
-currentPage = "/testing"
+currentPage = "/tests"
 include navBar
 
 .content
@@ -29,12 +29,6 @@ include navBar
                                 form#earform(method="post" action="#")
                                     if(picture)
                                         input.hidden(name = "picture", value=picture.id, hidden)
-                                    each symp in symptoms
-                                        if not(symp.ismedical)
-                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
-                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'ear', name=symp.id, data-name=symp.symptom_name)
-                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
-                                    hr
                                     each cat in categories
                                         if(cat.id == 1)
                                             a.btn.btn-link(data-toggle="collapse", href="#nose"~cat.id, aria-expanded="true", aria-controls="#nose"~cat.id)=cat.category_name
@@ -72,12 +66,6 @@ include navBar
                                     if(picture)
                                         input.hidden(name = "picture", value=picture.id, hidden)
                                     each symp in symptoms
-                                        if not(symp.ismedical)
-                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
-                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'throat', name=symp.id, data-name=symp.symptom_name)
-                                                label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
-                                    hr
-                                    each symp in symptoms
                                         if(symp.symptom_name and symp.throat and symp.ismedical and not(symp.diagnos))
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
                                                 input.custom-control-input.checkitem(type="checkbox", id=symp.id~'throat', name=symp.id, data-name=symp.symptom_name)
@@ -96,12 +84,6 @@ include navBar
                                 form#noseform(method="post" action="#")
                                     if(picture)
                                         input.hidden(name = "picture", value=picture.id, hidden)
-                                    each symp in symptoms
-                                        if not(symp.ismedical)
-                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
-                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'nose', name=symp.id, data-name=symp.symptom_name)
-                                                label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
-                                    hr
                                     each symp in symptoms
                                         if(symp.symptom_name and symp.nose and symp.ismedical and not(symp.diagnos))
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag

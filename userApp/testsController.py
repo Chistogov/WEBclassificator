@@ -4,7 +4,7 @@ from userApp import *
 from userApp.dbc import User, db, Testresults, Datasets, Category, Confirmed, Picture, Symptom, Recognized, Usertests, Tests
 from flask_login import login_required, current_user
 import datetime
-import logging
+import logging, collections
 
 
 @userApp.route('/tests', methods=['GET'])
@@ -16,7 +16,10 @@ def tests():
         message = request.args['message']
     tests = db.session.query(Datasets.Datasets)
     user_tests = db.session.query(Tests.Tests).filter(Tests.Tests.user_id==current_user.id, Tests.Tests.results==None)
-    test_results = db.session.query(Tests.Tests).filter(Tests.Tests.results!=None)
+    if(current_user.admin):
+        test_results = db.session.query(Tests.Tests).filter(Tests.Tests.results!=None)
+    else:
+        test_results = db.session.query(Tests.Tests).filter(Tests.Tests.results != None, Tests.Tests.user_id==current_user.id)
     return render_template('tests/index.pug', admin=current_user.admin, message=message, tests = tests,
                            results = test_results, user_tests=user_tests, user=current_user)
 
@@ -162,16 +165,31 @@ def testing(test):
                                                             Picture.Picture.id.notin_(results))
     if(len(list(pics_in_wait))==0):
         test_c = Tests.Tests.query.get(test)
-        test_real = db.session.query(Usertests.Usertests).filter(Usertests.Usertests.dataset_id == test_c.dataset_id)
-        test_user = db.session.query(Testresults.Testresults).filter(Testresults.Testresults.test_id == test_c.id)
-        test_real_list = list()
-        test_user_list = list()
-        for item in test_real:
-            test_real_list.append(str(item.pic_id) + "/" + str(item.symp_id))
-        for item in test_user:
-            test_user_list.append(str(item.pic_id) + "/" + str(item.symp_id))
-        result = list(set(test_real_list) ^ set(test_user_list))
-        test_c.results = 100 - ((100/(len(test_real_list+test_user_list)))*(len(result)))
+        test_result = Tests.Tests.query.get(test)
+        all_test_pics = db.session.query(Usertests.Usertests.pic_id).filter(
+            Usertests.Usertests.dataset_id == test_result.dataset_id).group_by(Usertests.Usertests.pic_id)
+        mistakes = list()
+        mistake_pics = list()
+        for pic in list(all_test_pics):
+
+            test_app = db.session.query(Symptom.Symptom.symptom_name).filter(
+                Usertests.Usertests.symp_id == Symptom.Symptom.id,
+                Usertests.Usertests.dataset_id == test_result.dataset_id,
+                Usertests.Usertests.pic_id == pic.pic_id)
+            user_result = db.session.query(Symptom.Symptom.symptom_name).filter(
+                Testresults.Testresults.symp_id == Symptom.Symptom.id,
+                Testresults.Testresults.test_id == test,
+                Testresults.Testresults.pic_id == pic.pic_id)
+            mistake = user_mistakes()
+            mistake.pic_id = pic.pic_id
+            mistake.minus = list(set(list(test_app)) - set(list(user_result)))
+            mistake.plus = list(set(list(user_result)) - set(list(test_app)))
+            if (len(mistake.plus) + len(mistake.minus) != 0):
+                mistakes.append(mistake)
+                mistake_pics.append(pic.pic_id)
+        test_c.results = 100.0-((100.0 / len(list(all_test_pics))) * len(mistake_pics))
+        print len(mistake_pics)
+        print len(list(all_test_pics))
         test_c.date = datetime.datetime.now()
         db.session.commit()
         message="Тестирование завершено"
@@ -190,7 +208,6 @@ def testing(test):
 def testing_post(test):
     if(current_user.user_name == "demo"):
         return redirect(url_for('sec_rec', message="Demo user, read only"))
-    print ("HEREEE!")
     form = request.form
     if(form.has_key('picture')):
         for item in form:
@@ -208,6 +225,40 @@ def testing_post(test):
 
     return redirect('/tests/testing/'+str(test))
 
+@userApp.route('/tests/results/<int:test>/<int:page>', methods=['GET'])
+@login_required
+def test_results(test, page):
+    logging.info("tests")
+    test_result=Tests.Tests.query.get(test)
+    dataset=Datasets.Datasets.query.get(test_result.dataset_id)
+    all_test_pics=db.session.query(Usertests.Usertests.pic_id).filter(Usertests.Usertests.dataset_id==test_result.dataset_id).group_by(Usertests.Usertests.pic_id)
+    mistakes = list()
+    mistake_pics = list()
+    for pic in list(all_test_pics):
+
+        test_app = db.session.query(Symptom.Symptom.symptom_name).filter(
+            Usertests.Usertests.symp_id == Symptom.Symptom.id,
+            Usertests.Usertests.dataset_id == test_result.dataset_id,
+            Usertests.Usertests.pic_id==pic.pic_id)
+        user_result = db.session.query(Symptom.Symptom.symptom_name).filter(
+            Testresults.Testresults.symp_id == Symptom.Symptom.id,
+            Testresults.Testresults.test_id == test,
+            Testresults.Testresults.pic_id==pic.pic_id)
+        mistake = user_mistakes()
+        mistake.pic_id=pic.pic_id
+        mistake.minus = list(set(list(test_app)) - set(list(user_result)))
+        mistake.plus = list(set(list(user_result)) - set(list(test_app)))
+        if(len(mistake.plus) + len(mistake.minus) != 0):
+            mistakes.append(mistake)
+            mistake_pics.append(pic.pic_id)
+
+    pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(mistake_pics))
+    count = len(list(pics))
+    pics = get_pics_for_page(page, pics)
+    pagination = Pagination.Pagination(page, PER_PAGE, count)
+    return render_template('tests/results.pug', admin=current_user.admin, pictures=pics, pagination=pagination,
+                           mistakes=mistakes, testid=test, dataset=dataset, user=current_user)
+
 PER_PAGE = 12
 
 def get_pics_for_page(page, pics):
@@ -217,3 +268,8 @@ def get_pics_for_page(page, pics):
     if page:
         pics = pics.offset(page * PER_PAGE)
     return pics
+
+class user_mistakes():
+    pic_id = ""
+    minus = list()
+    plus = list()

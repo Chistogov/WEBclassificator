@@ -1,0 +1,48 @@
+include application
+include navBar
+currentPage = "/tests"
+
+
+.content
+    h3=dataset.dataset_name~" "~user.user_name
+    .row
+        if(message)
+            div.col-12
+                div.alert.alert-danger(role="alert")=message
+        each pic in pictures
+            div.col-4
+                .card.card-bloc
+                    img.materialboxed(src='/data/'~pic.pic_name, width="100%")
+                    .card-body
+                        each mistake in mistakes
+                            if(mistake.pic_id==pic.id)
+                                each minus in mistake.minus
+                                    p=minus.symptom_name
+                                hr
+                                each plus in mistake.plus
+
+                                    p(style="color:red;text-decoration:line-through;")=plus.symptom_name
+
+
+.content
+    .row
+        div.col-s4.pagination-center
+            ul.pagination
+                li.page-item
+                    a.page-link(href='/tests/results/'~testid~'/0') Первая
+                if(pagination.page == 0)
+                    li.page-item(hidden=true)
+                        a.page-link(href='/tests/results/'~testid~'/'~(pagination.page - 1)) &laquo;
+                else
+                    li.page-item
+                        a.page-link(href='/tests/results/'~testid~'/'~(pagination.page - 1)) &laquo;
+                li.page-item
+                    a.page-link(href='')=(pagination.page+1)
+                if(pagination.page == pagination.total_pages)
+                    li.page-item(hidden=true)
+                        a.page-link(href='/tests/results/'~testid~'/'~(pagination.page + 1)) &raquo;
+                else
+                    li.page-item
+                        a.page-link(href='/tests/results/'~testid~'/'~(pagination.page + 1)) &raquo;
+                li.page-item
+                    a.page-link(href='/tests/results/'~testid~'/'~(pagination.total_pages)) Последняя

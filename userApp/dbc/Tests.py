@@ -9,7 +9,7 @@ class Tests(db.Model):
     dataset_id = db.Column(db.Integer, db.ForeignKey('datasets.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     results = db.Column(db.Float)
-    date = db.Column(db.Date)
+    date = db.Column(db.DATE)
 
     dataset = db.relationship("Datasets", back_populates="test")
 

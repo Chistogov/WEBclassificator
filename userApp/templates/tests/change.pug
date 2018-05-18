@@ -34,20 +34,20 @@ currentPage = "/tests"
         div.col-s4.pagination-center
             ul.pagination
                 li.page-item
-                    a.page-link(href='tests/change/0') Первая
+                    a.page-link(href='/tests/change/0') Первая
                 if(pagination.page == 0)
                     li.page-item(hidden=true)
-                        a.page-link(href='tests/change/'~pagination.page - 1) &laquo;
+                        a.page-link(href='/tests/change/'~pagination.page - 1) &laquo;
                 else
                     li.page-item
-                        a.page-link(href='tests/change/'~pagination.page - 1) &laquo;
+                        a.page-link(href='/tests/change/'~pagination.page - 1) &laquo;
                 li.page-item
                     a.page-link(href='')=(pagination.page+1)
                 if(pagination.page == pagination.total_pages)
                     li.page-item(hidden=true)
-                        a.page-link(href='tests/change/'~pagination.page + 1) &raquo;
+                        a.page-link(href='/tests/change/'~pagination.page + 1) &raquo;
                 else
                     li.page-item
-                        a.page-link(href='tests/change/'~pagination.page + 1) &raquo;
+                        a.page-link(href='/tests/change/'~pagination.page + 1) &raquo;
                 li.page-item
-                    a.page-link(href='tests/change/'~pagination.total_pages) Последняя
+                    a.page-link(href='/tests/change/'~pagination.total_pages) Последняя

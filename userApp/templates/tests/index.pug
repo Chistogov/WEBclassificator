@@ -39,13 +39,13 @@ include navBar
                             a(href='tests/testing/'~test.id)
                                 li.list-group-item.list-group-item-action
                                     span=test.dataset.dataset_name
-        if(admin)
-            div.col-12
-                .card.card-block
-                    div.card-body
-                        h5.card-title="Результаты тестирований"
-                        ul.list-group
-                            each test in results
+        div.col-12
+            .card.card-block
+                div.card-body
+                    h5.card-title="Результаты тестирований"
+                    ul.list-group
+                        each test in results
+                            a(href='tests/results/'~test.id~"/0")
                                 li.list-group-item.list-group-item-action
                                     span="Пользователь "~test.user.user_name~" прошел \""~test.dataset.dataset_name~"\" с результатом "~test.results~"% "~test.date
 
