@@ -20,12 +20,3 @@ class Recognized(db.Model):
     confirmed = db.relationship('Confirmed', back_populates='recognized',
                                 lazy='dynamic',
                                 primaryjoin=id == Confirmed.Confirmed.rec_id)
-    # def __init__(self, id, pic_name, index_date, note, hash, first_rec, skipped):
-    #     self.id = id
-    #     self.pic_name = pic_name
-    #     self.index_date = index_date
-    #     self.note = note
-    #     self.hash = hash
-    #     self.first_rec = first_rec
-    #     self.skipped = skipped
-    #     super(Recognized, self).__init__()

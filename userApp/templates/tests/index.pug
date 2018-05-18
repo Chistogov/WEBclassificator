@@ -1,0 +1,51 @@
+include application
+currentPage = "/tests"
+include navBar
+
+
+.content
+    .row
+        if(admin)
+            div.col-12
+                .card.card-block
+                    div.card-body
+                        h5.card-title="Добавить тест"
+                        form#regForm(method="post")
+                            if(message)
+                                div.alert.alert-danger(role="alert")=message
+                            div.form-group
+                                input#username.form-control(placeholder="Название теста", type="text", name="testname", required)
+                            button.btn.btn-primary(href="#" type="submit")="Добавить"
+        if(admin)
+            div.col-12
+                .card.card-block
+                    div.card-body
+                        h5.card-title="Тесты"
+                        ul.list-group
+                            each test in tests
+                                a(href='tests/'~test.id~"/0")
+                                    li.list-group-item.list-group-item-action
+                                        span=test.dataset_name
+                        hr
+                        a.btn.btn-primary(href="tests/change/0")="Редактирование тестов"
+                        hr
+                        a.btn.btn-primary(href="tests/users")="Пользовательские тесты"
+        div.col-12
+            .card.card-block
+                div.card-body
+                    h5.card-title="Пройти тестирование"
+                    ul.list-group
+                        each test in user_tests
+                            a(href='tests/testing/'~test.id)
+                                li.list-group-item.list-group-item-action
+                                    span=test.dataset.dataset_name
+        if(admin)
+            div.col-12
+                .card.card-block
+                    div.card-body
+                        h5.card-title="Результаты тестирований"
+                        ul.list-group
+                            each test in results
+                                li.list-group-item.list-group-item-action
+                                    span="Пользователь "~test.user.user_name~" прошел \""~test.dataset.dataset_name~"\" с результатом "~test.results~"% "~test.date
+

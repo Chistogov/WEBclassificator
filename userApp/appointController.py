@@ -91,6 +91,16 @@ def appoint_post():
     pics = db.session.query(Picture.Picture).filter(~Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(app), ~Picture.Picture.id.in_(in_app)).limit(count)
     appointService.toAppDb(pics, forUser)
     journalService.newMessaage(forUser, "Назначены новые снимки (" + str(len(list(pics))) + " шт.)")
+    #--------------------------------------
+    # cnnrec = db.session.query(Cnnrec.Cnnrec.pic_id).filter(Cnnrec.Cnnrec.symp_id == 20)
+    # recbad = list(db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.symp_id.in_([23, 37, 49, 53])))
+    # recnose = list(db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.symp_id.in_([20])))
+    # picnice = db.session.query(Picture.Picture.id).filter(Picture.Picture.id.notin_(recbad), Picture.Picture.id.in_(recnose))
+    # rec = db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.user_id == form['fromUser'], Recognized.Recognized.pic_id.in_(cnnrec), Recognized.Recognized.pic_id.in_(picnice))
+    # pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(rec)).limit(1000)
+    # appointService.toAppDb(pics, forUser)
+    # journalService.newMessaage(forUser, "Назначены новые снимки (" + str(len(list(pics))) + " шт.)")
+    #----------------------------------------
     return redirect('/appoint')
 
 @userApp.route('/appointed/', defaults={'page': 0})

@@ -1,0 +1,24 @@
+include application
+currentPage = "/tests"
+include navBar
+
+.content
+    .row
+        div.col-12
+            .card.card-block
+                .card-body
+                    h5.card-title="Назначение тестирования"
+                    if(message)
+                        div.alert.alert-danger(role="alert")=message
+                    form#addForm(method="post" action="#")
+                        div.form-group
+                            select.form-control(name="forUser", required)
+                                option(value="", disabled, selected)="Пользователь"
+                                for _user in users
+                                    option(value=_user.id)=_user.user_name
+                        div.form-group
+                            select.form-control(name="test", required)
+                                option(value="0", selected, disabled)="Тест"
+                                for test in tests
+                                    option(value=test.id)=test.dataset_name
+                        button.btn.btn-primary(href="#" type="submit")="Назначить"

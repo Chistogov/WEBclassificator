@@ -52,6 +52,15 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                 else
                     li.nav-item
                         a.nav-link(href="/appoint", target="_self") Назначить
+
+
+            if(currentPage == "/tests")
+                li.nav-item
+                    a.nav-link.active(href="/tests", target="_self") Тестирование
+            else
+                li.nav-item
+                    a.nav-link(href="/tests", target="_self") Тестирование
+
             if(admin)
                 if(currentPage == "/rejection")
                     li.nav-item

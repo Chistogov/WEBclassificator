@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template
 from userApp import *
-from userApp.dbc import User, db, Recognized, Appoint, Journal, Category
+from userApp.dbc import User, db, Recognized, Appoint, Journal, Category, Usertests, Testresults, Tests, Datasets
 from flask_login import login_required, current_user
 import datetime
 import logging

@@ -1,4 +1,4 @@
-from userApp.dbc import db, Recognized, Cnnrec, Mistakes
+from userApp.dbc import db, Recognized, Cnnrec, Mistakes, Usertests, Testresults
 
 
 class Symptom(db.Model):
@@ -24,6 +24,14 @@ class Symptom(db.Model):
     mistakes = db.relationship('Mistakes', back_populates='symptom',
                                lazy='dynamic',
                                primaryjoin=id == Mistakes.Mistakes.symp_id)
+
+    user_tests = db.relationship('Usertests', back_populates='symptom',
+                                 lazy='dynamic',
+                                 primaryjoin=id == Usertests.Usertests.symp_id)
+
+    test_results = db.relationship('Testresults', back_populates='symptom',
+                                   lazy='dynamic',
+                                   primaryjoin=id == Testresults.Testresults.symp_id)
 
     # def __init__(self, id, symptom_name):
     #     self.id = id

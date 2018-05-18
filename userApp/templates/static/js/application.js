@@ -24,10 +24,18 @@ $(document).ready(function() {
         }, 1000);
     }
     $('.collapse').on('show.bs.collapse', function (e) {
-        console.log('wef');
         $('.collapse').collapse("hide")
     })
-    // $('.collapse').collapse('hide');
+    $('.checktag').click(function() {
+        var checks = document.getElementsByClassName("checkitem");
+        document.getElementById("params").innerText="";
+        for (var i = 0; i < checks.length; i++) {
+            if(checks[i].checked)
+            {
+                document.getElementById("params").innerHTML += '<li>'+checks[i].dataset.name;
+            }
+        }
+    });
     $('.dropdown-toggle').dropdown();
     $('[data-toggle="tooltip"]').tooltip()
     $('.datepicker').datepicker({

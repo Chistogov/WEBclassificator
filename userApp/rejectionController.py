@@ -89,7 +89,7 @@ def pic_submit(pic):
 
 PER_PAGE = 12
 
-@userApp.route('/rejection/search/', methods=['GET'])
+@userApp.route('/rejection/search', methods=['GET'])
 @login_required
 def rejection_search():
     page=int(request.args.get('page'))

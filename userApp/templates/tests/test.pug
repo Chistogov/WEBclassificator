@@ -1,0 +1,44 @@
+include application
+include navBar
+
+
+.content
+    h3=dataset.dataset_name
+    .row
+        if(message)
+            div.col-12
+                div.alert.alert-danger(role="alert")=message
+        each pic in pictures
+            div.col-4
+                .card.card-bloc
+                    .card-title
+                        a(href="/tests/"~pic.id~"/"~dataset.id~"/pic_data_remove")
+                            i.material-icons.tiny close
+                    img.materialboxed(src='/data/'~pic.pic_name, width="100%")
+                    .card-body
+                        each item in pic.user_tests
+                            p(data-toggle="tooltip", data-placement="top", title=item.user.user_name)=item.symptom.symptom_name
+
+
+.content
+    .row
+        div.col-s4.pagination-center
+            ul.pagination
+                li.page-item
+                    a.page-link(href='/tests/'~testid~'/0') Первая
+                if(pagination.page == 0)
+                    li.page-item(hidden=true)
+                        a.page-link(href='/tests/'~testid~'/'~(pagination.page - 1)) &laquo;
+                else
+                    li.page-item
+                        a.page-link(href='/tests/'~testid~'/'~(pagination.page - 1)) &laquo;
+                li.page-item
+                    a.page-link(href='')=(pagination.page+1)
+                if(pagination.page == pagination.total_pages)
+                    li.page-item(hidden=true)
+                        a.page-link(href='/tests/'~testid~'/'~(pagination.page + 1)) &raquo;
+                else
+                    li.page-item
+                        a.page-link(href='/tests/'~testid~'/'~(pagination.page + 1)) &raquo;
+                li.page-item
+                    a.page-link(href='/tests/'~testid~'/'~(pagination.total_pages)) Последняя

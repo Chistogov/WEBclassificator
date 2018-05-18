@@ -59,13 +59,13 @@ def sec_rec_post():
                         new_tag.timer = max_time_rec
                     else:
                         new_tag.timer = form['timer']
-                # db.session.add(new_tag)
-        # db.session.commit()
-        # pic = Picture.Picture.query.get(appointed.pic_id)
-        # pic.first_rec = True
-        # db.session.commit()
-        # db.session.delete(appointed)
-        # db.session.commit()
+                db.session.add(new_tag)
+        db.session.commit()
+        pic = Picture.Picture.query.get(appointed.pic_id)
+        pic.first_rec = True
+        db.session.commit()
+        db.session.delete(appointed)
+        db.session.commit()
 
     return redirect('/rec')
 

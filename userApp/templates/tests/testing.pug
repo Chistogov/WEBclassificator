@@ -1,5 +1,5 @@
 include application
-currentPage = "/rec"
+currentPage = "/testing"
 include navBar
 
 .content
@@ -9,24 +9,8 @@ include navBar
                 .card-body
                     if(message)
                         div.alert.alert-danger(role="alert")=message
-                    if(pic_local)
-                        img.materialboxed(src=pic_local, width="100%")
-                    table.table.table-striped
-                        tbody
-                            tr
-                                td Сегодня распознано:
-                                td=today_rec
-                            tr
-                                td Снимков в ожидании:
-                                td=in_wait
-                            tr
-                                td Время распознания:
-                                td.timer=0
-            .card.card-block
-                .card-body
-                    h5.card-title="Нейросеть"
-                    each item in neural
-                        li.card-text=item[1]
+                    if(picture)
+                        img.materialboxed(src="/data/"~picture.pic_name, width="100%")
             .card.card-block
                 .card-body
                     h5.card-title="Признаки"
@@ -43,9 +27,8 @@ include navBar
                         div#earTab.tab-pane.fade.show.active(role="tabpanel", aria-labelledby="ear-tab")
                             .card-body
                                 form#earform(method="post" action="#")
-                                    input.hidden.timer(name = "timer", value=0, hidden)
-                                    if(appointed)
-                                        input.hidden(name = "appointed", value=appointed, hidden)
+                                    if(picture)
+                                        input.hidden(name = "picture", value=picture.id, hidden)
                                     each symp in symptoms
                                         if not(symp.ismedical)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
@@ -81,15 +64,13 @@ include navBar
                                                 input.custom-control-input.checkitem(type="checkbox", id=symp.id~'ear', name=symp.id, data-name=symp.symptom_name)
                                                 label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
                                     hr
-                                    if(appointed)
+                                    if(picture)
                                         button.btn.btn-success(href="#" type="submit")="Сохранить"
-                                        button.btn.btn-warning(href="/rec/skip/"~appointed)="Пропустить"
                         div#throatTab.tab-pane.fade(role="tabpanel", aria-labelledby="throat-tab")
                             .card-body
                                 form#throatform(method="post" action="#")
-                                    input.hidden.timer(name = "timer", value=0, hidden)
-                                    if(appointed)
-                                        input.hidden(name = "appointed", value=appointed, hidden)
+                                    if(picture)
+                                        input.hidden(name = "picture", value=picture.id, hidden)
                                     each symp in symptoms
                                         if not(symp.ismedical)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
@@ -108,15 +89,13 @@ include navBar
                                                 input.custom-control-input.checkitem(type="checkbox", id=symp.id~'throat', name=symp.id, data-name=symp.symptom_name)
                                                 label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
                                     hr
-                                    if(appointed)
+                                    if(picture)
                                         button.btn.btn-success(href="#" type="submit")="Сохранить"
-                                        button.btn.btn-warning(href="/rec/skip/"~appointed)="Пропустить"
                         div#noseTab.tab-pane.fade(role="tabpanel", aria-labelledby="nose-tab")
                             .card-body
                                 form#noseform(method="post" action="#")
-                                    input.hidden.timer(name = "timer", value=0, hidden)
-                                    if(appointed)
-                                        input.hidden(name = "appointed", value=appointed, hidden)
+                                    if(picture)
+                                        input.hidden(name = "picture", value=picture.id, hidden)
                                     each symp in symptoms
                                         if not(symp.ismedical)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
@@ -135,6 +114,5 @@ include navBar
                                                 input.custom-control-input.checkitem(type="checkbox", id=symp.id~'nose', name=symp.id, data-name=symp.symptom_name)
                                                 label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
                                     hr
-                                    if(appointed)
+                                    if(picture)
                                         button.btn.btn-success(href="#" type="submit")="Сохранить"
-                                        button.btn.btn-warning(href="/rec/skip/"~appointed)="Пропустить"
