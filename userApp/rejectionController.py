@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, redirect, url_for
 from userApp import *
-from userApp.dbc import User, db, Picture, Symptom, Recognized, Confirmed
+from userApp.dbc import User, db, Picture, Symptom, Recognized, Confirmed, Category
 from flask_login import login_required, current_user
 import logging, datetime
 
@@ -16,8 +16,10 @@ def rejection():
         message = request.args['message']
     logging.info("appoint")
     symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id)
+    categories = Category.Category.query.order_by(Category.Category.id).all()
     users = User.User.query.all()
-    return render_template('rejection.pug', symptoms=symptoms, users=users, message=message, admin=current_user.admin)
+    return render_template('rejection.pug', symptoms=symptoms, users=users, message=message,
+                           categories=categories,admin=current_user.admin)
 
 @userApp.route('/rejection', methods=['POST'])
 @login_required

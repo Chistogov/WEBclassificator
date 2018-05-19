@@ -11,6 +11,17 @@ include navBar
                         div.alert.alert-danger(role="alert")=message
                     if(picture)
                         img.materialboxed(src="/data/"~picture.pic_name, width="100%")
+                    table.table.table-striped
+                        tbody
+                            tr
+                                td Распознано:
+                                td=pic_ready
+                            tr
+                                td В ожидании:
+                                td=pic_wait
+                            tr
+                                td Время распознания:
+                                td.timer=0
             .card.card-block
                 .card-body
                     h5.card-title="Признаки"
@@ -27,6 +38,7 @@ include navBar
                         div#earTab.tab-pane.fade.show.active(role="tabpanel", aria-labelledby="ear-tab")
                             .card-body
                                 form#earform(method="post" action="#")
+                                    input.hidden.timer(name = "timer", value=0, hidden)
                                     if(picture)
                                         input.hidden(name = "picture", value=picture.id, hidden)
                                     each cat in categories
@@ -63,6 +75,7 @@ include navBar
                         div#throatTab.tab-pane.fade(role="tabpanel", aria-labelledby="throat-tab")
                             .card-body
                                 form#throatform(method="post" action="#")
+                                    input.hidden.timer(name = "timer", value=0, hidden)
                                     if(picture)
                                         input.hidden(name = "picture", value=picture.id, hidden)
                                     each symp in symptoms
@@ -82,6 +95,7 @@ include navBar
                         div#noseTab.tab-pane.fade(role="tabpanel", aria-labelledby="nose-tab")
                             .card-body
                                 form#noseform(method="post" action="#")
+                                    input.hidden.timer(name = "timer", value=0, hidden)
                                     if(picture)
                                         input.hidden(name = "picture", value=picture.id, hidden)
                                     each symp in symptoms

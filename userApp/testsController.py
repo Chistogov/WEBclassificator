@@ -163,6 +163,8 @@ def testing(test):
     pics_in_wait = db.session.query(Picture.Picture).filter(Picture.Picture.id == Usertests.Usertests.pic_id,
                                                             Usertests.Usertests.dataset_id == dataset.dataset_id,
                                                             Picture.Picture.id.notin_(results))
+    all_pics = db.session.query(Picture.Picture).filter(Picture.Picture.id == Usertests.Usertests.pic_id,
+                                                            Usertests.Usertests.dataset_id == dataset.dataset_id)
     if(len(list(pics_in_wait))==0):
         test_c = Tests.Tests.query.get(test)
         test_result = Tests.Tests.query.get(test)
@@ -201,7 +203,8 @@ def testing(test):
     return render_template('tests/testing.pug', symptoms=symptoms,
                            admin=current_user.admin,
                            message=message, categories=categories,
-                           picture = pics_in_wait.first())
+                           picture = pics_in_wait.first(), pic_wait=len(list(pics_in_wait)),
+                           pic_ready=len(list(all_pics))-len(list(pics_in_wait)))
 
 @userApp.route('/tests/testing/<int:test>', methods=['POST'])
 @login_required
@@ -218,6 +221,7 @@ def testing_post(test):
                 new_tag.symp_id=item
                 new_tag.pic_id=form['picture']
                 new_tag.test_id=test
+                new_tag.timer=form['timer']
                 new_tag.date=datetime.datetime.now()
                 db.session.add(new_tag)
         db.session.commit()
@@ -230,6 +234,7 @@ def testing_post(test):
 def test_results(test, page):
     logging.info("tests")
     test_result=Tests.Tests.query.get(test)
+    test_user=User.User.query.get(test_result.user_id)
     dataset=Datasets.Datasets.query.get(test_result.dataset_id)
     all_test_pics=db.session.query(Usertests.Usertests.pic_id).filter(Usertests.Usertests.dataset_id==test_result.dataset_id).group_by(Usertests.Usertests.pic_id)
     mistakes = list()
@@ -248,6 +253,7 @@ def test_results(test, page):
         mistake.pic_id=pic.pic_id
         mistake.minus = list(set(list(test_app)) - set(list(user_result)))
         mistake.plus = list(set(list(user_result)) - set(list(test_app)))
+        mistake.trues = list(set(list(user_result)) & set(list(test_app)))
         if(len(mistake.plus) + len(mistake.minus) != 0):
             mistakes.append(mistake)
             mistake_pics.append(pic.pic_id)
@@ -256,8 +262,12 @@ def test_results(test, page):
     count = len(list(pics))
     pics = get_pics_for_page(page, pics)
     pagination = Pagination.Pagination(page, PER_PAGE, count)
+    testresult = db.session.query(db.func.max(Testresults.Testresults.date), db.func.min(Testresults.Testresults.date)).filter(
+        Testresults.Testresults.test_id == test).first()
+    time_rec = testresult[0] - testresult[1]
+
     return render_template('tests/results.pug', admin=current_user.admin, pictures=pics, pagination=pagination,
-                           mistakes=mistakes, testid=test, dataset=dataset, user=current_user)
+                           mistakes=mistakes, testid=test, dataset=dataset, rec_user=test_user, time_rec=time_rec)
 
 PER_PAGE = 12
 
@@ -273,3 +283,4 @@ class user_mistakes():
     pic_id = ""
     minus = list()
     plus = list()
+    trues = list()

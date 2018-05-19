@@ -1,10 +1,12 @@
 include application
-include navBar
 currentPage = "/tests"
+include navBar
 
 
 .content
-    h3=dataset.dataset_name~" "~user.user_name
+    h3=dataset.dataset_name
+    h5=rec_user.user_name
+    h5="Время тестирования: "~time_rec
     .row
         if(message)
             div.col-12
@@ -19,8 +21,10 @@ currentPage = "/tests"
                                 each minus in mistake.minus
                                     p=minus.symptom_name
                                 hr
+                                each trues in mistake.trues
+                                    p(style="color:green;")=trues.symptom_name
+                                hr
                                 each plus in mistake.plus
-
                                     p(style="color:red;text-decoration:line-through;")=plus.symptom_name
 
 

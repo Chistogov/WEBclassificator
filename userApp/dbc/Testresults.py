@@ -11,6 +11,7 @@ class Testresults(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     test_id = db.Column(db.Integer, db.ForeignKey('tests.id'), nullable=False)
     date = db.Column(db.Date)
+    timer = db.Column(db.Integer, default=0)
 
     symptom = db.relationship("Symptom", back_populates="test_results")
 
