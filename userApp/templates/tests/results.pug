@@ -7,6 +7,8 @@ include navBar
     h3=dataset.dataset_name
     h5=rec_user.user_name
     h5="Время тестирования: "~time_rec
+    h5="Средний результат по диагнозам: "~summary_percentage_d~"%"
+    h5="Средний результат по визуальным признакам: "~summary_percentage_v~"%"
     .row
         if(message)
             div.col-12
@@ -18,6 +20,8 @@ include navBar
                     .card-body
                         each mistake in mistakes
                             if(mistake.pic_id==pic.id)
+                                p(style="color:blue;")="Результат(визуальные признаки): "~mistake.percentage_v~"%"
+                                p(style="color:blue;")="Результат(диагнозы): "~mistake.percentage_d~"%"
                                 each minus in mistake.minus
                                     p=minus.symptom_name
                                 hr

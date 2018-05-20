@@ -170,28 +170,34 @@ def testing(test):
         test_result = Tests.Tests.query.get(test)
         all_test_pics = db.session.query(Usertests.Usertests.pic_id).filter(
             Usertests.Usertests.dataset_id == test_result.dataset_id).group_by(Usertests.Usertests.pic_id)
-        mistakes = list()
-        mistake_pics = list()
+        i = 0
+        summary_percentage_d = 0.0
         for pic in list(all_test_pics):
 
-            test_app = db.session.query(Symptom.Symptom.symptom_name).filter(
+            test_app_d = db.session.query(Symptom.Symptom.symptom_name).filter(
                 Usertests.Usertests.symp_id == Symptom.Symptom.id,
                 Usertests.Usertests.dataset_id == test_result.dataset_id,
-                Usertests.Usertests.pic_id == pic.pic_id)
-            user_result = db.session.query(Symptom.Symptom.symptom_name).filter(
+                Usertests.Usertests.pic_id == pic.pic_id,
+                Symptom.Symptom.diagnos == True)
+
+            user_result_d = db.session.query(Symptom.Symptom.symptom_name).filter(
                 Testresults.Testresults.symp_id == Symptom.Symptom.id,
                 Testresults.Testresults.test_id == test,
-                Testresults.Testresults.pic_id == pic.pic_id)
-            mistake = user_mistakes()
-            mistake.pic_id = pic.pic_id
-            mistake.minus = list(set(list(test_app)) - set(list(user_result)))
-            mistake.plus = list(set(list(user_result)) - set(list(test_app)))
-            if (len(mistake.plus) + len(mistake.minus) != 0):
-                mistakes.append(mistake)
-                mistake_pics.append(pic.pic_id)
-        test_c.results = 100.0-((100.0 / len(list(all_test_pics))) * len(mistake_pics))
-        print len(mistake_pics)
-        print len(list(all_test_pics))
+                Testresults.Testresults.pic_id == pic.pic_id,
+                Symptom.Symptom.diagnos == True)
+
+            minus_d = list(set(list(test_app_d)) - set(list(user_result_d)))
+            plus_d = list(set(list(user_result_d)) - set(list(test_app_d)))
+            trues_d = list(set(list(user_result_d)) & set(list(test_app_d)))
+
+            percentage_d = (100 / (len(list(minus_d)) + len(list(plus_d)) + len(list(trues_d)))) * len(
+                list(trues_d))
+            i += 1
+            summary_percentage_d = summary_percentage_d + percentage_d
+
+        summary_percentage_d = summary_percentage_d / i
+        summary_percentage_d = round(summary_percentage_d, 2)
+        test_c.results = summary_percentage_d
         test_c.date = datetime.datetime.now()
         db.session.commit()
         message="Тестирование завершено"
@@ -239,6 +245,9 @@ def test_results(test, page):
     all_test_pics=db.session.query(Usertests.Usertests.pic_id).filter(Usertests.Usertests.dataset_id==test_result.dataset_id).group_by(Usertests.Usertests.pic_id)
     mistakes = list()
     mistake_pics = list()
+    i = 0
+    summary_percentage_v = 0.0
+    summary_percentage_d = 0.0
     for pic in list(all_test_pics):
 
         test_app = db.session.query(Symptom.Symptom.symptom_name).filter(
@@ -249,15 +258,52 @@ def test_results(test, page):
             Testresults.Testresults.symp_id == Symptom.Symptom.id,
             Testresults.Testresults.test_id == test,
             Testresults.Testresults.pic_id==pic.pic_id)
+        test_app_v = db.session.query(Symptom.Symptom.symptom_name).filter(
+            Usertests.Usertests.symp_id == Symptom.Symptom.id,
+            Usertests.Usertests.dataset_id == test_result.dataset_id,
+            Usertests.Usertests.pic_id==pic.pic_id,
+            Symptom.Symptom.diagnos == False)
+        test_app_d = db.session.query(Symptom.Symptom.symptom_name).filter(
+            Usertests.Usertests.symp_id == Symptom.Symptom.id,
+            Usertests.Usertests.dataset_id == test_result.dataset_id,
+            Usertests.Usertests.pic_id==pic.pic_id,
+            Symptom.Symptom.diagnos == True)
+        user_result_v = db.session.query(Symptom.Symptom.symptom_name).filter(
+            Testresults.Testresults.symp_id == Symptom.Symptom.id,
+            Testresults.Testresults.test_id == test,
+            Testresults.Testresults.pic_id==pic.pic_id,
+            Symptom.Symptom.diagnos == False)
+        user_result_d = db.session.query(Symptom.Symptom.symptom_name).filter(
+            Testresults.Testresults.symp_id == Symptom.Symptom.id,
+            Testresults.Testresults.test_id == test,
+            Testresults.Testresults.pic_id==pic.pic_id,
+            Symptom.Symptom.diagnos == True)
         mistake = user_mistakes()
         mistake.pic_id=pic.pic_id
         mistake.minus = list(set(list(test_app)) - set(list(user_result)))
         mistake.plus = list(set(list(user_result)) - set(list(test_app)))
         mistake.trues = list(set(list(user_result)) & set(list(test_app)))
-        if(len(mistake.plus) + len(mistake.minus) != 0):
+
+        minus_v = list(set(list(test_app_v)) - set(list(user_result_v)))
+        plus_v = list(set(list(user_result_v)) - set(list(test_app_v)))
+        trues_v = list(set(list(user_result_v)) & set(list(test_app_v)))
+
+        minus_d = list(set(list(test_app_d)) - set(list(user_result_d)))
+        plus_d = list(set(list(user_result_d)) - set(list(test_app_d)))
+        trues_d = list(set(list(user_result_d)) & set(list(test_app_d)))
+
+        mistake.percentage_v = (100/(len(list(minus_v))+len(list(plus_v))+len(list(trues_v))))*len(list(trues_v))
+        i+=1
+        summary_percentage_v = summary_percentage_v+mistake.percentage_v
+        mistake.percentage_d = (100 / (len(list(minus_d)) + len(list(plus_d)) + len(list(trues_d)))) * len(list(trues_d))
+        summary_percentage_d = summary_percentage_d + mistake.percentage_d
+        if(len(mistake.plus) + len(mistake.minus) + len(mistake.trues) != 0):
             mistakes.append(mistake)
             mistake_pics.append(pic.pic_id)
-
+    summary_percentage_v = summary_percentage_v/i
+    summary_percentage_v = round(summary_percentage_v,2)
+    summary_percentage_d = summary_percentage_d / i
+    summary_percentage_d = round(summary_percentage_d, 2)
     pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(mistake_pics))
     count = len(list(pics))
     pics = get_pics_for_page(page, pics)
@@ -267,7 +313,8 @@ def test_results(test, page):
     time_rec = testresult[0] - testresult[1]
 
     return render_template('tests/results.pug', admin=current_user.admin, pictures=pics, pagination=pagination,
-                           mistakes=mistakes, testid=test, dataset=dataset, rec_user=test_user, time_rec=time_rec)
+                           mistakes=mistakes, testid=test, dataset=dataset, rec_user=test_user, time_rec=time_rec,
+                           summary_percentage_v=summary_percentage_v, summary_percentage_d=summary_percentage_d)
 
 PER_PAGE = 12
 
@@ -284,3 +331,5 @@ class user_mistakes():
     minus = list()
     plus = list()
     trues = list()
+    percentage_v = 0.0
+    percentage_d = 0.0
