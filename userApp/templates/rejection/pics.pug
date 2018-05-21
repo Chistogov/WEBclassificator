@@ -14,7 +14,7 @@ include navBar
                     .card-body
                         if (pic.recognized.first())
                             each item in pic.recognized
-                                p(data-toggle="tooltip", data-placement="top", title=item.user.user_name)=item.symptom.symptom_name
+                                p(title=item.user.user_name)=item.symptom.symptom_name
                                     a(href="/pics/"~pic.id~"/"~item.symptom.id~"/remove")
                                         i.material-icons.tiny close
                         div.dropdown

@@ -192,6 +192,8 @@ def testing(test):
 
             percentage_d = (100 / (len(list(minus_d)) + len(list(plus_d)) + len(list(trues_d)))) * len(
                 list(trues_d))
+            if (percentage_d > 0):
+                percentage_d = 100
             i += 1
             summary_percentage_d = summary_percentage_d + percentage_d
 
@@ -296,6 +298,8 @@ def test_results(test, page):
         i+=1
         summary_percentage_v = summary_percentage_v+mistake.percentage_v
         mistake.percentage_d = (100 / (len(list(minus_d)) + len(list(plus_d)) + len(list(trues_d)))) * len(list(trues_d))
+        if(mistake.percentage_d>0):
+            mistake.percentage_d = 100
         summary_percentage_d = summary_percentage_d + mistake.percentage_d
         if(len(mistake.plus) + len(mistake.minus) + len(mistake.trues) != 0):
             mistakes.append(mistake)

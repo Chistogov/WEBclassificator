@@ -36,7 +36,8 @@ c = 0
 d = 0
 l = 0
 
-all_pics = db.session.query(Picture.Picture).all()
+recognized_pics = db.session.query(Cnnrec.Cnnrec.pic_id)
+all_pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.notin_(recognized_pics)).all()
 print str(len(all_pics))
 
 

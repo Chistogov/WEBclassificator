@@ -53,7 +53,7 @@ def rejection_post():
     conflist = list()
     for item in conf:
         conflist.append(item.recognized.pic_id)
-    pics = pics.filter(Picture.Picture.id.notin_(conflist))
+    # pics = pics.filter(Picture.Picture.id.notin_(conflist))
 
     picslist = list()
     for item in pics:
