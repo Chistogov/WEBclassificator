@@ -38,6 +38,8 @@ include navBar
                         div#earTab.tab-pane.fade.show.active(role="tabpanel", aria-labelledby="ear-tab")
                             .card-body
                                 form#earform(method="post" action="#")
+                                    if(picture)
+                                        input.hidden(name = "picture", value=picture.id, hidden)
                                     input.hidden.timer(name = "timer", value=0, hidden)
                                     each symp in symptoms
                                         if (symp.primary and symp.ear)
@@ -85,6 +87,8 @@ include navBar
                         div#throatTab.tab-pane.fade(role="tabpanel", aria-labelledby="throat-tab")
                             .card-body
                                 form#throatform(method="post" action="#")
+                                    if(picture)
+                                        input.hidden(name = "picture", value=picture.id, hidden)
                                     input.hidden.timer(name = "timer", value=0, hidden)
                                     each symp in symptoms
                                         if (symp.primary and symp.throat)
@@ -116,6 +120,8 @@ include navBar
                             .card-body
                                 form#noseform(method="post" action="#")
                                     input.hidden.timer(name = "timer", value=0, hidden)
+                                    if(picture)
+                                        input.hidden(name = "picture", value=picture.id, hidden)
                                     each symp in symptoms
                                         if (symp.primary and symp.nose)
                                             div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag

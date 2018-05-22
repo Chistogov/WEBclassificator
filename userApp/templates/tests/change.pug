@@ -15,14 +15,23 @@ include navBar
                     img.card-img-top.zoom(src='/data/'~pic.pic_name, width="100%")
                     .card-body
                         if (pic.recognized.first())
-                            each item in pic.recognized
-                                p(data-toggle="tooltip", data-placement="top", title=item.user.user_name)=item.symptom.symptom_name
+                            each item in pic.confirmed
+                                p(title=item.user.user_name)=item.recognized.symptom.symptom_name
                         hr
                         if (pic.user_tests.first())
-                            each item in pic.user_tests
-                                p(data-toggle="tooltip", data-placement="top", title=item.user.user_name)=item.dataset.dataset_name~"("~item.symptom.symptom_name~")"
-                                    a(href="/tests/"~pic.id~"/"~item.symptom.id~"/"~item.dataset.id~"/remove")
-                                        i.material-icons.tiny close
+                            each test in tests
+                                div(id="acc"~pic.id~test.id)
+                                    .card
+                                        .card-header(id = "head"~pic.id~test.id)
+                                            div.btn.btn-link.collapsed(data-toggle="collapse", data-target="#list"~pic.id~test.id, aria-expanded="false")=test.dataset_name
+                                        div.collapse(id = "list"~pic.id~test.id, aria-labelledby="#head"~pic.id~test.id, data-parent="#acc"~pic.id~test.id)
+                                            div.card-body
+                                                ul.list-group
+                                                    each item in pic.user_tests
+                                                        if(item.dataset_id==test.id)
+                                                            li(title=item.user.user_name)=item.symptom.symptom_name
+                                                                a(href="/tests/"~pic.id~"/"~item.symptom.id~"/"~item.dataset.id~"/remove")
+                                                                    i.material-icons.tiny close
                         div.dropdown
                             button.btn.btn-secondary.dropdown-toggle(type="button", id="dropdownMenu"~pic.id, data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Добавить к тесту"
                             div.dropdown-menu(aria-labelledby="dropdownMenu"~pic.id)

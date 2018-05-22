@@ -64,8 +64,6 @@ def tests_change(page):
     pics = db.session.query(Picture.Picture).filter(Confirmed.Confirmed.pic_id == Picture.Picture.id, Confirmed.Confirmed.user_id == current_user.id)
     count = len(list(pics))
     pics = get_pics_for_page(page, pics)
-    for pic in pics:
-        print pic.pic_name
     pagination = Pagination.Pagination(page, PER_PAGE, count)
     tests = db.session.query(Datasets.Datasets)
     return render_template('tests/change.pug', admin=current_user.admin, message=message, tests = tests,
@@ -79,11 +77,12 @@ def tests_add_pic(pic, test):
     if not(current_user.admin):
         return redirect('/')
 
-    recs = db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id == pic)
-    for rec in recs:
+    confirmed = db.session.query(Confirmed.Confirmed).filter(Confirmed.Confirmed.pic_id == pic, Confirmed.Confirmed.user_id==current_user.id)
+    for conf in confirmed:
         new_tag = Usertests.Usertests()
         new_tag.pic_id=pic
         new_tag.user_id=current_user.id
+        rec = Recognized.Recognized.query.get(conf.rec_id)
         new_tag.symp_id=rec.symp_id
         new_tag.dataset_id=test
         exist = db.session.query(Usertests.Usertests).filter(Usertests.Usertests.pic_id == pic,
@@ -223,7 +222,6 @@ def testing_post(test):
     if(form.has_key('picture')):
         for item in form:
             if(item.isdigit()):
-                print item
                 new_tag = Testresults.Testresults()
                 new_tag.user_id=current_user.id
                 new_tag.symp_id=item
