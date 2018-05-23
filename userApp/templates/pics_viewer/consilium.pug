@@ -1,0 +1,80 @@
+include application
+currentPage = "/consilium"
+include navBar
+
+.content
+    .row
+        div.col-md-6
+            .card.card-block
+                .card-body
+                    if(pic)
+                        img.materialboxed(src="/data/"~pic.pic_name, width="100%")
+            .card.card-block
+                .card-body
+                    h5.card-title="Нейросеть"
+                    each item in neural
+                        li.card-text=item.cnnSymptom.symptom_name
+        div.col-md-6
+            .card.card-block
+                .card-body
+                    h5.card-title="Пользователи"
+                    each user_ in user_rec
+                        div(id="acc"~user_.id)
+                            .card
+                                .card-header(id = "head"~user_.id)
+                                    div.btn.btn-link.collapsed(data-toggle="collapse", data-target="#list"~user_.id, aria-expanded="false")=user_.user_name
+                                div.collapse(id = "list"~user_.id, aria-labelledby="#head"~user_.id, data-parent="#acc"~user_.id)
+                                    div.card-body
+                                        ul.list-group
+                                            each rec in recognized
+                                                if(rec.user_id == user_.id)
+                                                    if(rec.symptom.primary)
+                                                        p=rec.symptom.symptom_name
+                                            each rec in recognized
+                                                if(rec.user_id == user_.id)
+                                                    if not(rec.symptom.ismedical or rec.symptom.primary)
+                                                        p(style="color:blue;")=rec.symptom.symptom_name
+                                            each rec in recognized
+                                                if(rec.user_id == user_.id)
+                                                    if(rec.symptom.ismedical and not(rec.symptom.diagnos) and not(rec.symptom.primary))
+                                                        p(style="color:green;")=rec.symptom.symptom_name~" ("~rec.symptom.category.category_name~")"
+                                            each rec in recognized
+                                                if(rec.user_id == user_.id)
+                                                    if(rec.symptom.ismedical and rec.symptom.diagnos and not(rec.symptom.primary))
+                                                        p(style="color:red;")=rec.symptom.symptom_name
+            .card.card-block
+                .card-body
+                    h5.card-title="Признаки"
+                    form#testForm(method="post" action="#")
+                        if(pic)
+                            input.hidden(name = "pic", value=pic.id, hidden)
+                        each rec in symptom_list
+                            if(rec.symptom.primary)
+                                div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                    input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~'symp', name=rec.symptom.id, data-name=rec.symptom.symptom_name)
+                                    label.custom-control-label(for=rec.symptom.id~'symp')=rec.symptom.symptom_name
+                        hr
+                        each rec in symptom_list
+                            if not(rec.symptom.ismedical or rec.symptom.primary)
+                                div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                    input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~'symp', name=rec.symptom.id, data-name=rec.symptom.symptom_name)
+                                    label.custom-control-label(for=rec.symptom.id~'symp', style="color:blue;")=rec.symptom.symptom_name
+                        hr
+                        each rec in symptom_list
+                            if(rec.symptom.ismedical and not(rec.symptom.diagnos) and not(rec.symptom.primary))
+                                div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                    input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~'symp', name=rec.symptom.id, data-name=rec.symptom.symptom_name)
+                                    label.custom-control-label(for=rec.symptom.id~'symp', style="color:green;")=rec.symptom.symptom_name~" ("~rec.symptom.category.category_name~")"~" ("~rec.count~"%)"
+                        hr
+                        each rec in symptom_list
+                            if(rec.symptom.ismedical and rec.symptom.diagnos and not(rec.symptom.primary))
+                                div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                    input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~'symp', name=rec.symptom.id, data-name=rec.symptom.symptom_name)
+                                    label.custom-control-label(for=rec.symptom.id~'symp', style="color:red;")=rec.symptom.symptom_name~" ("~rec.count~"%)"
+                        hr
+                        each dataset in datasets
+                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                input.custom-control-input.checkitem(type="checkbox", id=dataset.id~'test', name=dataset.id~"test", value=dataset.id, data-name=dataset.dataset_name  )
+                                label.custom-control-label(for=dataset.id~'test')=dataset.dataset_name
+                        if(pic)
+                            button.btn.btn-success(href="#" type="submit")="Добавить в тесты"

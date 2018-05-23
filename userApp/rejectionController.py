@@ -89,6 +89,31 @@ def pic_submit(pic):
         db.session.commit()
     return redirect(request.referrer)
 
+@userApp.route('/rejection/submit/<int:pic>/<int:user_id>')
+@login_required
+def pic_submit_user(pic, user_id):
+    if (current_user.user_name == "demo"):
+        return redirect(request.referrer)
+    if not(current_user.admin):
+        return redirect('/')
+    recs = db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id == pic, Recognized.Recognized.user_id == user_id)
+
+    conf = db.session.query(Confirmed.Confirmed).filter(Confirmed.Confirmed.user_id == current_user.id)
+    for item in conf:
+        if (item.recognized.pic_id==pic):
+            print ("Double Click Error")
+            return redirect(request.referrer)
+
+    for rec in recs:
+        confirmed = Confirmed.Confirmed()
+        confirmed.user_id = current_user.id
+        confirmed.rec_id = rec.id
+        confirmed.date = datetime.datetime.now()
+        confirmed.pic_id = rec.pic_id
+        db.session.add(confirmed)
+        db.session.commit()
+    return redirect(request.referrer)
+
 PER_PAGE = 12
 
 @userApp.route('/rejection/search', methods=['GET'])
@@ -97,12 +122,14 @@ def rejection_search():
     page=int(request.args.get('page'))
     picslist = request.args.getlist('p')
     symp_type = request.args.get('symp_type')
+    user_owner = request.args.get('user_owner')
     pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(picslist))
-
+    # print "rejection_search " + user_owner
     count = len(list(pics))
     pics = get_pics_for_page(page, pics)
     pagination = Pagination.Pagination(page, PER_PAGE, count)
     symptoms = db.session.query(Symptom.Symptom)
+
     if(symp_type == "nose"):
         symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.nose == True)
     elif (symp_type == "throat"):
@@ -111,7 +138,9 @@ def rejection_search():
         symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.ear == True)
 
     confirmed = db.session.query(Confirmed.Confirmed.pic_id).filter(Confirmed.Confirmed.user_id == current_user.id).group_by(Confirmed.Confirmed.pic_id)
-    return render_template('/rejection/pics.pug', confirmed = confirmed,admin=current_user.admin, pictures=pics, pagination=pagination, request=request, symptoms=symptoms)
+    if not(user_owner):
+        user_owner=0
+    return render_template('/rejection/pics.pug', confirmed = confirmed,admin=current_user.admin, pictures=pics, pagination=pagination, request=request, symptoms=symptoms, user_owner=int(user_owner))
 
 def get_pics_for_page(page, pics):
     pics = pics.group_by(Picture.Picture.id)

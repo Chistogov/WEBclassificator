@@ -26,6 +26,7 @@ from userApp import Pagination
 from userApp import AlchemyEncoder
 from userApp import rejectionController
 from userApp import testsController
+from userApp import consiliumController
 
 from userApp import updateController
 

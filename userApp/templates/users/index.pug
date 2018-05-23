@@ -14,7 +14,8 @@ include navBar
                             each item in recHistory
                                 tr
                                     td="Дата: "~item.date
-                                    td="Распознано: "~item.count_rec
+                                    td
+                                        a(href="/user_day_rec/"~user.id~"/"~item.date)="Распознано: "~item.count_rec
                                     td="Ошибки: "~item.mistakes
                                     td="Процент ошибок: "~item.mpercentage~"%"
                                     td="Время работы: "~item.time~" (ч)"

@@ -17,7 +17,8 @@ include navBar
                     img.materialboxed(src='/data/'~pic.pic_name, width="100%")
                     .card-body
                         each item in pic.user_tests
-                            p(data-toggle="tooltip", data-placement="top", title=item.user.user_name)=item.symptom.symptom_name
+                            if(item.dataset_id == dataset.id)
+                                p(title=item.user.user_name)=item.symptom.symptom_name
 
 
 .content
