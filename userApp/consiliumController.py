@@ -11,13 +11,14 @@ import logging
 @login_required
 def consilium(pic_id):
     # ***
-    recognized = db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id == pic_id)
+    experts = db.session.query(User.User.id).filter(User.User.expert == True)
+    recognized = db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id == pic_id, Recognized.Recognized.user_id.in_(experts))
     symp_ids = list()
     for item in db.session.query(Recognized.Recognized.symp_id).filter(Recognized.Recognized.pic_id == pic_id).group_by(Recognized.Recognized.user_id, Recognized.Recognized.symp_id):
         symp_ids.append(item.symp_id)
-    user_rec = db.session.query(Recognized.Recognized.user_id).filter(Recognized.Recognized.pic_id == pic_id).group_by(Recognized.Recognized.user_id)
-    user_rec = db.session.query(User.User).filter(User.User.id.in_(user_rec))
-    recognized_count = db.session.query(db.func.count(Recognized.Recognized.symp_id)).filter(Recognized.Recognized.pic_id == pic_id).group_by(Recognized.Recognized.symp_id)
+    user_rec = db.session.query(Recognized.Recognized.user_id).filter(Recognized.Recognized.pic_id == pic_id, Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.user_id)
+    user_rec = db.session.query(User.User).filter(User.User.id.in_(user_rec), User.User.expert == True)
+    recognized_count = db.session.query(db.func.count(Recognized.Recognized.symp_id)).filter(Recognized.Recognized.pic_id == pic_id, Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.symp_id)
     symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.id.in_(symp_ids))
     symptom_list = list()
     diagnoses = db.session.query(Symptom.Symptom.id).filter(Symptom.Symptom.diagnos == True)
@@ -40,7 +41,7 @@ def consilium(pic_id):
     return render_template('pics_viewer/consilium.pug', admin=current_user.admin, neural=neural, pic=pic, user_rec=user_rec, recognized=recognized, datasets=datasets
                            , recognized_count=recognized_count, symptom_list=symptom_list)
 
-@userApp.route('/consilium/<int:pic_id>', methods=['POST'])
+@userApp.route('/consilium/pic/<int:pic_id>', methods=['POST'])
 @login_required
 def consilium_post(pic_id):
     if not(current_user.admin):
@@ -77,25 +78,75 @@ def consilium_post(pic_id):
 
     return redirect(request.referrer)
 
-@userApp.route('/user_day_rec/<int:user_id>/<string:date>', methods=['GET'])
+
+PER_PAGE = 12
+
+@userApp.route('/consilium/', defaults={'page': 0})
+@userApp.route('/consilium/<int:page>')
 @login_required
-def user_day_rec(user_id, date):
+def consilium_view(page):
+    print "consilium_view"
     if not(current_user.admin):
         return redirect(request.referrer)
-    if(current_user.user_name == "demo"):
-        return redirect(url_for('rejection', message="Demo user, read only"))
-    print user_id
-    print date
-    pics = db.session.query(Picture.Picture).join(Recognized.Recognized)
-    pics = pics.filter(Recognized.Recognized.user_id == user_id)
-    date = datetime.datetime.strptime(date, "%Y-%m-%d")
-    pics = pics.filter(db.func.DATE(Recognized.Recognized.date) == date)
-    picslist = list()
-    for item in pics:
-        picslist.append(item.id)
-    print "user_day_rec " + str(user_id)
-    return redirect(url_for('rejection_search', page=0, p=picslist, user_owner=user_id))
+    experts = db.session.query(User.User.id).filter(User.User.expert == True)
+    pics = db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.pic_id)
+    pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(pics))
+    count = len(list(pics))
+    pics = get_pics_for_page(page, pics)
+    pagination = Pagination.Pagination(page, PER_PAGE, count)
+    pics_list = list()
+    print "here"
+    for pic in pics:
+        form = picsForm()
+        form.pic = pic
+        print pic.id
+        experts = db.session.query(User.User.id).filter(User.User.expert == True)
+
+        symp_ids = list()
+        for item in db.session.query(Recognized.Recognized.symp_id).filter(
+                Recognized.Recognized.pic_id == pic.id).group_by(Recognized.Recognized.user_id,
+                                                                 Recognized.Recognized.symp_id):
+            symp_ids.append(item.symp_id)
+        user_rec = db.session.query(Recognized.Recognized.user_id).filter(Recognized.Recognized.pic_id == pic.id,
+                                                                          Recognized.Recognized.user_id.in_(
+                                                                              experts)).group_by(
+            Recognized.Recognized.user_id)
+        user_rec = db.session.query(User.User).filter(User.User.id.in_(user_rec), User.User.expert == True)
+
+        symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.id.in_(symp_ids))
+        symptom_list = list()
+        diagnoses = db.session.query(Symptom.Symptom.id).filter(Symptom.Symptom.diagnos == True)
+        count_users = len(list(user_rec))
+        count_diagnoses = len(list(
+            db.session.query(Recognized.Recognized.user_id).filter(Recognized.Recognized.pic_id == pic.id,
+                                                                   Recognized.Recognized.symp_id.in_(
+                                                                       diagnoses)).group_by(
+                Recognized.Recognized.user_id)))
+        for symptom in symptoms:
+            symp = picSymps()
+            symp.symptom = symptom
+            if (symptom.ismedical and not (symptom.primary)):
+                symp.count = (100 / count_users) * symp_ids.count(symptom.id)
+            if (symptom.diagnos):
+                symp.count = (100 / count_diagnoses) * symp_ids.count(symptom.id)
+            symptom_list.append(symp)
+        form.symps=symptom_list
+        pics_list.append(form)
+
+    return render_template('/consilium/index.pug', admin=current_user.admin, pagination=pagination, pictures=pics_list)
+
+def get_pics_for_page(page, pics):
+    pics = pics.group_by(Picture.Picture.id)
+    if PER_PAGE:
+        pics = pics.limit(PER_PAGE)
+    if page:
+        pics = pics.offset(page * PER_PAGE)
+    return pics
 
 class picSymps():
     symptom = None
     count = 0
+
+class picsForm():
+    pic = None
+    symps = picSymps()

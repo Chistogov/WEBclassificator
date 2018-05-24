@@ -76,6 +76,13 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                     li.nav-item
                         a.nav-link(href="/users", target="_self") Пользователи
             if(admin)
+                if(currentPage == "/consilium")
+                    li.nav-item
+                        a.nav-link.active(href="/consilium", target="_self") Консилиум
+                else
+                    li.nav-item
+                        a.nav-link(href="/consilium", target="_self") Консилиум
+            if(admin)
                 if(currentPage == "/indexing")
                     li.nav-item
                         a.nav-link.active(href="/indexing", target="_self") Индексация

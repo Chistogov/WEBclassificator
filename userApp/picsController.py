@@ -81,3 +81,5 @@ def pic_add_symp(pic, symp):
     db.session.commit()
 
     return redirect(request.referrer)
+
+

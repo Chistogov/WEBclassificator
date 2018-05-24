@@ -12,6 +12,11 @@ class Symptom(db.Model):
     diagnos = db.Column(db.Boolean, default=False)
     primary = db.Column(db.Boolean, default=False)
     cat_id = db.Column(db.ForeignKey('category.id'))
+    weight = db.Column(db.Integer)
+
+    __mapper_args__ = {
+        "order_by": weight
+    }
 
     category = db.relationship('Category', back_populates='symptom')
 

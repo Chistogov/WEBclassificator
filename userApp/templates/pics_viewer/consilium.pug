@@ -50,31 +50,16 @@ include navBar
                             input.hidden(name = "pic", value=pic.id, hidden)
                         each rec in symptom_list
                             if(rec.symptom.primary)
-                                div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
-                                    input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~'symp', name=rec.symptom.id, data-name=rec.symptom.symptom_name)
-                                    label.custom-control-label(for=rec.symptom.id~'symp')=rec.symptom.symptom_name
+                                p=rec.symptom.symptom_name
                         hr
                         each rec in symptom_list
                             if not(rec.symptom.ismedical or rec.symptom.primary)
-                                div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
-                                    input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~'symp', name=rec.symptom.id, data-name=rec.symptom.symptom_name)
-                                    label.custom-control-label(for=rec.symptom.id~'symp', style="color:blue;")=rec.symptom.symptom_name
+                                p(style="color:blue;")=rec.symptom.symptom_name
                         hr
                         each rec in symptom_list
                             if(rec.symptom.ismedical and not(rec.symptom.diagnos) and not(rec.symptom.primary))
-                                div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
-                                    input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~'symp', name=rec.symptom.id, data-name=rec.symptom.symptom_name)
-                                    label.custom-control-label(for=rec.symptom.id~'symp', style="color:green;")=rec.symptom.symptom_name~" ("~rec.symptom.category.category_name~")"~" ("~rec.count~"%)"
+                                p(style="color:green;")=rec.symptom.symptom_name~" ("~rec.symptom.category.category_name~")"~" ("~rec.count~"%)"
                         hr
                         each rec in symptom_list
                             if(rec.symptom.ismedical and rec.symptom.diagnos and not(rec.symptom.primary))
-                                div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
-                                    input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~'symp', name=rec.symptom.id, data-name=rec.symptom.symptom_name)
-                                    label.custom-control-label(for=rec.symptom.id~'symp', style="color:red;")=rec.symptom.symptom_name~" ("~rec.count~"%)"
-                        hr
-                        each dataset in datasets
-                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
-                                input.custom-control-input.checkitem(type="checkbox", id=dataset.id~'test', name=dataset.id~"test", value=dataset.id, data-name=dataset.dataset_name  )
-                                label.custom-control-label(for=dataset.id~'test')=dataset.dataset_name
-                        if(pic)
-                            button.btn.btn-success(href="#" type="submit")="Добавить в тесты"
+                                p(style="color:red;")=rec.symptom.symptom_name~" ("~rec.count~"%)"

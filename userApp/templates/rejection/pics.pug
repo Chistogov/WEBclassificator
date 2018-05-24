@@ -10,8 +10,7 @@ include navBar
         each pic in pictures
             div.col-3
                 .card.card-block
-                    a(href = "/consilium/"~pic.id)
-                        img.card-img-top.zoom(src='/data/'~pic.pic_name, width="100%")
+                    img.card-img-top.zoom(src='/data/'~pic.pic_name, width="100%")
                     .card-body
                         if (pic.recognized.first())
                             each item in pic.recognized

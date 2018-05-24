@@ -8,6 +8,7 @@ class User(db.Model, UserMixin):
     user_name = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(50), unique=True)
     admin = db.Column(db.Boolean)
+    expert = db.Column(db.Boolean)
 
     recognized = db.relationship('Recognized', back_populates='user',
                             lazy='dynamic',

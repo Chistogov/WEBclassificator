@@ -114,6 +114,25 @@ def pic_submit_user(pic, user_id):
         db.session.commit()
     return redirect(request.referrer)
 
+@userApp.route('/user_day_rec/<int:user_id>/<string:date>', methods=['GET'])
+@login_required
+def user_day_rec(user_id, date):
+    if not(current_user.admin):
+        return redirect(request.referrer)
+    if(current_user.user_name == "demo"):
+        return redirect(url_for('rejection', message="Demo user, read only"))
+    print user_id
+    print date
+    pics = db.session.query(Picture.Picture).join(Recognized.Recognized)
+    pics = pics.filter(Recognized.Recognized.user_id == user_id)
+    date = datetime.datetime.strptime(date, "%Y-%m-%d")
+    pics = pics.filter(db.func.DATE(Recognized.Recognized.date) == date)
+    picslist = list()
+    for item in pics:
+        picslist.append(item.id)
+    print "user_day_rec " + str(user_id)
+    return redirect(url_for('rejection_search', page=0, p=picslist, user_owner=user_id))
+
 PER_PAGE = 12
 
 @userApp.route('/rejection/search', methods=['GET'])

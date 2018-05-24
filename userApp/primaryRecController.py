@@ -21,7 +21,7 @@ def sec_rec():
         appointed = pic[2]
     else:
         message = "No data"
-    symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id)
+    symptoms = db.session.query(Symptom.Symptom)
     pics_today = db.session.query(Recognized.Recognized.pic_id).filter(db.func.DATE(Recognized.Recognized.date)==datetime.datetime.now().date(),
                                                                       Recognized.Recognized.user_id==current_user.id)\
                                                                     .group_by(Recognized.Recognized.pic_id)

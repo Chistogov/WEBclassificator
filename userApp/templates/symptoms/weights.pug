@@ -1,0 +1,115 @@
+include application
+currentPage = "/rec"
+include navBar
+
+.content
+    .row
+        div.col-md-12
+            .card.card-block
+                nav
+                    div#tabForm.nav.nav-tabs(role="tablist")
+                        a.nav-item.nav-link.active(href="#earTab", data-toggle="tab",id="ear-tab", aria-controls="earTab", aria-selected="true")="Ухо"
+                        a.nav-item.nav-link(href="#throatTab", data-toggle="tab",id="throat-tab", aria-controls="throatTab", aria-selected="false")="Горло"
+                        a.nav-item.nav-link(href="#noseTab", data-toggle="tab",id="nose-tab", role="tab", aria-controls="noseTab", aria-selected="false")="Нос"
+                    .tab-content
+                        div#earTab.tab-pane.fade.show.active(role="tabpanel", aria-labelledby="ear-tab")
+                            .card-body
+                                form#earform(method="post" action="#")
+                                    each symp in symptoms
+                                        if (symp.primary and symp.ear)
+                                            div.form-group
+                                                label(for=symp.id~'ear')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'ear', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    each symp in symptoms
+                                        if not(symp.ismedical or symp.primary)
+                                            div.form-group
+                                                label(for=symp.id~'ear')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'ear', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    each cat in categories
+                                        if(cat.id == 1)
+                                            a.btn.btn-link(data-toggle="collapse", href="#nose"~cat.id, aria-expanded="true", aria-controls="#nose"~cat.id)=cat.category_name
+                                        else
+                                            a.btn.btn-link(data-toggle="collapse", href="#nose"~cat.id, aria-expanded="true", aria-controls="#nose"~cat.id)=cat.category_name
+                                    each cat in categories
+                                        if(cat.id == 1)
+                                            div.collapse.show(id="nose"~cat.id)
+                                                each symp in symptoms
+                                                    if(symp.symptom_name and symp.ear and symp.ismedical and not(symp.diagnos) and not(symp.primary))
+                                                        if(symp.cat_id == cat.id)
+                                                            div.form-group
+                                                                label(for=symp.id~'ear')=symp.symptom_name
+                                                                input(class="form-control", id=symp.id~'ear', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                        else
+                                            div.collapse(id="nose"~cat.id)
+                                                each symp in symptoms
+                                                    if(symp.symptom_name and symp.ear and symp.ismedical and not(symp.diagnos) and not(symp.primary))
+                                                        if(symp.cat_id == cat.id)
+                                                            div.form-group
+                                                                label(for=symp.id~'ear')=symp.symptom_name
+                                                                input(class="form-control", id=symp.id~'ear', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.ear and symp.ismedical and symp.diagnos and not(symp.primary))
+                                            div.form-group
+                                                label(for=symp.id~'ear')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'ear', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    button.btn.btn-success(href="#" type="submit")="Сохранить"
+                        div#throatTab.tab-pane.fade(role="tabpanel", aria-labelledby="throat-tab")
+                            .card-body
+                                form#throatform(method="post" action="#")
+                                    each symp in symptoms
+                                        if (symp.primary and symp.throat)
+                                            div.form-group
+                                                label(for=symp.id~'throat')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'throat', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    each symp in symptoms
+                                        if not(symp.ismedical or symp.primary)
+                                            div.form-group
+                                                label(for=symp.id~'throat')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'throat', name=symp.id, name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.throat and symp.ismedical and not(symp.diagnos) and not(symp.primary))
+                                            div.form-group
+                                                label(for=symp.id~'throat')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'throat', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.throat and symp.ismedical and symp.diagnos and not(symp.primary))
+                                            div.form-group
+                                                label(for=symp.id~'throat')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'throat', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    button.btn.btn-success(href="#" type="submit")="Сохранить"
+                        div#noseTab.tab-pane.fade(role="tabpanel", aria-labelledby="nose-tab")
+                            .card-body
+                                form#noseform(method="post" action="#")
+                                    each symp in symptoms
+                                        if (symp.primary and symp.nose)
+                                            div.form-group
+                                                label(for=symp.id~'nose')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'nose', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    each symp in symptoms
+                                        if not(symp.ismedical or symp.primary)
+                                            div.form-group
+                                                label(for=symp.id~'nose')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'nose', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.nose and symp.ismedical and not(symp.diagnos) and not(symp.primary))
+                                            div.form-group
+                                                label(for=symp.id~'nose')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'nose', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.nose and symp.ismedical and symp.diagnos and not(symp.primary))
+                                            div.form-group
+                                                label(for=symp.id~'nose')=symp.symptom_name
+                                                input(class="form-control", id=symp.id~'nose', name=symp.id, placeholder=symp.symptom_name, value=symp.weight)
+                                    hr
+                                    button.btn.btn-success(href="#" type="submit")="Сохранить"

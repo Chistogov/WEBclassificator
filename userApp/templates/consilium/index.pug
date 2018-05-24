@@ -1,0 +1,56 @@
+include application
+include navBar
+
+
+.content
+    .row
+        if(message)
+            div.col-12
+                div.alert.alert-danger(role="alert")=message
+        each item in pictures
+            div.col-4
+                .card.card-block
+                    a(href = "/consilium/pic/"~item.pic.id)
+                        img.card-img-top.zoom(src='/data/'~item.pic.pic_name, width="100%")
+                    .card-body
+                        p=item.pic.id
+                        form#testForm(method="post" action="#")
+                            input.hidden(name = "pic", value=item.pic.id, hidden)
+                            each rec in item.symps
+                                if(rec.symptom.primary)
+                                    p=rec.symptom.symptom_name
+                            hr
+                            each rec in item.symps
+                                if not(rec.symptom.ismedical or rec.symptom.primary)
+                                    p(style="color:blue;")=rec.symptom.symptom_name
+                            hr
+                            each rec in item.symps
+                                if(rec.symptom.ismedical and not(rec.symptom.diagnos) and not(rec.symptom.primary))
+                                    p(style="color:green;")=rec.symptom.symptom_name~" ("~rec.symptom.category.category_name~")"~" ("~rec.count~"%)"
+                            hr
+                            each rec in item.symps
+                                if(rec.symptom.ismedical and rec.symptom.diagnos and not(rec.symptom.primary))
+                                    p(style="color:red;")=rec.symptom.symptom_name~" ("~rec.count~"%)"
+
+.content
+    .row
+        div.col-s4.pagination-center
+            ul.pagination
+                li.page-item
+                    a.page-link(href=url_for('rejection_search', page=0, p=request.args.getlist('p'))) Первая
+                if(pagination.page == 0)
+                    li.page-item(hidden=true)
+                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, p=request.args.getlist('p'))) &laquo;
+                else
+                    li.page-item
+                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, p=request.args.getlist('p'))) &laquo;
+                li.page-item
+                    a.page-link(href='')=(pagination.page+1)
+                if(pagination.page == pagination.total_pages)
+                    li.page-item(hidden=true)
+                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, p=request.args.getlist('p'))) &raquo;
+                else
+                    li.page-item
+                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, p=request.args.getlist('p'))) &raquo;
+                li.page-item
+                    a.page-link(href=url_for('rejection_search', page=pagination.total_pages, p=request.args.getlist('p'))) Последняя

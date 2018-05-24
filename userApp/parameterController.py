@@ -14,7 +14,7 @@ def parameter():
     message = ""
     if ('message' in request.args):
         message = request.args['message']
-    symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id).all()
+    symptoms = db.session.query(Symptom.Symptom)
     categories = Category.Category.query.order_by(Category.Category.id).all()
     return render_template('parameter.pug', symptoms=symptoms, admin=current_user.admin, message=message, category=categories)
 
@@ -46,3 +46,29 @@ def parameter_post():
         db.session.commit()
     return redirect('/settings')
 
+
+@userApp.route('/settings/symps', methods=['GET'])
+@login_required
+def parameter_weights():
+    if not(current_user.admin):
+        return redirect('/')
+    logging.info('parameter')
+    message = ""
+    if ('message' in request.args):
+        message = request.args['message']
+    symptoms = db.session.query(Symptom.Symptom)
+    categories = Category.Category.query.order_by(Category.Category.id).all()
+    return render_template('symptoms/weights.pug', symptoms=symptoms, admin=current_user.admin, message=message, categories=categories)
+
+@userApp.route('/settings/symps', methods=['POST'])
+@login_required
+def parameter_weights_post():
+    if not(current_user.admin):
+        return redirect('/')
+    form = request.form
+    print "form"
+    for item in form:
+        symp = Symptom.Symptom.query.get(item)
+        symp.weight = form[item]
+        db.session.commit()
+    return redirect(request.referrer)
