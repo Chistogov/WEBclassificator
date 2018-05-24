@@ -7,7 +7,7 @@ import datetime
 import logging
 
 
-@userApp.route('/consilium/<int:pic_id>')
+@userApp.route('/consilium/pic/<int:pic_id>')
 @login_required
 def consilium(pic_id):
     # ***
