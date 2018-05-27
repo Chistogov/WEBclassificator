@@ -27,6 +27,7 @@ from userApp import AlchemyEncoder
 from userApp import rejectionController
 from userApp import testsController
 from userApp import consiliumController
+from userApp import secondaryRecController
 
 from userApp import updateController
 

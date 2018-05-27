@@ -1,4 +1,4 @@
-from userApp.dbc import db, Recognized, Appoint, Cnnrec, Mistakes, Confirmed, Usertests, Testresults
+from userApp.dbc import db, Recognized, Appoint, Cnnrec, Mistakes, Confirmed, Usertests, Testresults, Consilium
 
 
 class Picture(db.Model):
@@ -36,6 +36,10 @@ class Picture(db.Model):
     test_results = db.relationship('Testresults', back_populates='picture',
                                    lazy='dynamic',
                                    primaryjoin=id == Testresults.Testresults.pic_id)
+
+    consilium = db.relationship('Consilium', back_populates='picture',
+                                   lazy='dynamic',
+                                   primaryjoin=id == Consilium.Consilium.pic_id)
 
     # def __init__(self, id, pic_name, index_date, note, hash, first_rec, skipped):
     #     self.id = id

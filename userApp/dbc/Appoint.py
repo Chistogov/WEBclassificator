@@ -8,6 +8,7 @@ class Appoint(db.Model):
     pic_id = db.Column(db.Integer, db.ForeignKey('pictures.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     date = db.Column(db.Date)
+    secondary = db.Column(db.Boolean)
 
     user = db.relationship("User", back_populates="app")
 

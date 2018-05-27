@@ -1,0 +1,24 @@
+include application
+currentPage = "/tests"
+include navBar
+
+.content
+    .row
+        div.col-12
+            .card.card-block
+                .card-body
+                    h5.card-title="Формирование тестирования"
+                    if(message)
+                        div.alert.alert-danger(role="alert")=message
+                    form#addForm(method="post" action="#")
+                        div.form-group
+                            select.form-control(name="test", required)
+                                option(value="0", selected, disabled)="Тест"
+                                for test in tests
+                                    option(value=test.id)=test.dataset_name
+                        div.col-md-4
+                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                input.custom-control-input(type="checkbox", id='notUsing', name="notUsing")
+                                label.custom-control-label(for='notUsing')="Только неиспользуемые в других тестах"
+                        hr
+                        button.btn.btn-primary(href="#" type="submit")="Добавить"

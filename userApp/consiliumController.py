@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, redirect, url_for, request
 from userApp import *
-from userApp.dbc import User, db, Recognized, Appoint, Journal, Category, Usertests, Testresults, Tests, Datasets, Picture, Cnnrec, Confirmed, Symptom
+from userApp.dbc import User, db, Recognized, Consilium, Journal, Category, Usertests, Testresults, Tests, Datasets, Picture, Cnnrec, Confirmed, Symptom
 from flask_login import login_required, current_user
 import datetime
 import logging
@@ -82,10 +82,9 @@ def consilium_post(pic_id):
 PER_PAGE = 12
 
 @userApp.route('/consilium/', defaults={'page': 0})
-@userApp.route('/consilium/<int:page>')
+@userApp.route('/consilium/<int:page>', methods=['GET'])
 @login_required
 def consilium_view(page):
-    print "consilium_view"
     if not(current_user.admin):
         return redirect(request.referrer)
     experts = db.session.query(User.User.id).filter(User.User.expert == True)
@@ -95,11 +94,9 @@ def consilium_view(page):
     pics = get_pics_for_page(page, pics)
     pagination = Pagination.Pagination(page, PER_PAGE, count)
     pics_list = list()
-    print "here"
     for pic in pics:
         form = picsForm()
         form.pic = pic
-        print pic.id
         experts = db.session.query(User.User.id).filter(User.User.expert == True)
 
         symp_ids = list()
@@ -131,9 +128,36 @@ def consilium_view(page):
                 symp.count = (100 / count_diagnoses) * symp_ids.count(symptom.id)
             symptom_list.append(symp)
         form.symps=symptom_list
+        cons = db.session.query(Consilium.Consilium.symp_id).filter(Consilium.Consilium.pic_id == pic.id)
+        form.consilium = list()
+        if(len(list(cons))>0):
+            for cns in cons:
+                form.consilium.append(cns.symp_id)
         pics_list.append(form)
 
     return render_template('/consilium/index.pug', admin=current_user.admin, pagination=pagination, pictures=pics_list)
+
+@userApp.route('/consilium/', methods=['POST'])
+@userApp.route('/consilium/<int:page>', methods=['POST'])
+@login_required
+def consilium_view_post():
+    if not(current_user.admin):
+        return redirect(request.referrer)
+    form = request.form
+    if(form.has_key('pic')):
+        db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id == form['pic']).delete()
+    for item in form:
+        if (item.isdigit()):
+            new_tag = Consilium.Consilium()
+            new_tag.user_id = current_user.id
+            new_tag.symp_id = item
+            new_tag.pic_id = form['pic']
+            exist = db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id == form['pic'],
+                                                                 Consilium.Consilium.symp_id == item)
+            if (len(list(exist)) == 0):
+                db.session.add(new_tag)
+    db.session.commit()
+    return redirect(request.referrer)
 
 def get_pics_for_page(page, pics):
     pics = pics.group_by(Picture.Picture.id)
@@ -150,3 +174,4 @@ class picSymps():
 class picsForm():
     pic = None
     symps = picSymps()
+    consilium = list()

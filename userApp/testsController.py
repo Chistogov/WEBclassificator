@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, redirect, url_for
 from userApp import *
-from userApp.dbc import User, db, Testresults, Datasets, Category, Confirmed, Picture, Symptom, Recognized, Usertests, Tests
+from userApp.dbc import User, db, Testresults, Datasets, Category, Confirmed, Picture, Symptom, Recognized, Usertests, Tests, Consilium
 from flask_login import login_required, current_user
 import datetime
 import logging, collections
@@ -61,7 +61,7 @@ def tests_change(page):
     message = ""
     if ('message' in request.args):
         message = request.args['message']
-    pics = db.session.query(Picture.Picture).filter(Confirmed.Confirmed.pic_id == Picture.Picture.id, Confirmed.Confirmed.user_id == current_user.id)
+    pics = db.session.query(Picture.Picture).filter(Consilium.Consilium.pic_id == Picture.Picture.id)
     count = len(list(pics))
     pics = get_pics_for_page(page, pics)
     pagination = Pagination.Pagination(page, PER_PAGE, count)
@@ -77,16 +77,15 @@ def tests_add_pic(pic, test):
     if not(current_user.admin):
         return redirect('/')
 
-    confirmed = db.session.query(Confirmed.Confirmed).filter(Confirmed.Confirmed.pic_id == pic, Confirmed.Confirmed.user_id==current_user.id)
-    for conf in confirmed:
+    consilium = db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id == pic)
+    for conf in consilium:
         new_tag = Usertests.Usertests()
         new_tag.pic_id=pic
         new_tag.user_id=current_user.id
-        rec = Recognized.Recognized.query.get(conf.rec_id)
-        new_tag.symp_id=rec.symp_id
+        new_tag.symp_id=conf.symp_id
         new_tag.dataset_id=test
         exist = db.session.query(Usertests.Usertests).filter(Usertests.Usertests.pic_id == pic,
-                                                             Usertests.Usertests.symp_id==rec.symp_id, Usertests.Usertests.dataset_id==test)
+                                                             Usertests.Usertests.symp_id==conf.symp_id, Usertests.Usertests.dataset_id==test)
         if (len(list(exist)) == 0):
             db.session.add(new_tag)
     db.session.commit()
@@ -127,7 +126,7 @@ def tests_users():
         message = request.args['message']
     tests = db.session.query(Datasets.Datasets)
     users = db.session.query(User.User)
-    return render_template('tests/users.pug', admin=current_user.admin, message=message, tests = tests,users=users)\
+    return render_template('tests/users.pug', admin=current_user.admin, message=message, tests = tests,users=users)
 
 @userApp.route('/tests/users', methods=['POST'])
 @login_required
@@ -148,6 +147,47 @@ def tests_users_app():
     db.session.add(new_tag)
     db.session.commit()
     return redirect('/tests/users')
+
+@userApp.route('/tests/forming', methods=['GET'])
+@login_required
+def tests_forming():
+    logging.info("tests_forming")
+    message = ""
+    if ('message' in request.args):
+        message = request.args['message']
+    tests = db.session.query(Datasets.Datasets)
+    users = db.session.query(User.User)
+    return render_template('tests/forming.pug', admin=current_user.admin, message=message, tests = tests,users=users)
+
+@userApp.route('/tests/forming', methods=['POST'])
+@login_required
+def tests_forming_post():
+    logging.info("tests_forming_post")
+    if (current_user.user_name == "demo"):
+        return redirect(request.referrer)
+    if not(current_user.admin):
+        return redirect('/')
+    form = request.form
+    consilium = db.session.query(Consilium.Consilium)
+    if (form.has_key('notUsing')):
+        print "notUsing"
+        intest = db.session.query(Usertests.Usertests.pic_id)
+        consilium = db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id.notin_(intest))
+    for conf in consilium:
+        print "new_tag"
+        new_tag = Usertests.Usertests()
+        new_tag.pic_id = conf.pic_id
+        new_tag.user_id = current_user.id
+        new_tag.symp_id = conf.symp_id
+        new_tag.dataset_id = form['test']
+        exist = db.session.query(Usertests.Usertests).filter(Usertests.Usertests.pic_id == conf.pic_id,
+                                                             Usertests.Usertests.symp_id == conf.symp_id,
+                                                             Usertests.Usertests.dataset_id == form['test'])
+        if (len(list(exist)) == 0):
+            db.session.add(new_tag)
+    db.session.commit()
+
+    return redirect('/tests/forming')
 
 @userApp.route('/tests/testing/<int:test>', methods=['GET'])
 @login_required

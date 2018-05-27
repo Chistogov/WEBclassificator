@@ -42,6 +42,7 @@ include navBar
                                                 if(rec.user_id == user_.id)
                                                     if(rec.symptom.ismedical and rec.symptom.diagnos and not(rec.symptom.primary))
                                                         p(style="color:red;")=rec.symptom.symptom_name
+                                            a.btn.btn-primary(href="/appoint/"~user_.id~"/"~pic.id)="На перераспознание"
             .card.card-block
                 .card-body
                     h5.card-title="Признаки"

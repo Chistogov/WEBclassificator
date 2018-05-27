@@ -20,6 +20,7 @@ def toAppDb(pics, forUser):
     for pic in pics:
         app = Appoint.Appoint()
         app.user_id = forUser
+        app.secondary = False
         app.pic_id = pic.id
         app.date = datetime.datetime.now().date()
         db.session.add(app)

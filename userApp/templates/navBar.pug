@@ -11,12 +11,13 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
             else
                 li.nav-item
                     a.nav-link(href="/", target="_self") Главная
-            if(currentPage=="/rec")
-                li.nav-item
-                    a.nav-link.active(href="/rec", target="_self") Разметка
-            else
-                li.nav-item
-                    a.nav-link(href="/rec", target="_self") Разметка
+
+            li.nav-item.dropdown
+                a(class="nav-link dropdown-toggle", href="#", id="navbarRecMenuLink", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Разметка"
+                div(div class="dropdown-menu", aria-labelledby="navbarRecMenuLink")
+                    a.dropdown-item(href="/rec", target="_self") Первичная
+                    a.dropdown-item(href="/sec_rec", target="_self") Повторная
+
             if(admin)
                 if(currentPage == "/settings")
                     li.nav-item
@@ -24,35 +25,6 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                 else
                     li.nav-item
                         a.nav-link(href="/settings", target="_self") Параметры
-            if(admin)
-                if(currentPage == "/stats")
-                    li.nav-item
-                        a.nav-link.active(href="/stats", target="_self") Статистика
-                else
-                    li.nav-item
-                        a.nav-link(href="/stats", target="_self") Статистика
-            if(admin)
-                if(currentPage == "/stats_cnn")
-                    li.nav-item
-                        a.nav-link.active(href="/stats_cnn", target="_self") Статистика(НС)
-                else
-                    li.nav-item
-                        a.nav-link(href="/stats_cnn", target="_self") Статистика(НС)
-
-            if(currentPage == "/help")
-                li.nav-item
-                    a.nav-link.active.modal-trigger(data-toggle="modal", data-target="#help-modal") Помощь
-            else
-                li.nav-item
-                    a.nav-link.modal-trigger(data-toggle="modal", data-target="#help-modal") Помощь
-            if(admin)
-                if(currentPage == "/appoint")
-                    li.nav-item
-                        a.nav-link.active(href="/appoint", target="_self") Назначить
-                else
-                    li.nav-item
-                        a.nav-link(href="/appoint", target="_self") Назначить
-
 
             if(currentPage == "/tests")
                 li.nav-item
@@ -62,33 +34,34 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                     a.nav-link(href="/tests", target="_self") Тестирование
 
             if(admin)
-                if(currentPage == "/rejection")
-                    li.nav-item
-                        a.nav-link.active(href="/rejection", target="_self") Подтверждение
-                else
-                    li.nav-item
-                        a.nav-link(href="/rejection", target="_self") Подтверждение
+                li.nav-item.dropdown
+                    a(class="nav-link dropdown-toggle", href="#", id="navbarStatsMenuLink", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Статистика"
+                    div(div class="dropdown-menu", aria-labelledby="navbarStatsMenuLink")
+                        a.dropdown-item(href="/stats_cnn", target="_self") Статистика(НС)
+                        a.dropdown-item(href="/stats", target="_self") Статистика
+
             if(admin)
-                if(currentPage == "/users")
-                    li.nav-item
-                        a.nav-link.active(href="/users", target="_self") Пользователи
-                else
-                    li.nav-item
-                        a.nav-link(href="/users", target="_self") Пользователи
+                li.nav-item.dropdown
+                    a(class="nav-link dropdown-toggle", href="#", id="navbarPicsMenuLink", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Работа со снимками"
+                    div(div class="dropdown-menu", aria-labelledby="navbarPicsMenuLink")
+                        a.dropdown-item(href="/rejection", target="_self") Подтверждение
+                        a.dropdown-item(href="/consilium/0", target="_self") Консилиум
+                        a.dropdown-item(href="/indexing", target="_self") Индексация
+
             if(admin)
-                if(currentPage == "/consilium")
-                    li.nav-item
-                        a.nav-link.active(href="/consilium", target="_self") Консилиум
-                else
-                    li.nav-item
-                        a.nav-link(href="/consilium", target="_self") Консилиум
-            if(admin)
-                if(currentPage == "/indexing")
-                    li.nav-item
-                        a.nav-link.active(href="/indexing", target="_self") Индексация
-                else
-                    li.nav-item
-                        a.nav-link(href="/indexing", target="_self") Индексация
+                li.nav-item.dropdown
+                    a(class="nav-link dropdown-toggle", href="#", id="navbarUsersMenuLink", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Пользователи"
+                    div(div class="dropdown-menu", aria-labelledby="navbarUsersMenuLink")
+                        a.dropdown-item(href="/users", target="_self") Пользователи
+                        a.dropdown-item(href="/appoint", target="_self") Назначить
+
+            if(currentPage == "/help")
+                li.nav-item
+                    a.nav-link.active.modal-trigger(data-toggle="modal", data-target="#help-modal") Помощь
+            else
+                li.nav-item
+                    a.nav-link.modal-trigger(data-toggle="modal", data-target="#help-modal") Помощь
+
             if(currentPage == "/updates")
                 li.nav-item
                     a.nav-link.active(href="/updates", target="_self") Обновления

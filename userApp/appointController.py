@@ -5,7 +5,7 @@ from userApp import Pagination
 from userApp.dbc import User, db, Picture, Symptom, Recognized, Appoint, Cnnrec
 from userApp.Service import appointService, journalService
 from flask_login import login_required, current_user
-import logging
+import logging, datetime
 
 
 @userApp.route('/appoint', methods=['GET'])
@@ -118,6 +118,24 @@ def app_view(path, page):
     pagination = Pagination.Pagination(page, PER_PAGE, count)
     user = User.User.query.get(app_user)
     return render_template('/appoint/viewer.pug', admin=current_user.admin, pictures=pics, pagination=pagination, user=user)
+
+@userApp.route('/appoint/<int:user>/<int:pic>')
+@login_required
+def user_pic_app(user, pic):
+    if (current_user.user_name == "demo"):
+        return redirect(request.referrer)
+    if not(current_user.admin):
+        return redirect('/')
+
+    app = Appoint.Appoint()
+    app.user_id = user
+    app.secondary = True
+    app.pic_id = pic
+    app.date = datetime.datetime.now().date()
+    db.session.add(app)
+    db.session.commit()
+
+    return redirect(request.referrer)
 
 PER_PAGE = 21
 
