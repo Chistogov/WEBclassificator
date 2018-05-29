@@ -162,9 +162,19 @@ def consilium_view_post(page):
         return redirect(request.referrer)
     form = request.form
     if (form.has_key('user')):
-        appoint(form)
-        user = User.User.query.get(form['user'])
-        return redirect(url_for('consilium_view', page=page, message="Снимок " + form['pic'] + " назначен пользователю " + user.user_name + " с сообщением: \"" + form['message'] + "\""))
+        app = Appoint.Appoint()
+        app.user_id = form['user']
+        app.secondary = True
+        app.pic_id = form['pic']
+        app.date = datetime.datetime.now().date()
+        app.message = form['message']
+        db.session.add(app)
+        db.session.commit()
+        journalService.newMessaage(form['user'],
+                                   "Назначен снимок на повторное распознание с сообщением: \"" + form['message'] + "\"")
+        #user = User.User.query.get(form['user'])
+        return redirect(request.referrer)
+        # return redirect(url_for('consilium_view', page=page, message="Снимок " + form['pic'] + " назначен пользователю " + user.user_name + " с сообщением: \"" + form['message'] + "\""))
     if(form.has_key('pic')):
         db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id == form['pic']).delete()
     for item in form:
