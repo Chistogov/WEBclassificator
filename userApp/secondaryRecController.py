@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, redirect, url_for
 from userApp import *
-from userApp.dbc import Symptom, Picture, db, Recognized, Appoint, Cnnrec, Category,User
+from userApp.dbc import Symptom, Picture, db, Recognized, Appoint, Cnnrec, Category,User, Confirmed
 from flask_login import login_required, current_user
 import datetime
 import logging
@@ -96,6 +96,10 @@ def sec_rec_post():
     form = request.form
     if(form.has_key('appointed')):
         appointed = Appoint.Appoint.query.get(int(form['appointed']))
+        recs = db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id == appointed.pic_id,
+                                                       Recognized.Recognized.user_id == current_user.id)
+        for rec in recs:
+            db.session.query(Confirmed.Confirmed).filter(Confirmed.Confirmed.rec_id == rec.id).delete()
         db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id==appointed.pic_id, Recognized.Recognized.user_id==current_user.id).delete()
         for item in form:
             if(item.isdigit()):

@@ -93,7 +93,6 @@ def consilium_view(page):
     pics = list()
     for pic in pics1:
         tmppic = db.session.query(db.func.count(Recognized.Recognized.pic_id)).filter(Recognized.Recognized.pic_id == pic[0], Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.pic_id).first()
-        print tmppic[0]
         if(tmppic[0]>2):
             pics.append(pic[0])
     pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(pics))
@@ -161,6 +160,7 @@ def consilium_view_post(page):
     if not(current_user.admin):
         return redirect(request.referrer)
     form = request.form
+
     if (form.has_key('user') and form.has_key('message') and form.has_key('pic')):
         app = Appoint.Appoint()
         app.user_id = form['user']
@@ -170,10 +170,7 @@ def consilium_view_post(page):
         app.message = form['message']
         db.session.add(app)
         db.session.commit()
-        journalService.newMessaage(form['user'],
-                                   "Назначен снимок на повторное распознание с сообщением: \"" + form['message'] + "\"")
-        user = User.User.query.get(form['user'])
-        return redirect(url_for('consilium_view', page=page, message="Снимок " + form['pic'] + " назначен пользователю " + user.user_name + " с сообщением: \"" + form['message'] + "\""))
+        return redirect(url_for('consilium_view', page=page))
     if(form.has_key('pic')):
         db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id == form['pic']).delete()
     for item in form:
