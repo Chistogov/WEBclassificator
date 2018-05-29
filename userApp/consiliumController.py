@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, redirect, url_for, request
 from userApp import *
-from userApp.dbc import User, db, Recognized, Consilium, Journal, Category, Usertests, Testresults, Tests, Datasets, Picture, Cnnrec, Confirmed, Symptom
+from userApp.dbc import User, db, Recognized, Consilium, Appoint, Category, Usertests, Testresults, Tests, Datasets, Picture, Cnnrec, Confirmed, Symptom
 from flask_login import login_required, current_user
 import datetime
+from userApp.Service import journalService
 import logging
 
 
@@ -94,20 +95,23 @@ def consilium_view(page):
     pics = get_pics_for_page(page, pics)
     pagination = Pagination.Pagination(page, PER_PAGE, count)
     pics_list = list()
+    message = ""
+    if ('message' in request.args):
+        message = request.args['message']
     for pic in pics:
         form = picsForm()
         form.pic = pic
-        experts = db.session.query(User.User.id).filter(User.User.expert == True)
 
         symp_ids = list()
         for item in db.session.query(Recognized.Recognized.symp_id).filter(
-                Recognized.Recognized.pic_id == pic.id).group_by(Recognized.Recognized.user_id,
+                Recognized.Recognized.pic_id == pic.id, Recognized.Recognized.user_id.in_(
+                                                                 experts)).group_by(Recognized.Recognized.user_id,
                                                                  Recognized.Recognized.symp_id):
             symp_ids.append(item.symp_id)
         user_rec = db.session.query(Recognized.Recognized.user_id).filter(Recognized.Recognized.pic_id == pic.id,
                                                                           Recognized.Recognized.user_id.in_(
-                                                                              experts)).group_by(
-            Recognized.Recognized.user_id)
+                                                                          experts)).group_by(
+                                                                          Recognized.Recognized.user_id)
         user_rec = db.session.query(User.User).filter(User.User.id.in_(user_rec), User.User.expert == True)
 
         symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.id.in_(symp_ids))
@@ -117,10 +121,15 @@ def consilium_view(page):
         count_diagnoses = len(list(
             db.session.query(Recognized.Recognized.user_id).filter(Recognized.Recognized.pic_id == pic.id,
                                                                    Recognized.Recognized.symp_id.in_(
-                                                                       diagnoses)).group_by(
-                Recognized.Recognized.user_id)))
+                                                                   diagnoses),Recognized.Recognized.user_id.in_(
+                                                                   experts)).group_by(
+                                                                   Recognized.Recognized.user_id)))
         for symptom in symptoms:
             symp = picSymps()
+            users = db.session.query(User.User).filter(User.User.expert==True, User.User.id==Recognized.Recognized.user_id, Recognized.Recognized.symp_id==symptom.id, Recognized.Recognized.pic_id==pic.id)
+            symp.users=list()
+            for usr in users:
+                symp.users.append(usr)
             symp.symptom = symptom
             if (symptom.ismedical and not (symptom.primary)):
                 symp.count = (100 / count_users) * symp_ids.count(symptom.id)
@@ -135,15 +144,21 @@ def consilium_view(page):
                 form.consilium.append(cns.symp_id)
         pics_list.append(form)
 
-    return render_template('/consilium/index.pug', admin=current_user.admin, pagination=pagination, pictures=pics_list)
+    return render_template('/consilium/index.pug', admin=current_user.admin, pagination=pagination, pictures=pics_list, message=message)
 
-@userApp.route('/consilium/', methods=['POST'])
+@userApp.route('/consilium/', methods=['POST'], defaults={'page': 0})
 @userApp.route('/consilium/<int:page>', methods=['POST'])
 @login_required
-def consilium_view_post():
+def consilium_view_post(page):
+    if (current_user.user_name == "demo"):
+        return redirect(request.referrer)
     if not(current_user.admin):
         return redirect(request.referrer)
     form = request.form
+    if (form.has_key('user')):
+        appoint(form)
+        user = User.User.query.get(form['user'])
+        return redirect(request.path + "?message=" + "Снимок " + form['pic'] + " назначен пользователю " + user.user_name + " с сообщением: \"" + form['message'] + "\"")
     if(form.has_key('pic')):
         db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id == form['pic']).delete()
     for item in form:
@@ -159,6 +174,18 @@ def consilium_view_post():
     db.session.commit()
     return redirect(request.referrer)
 
+def appoint(form):
+    app = Appoint.Appoint()
+    app.user_id = form['user']
+    app.secondary = True
+    app.pic_id = form['pic']
+    app.date = datetime.datetime.now().date()
+    app.message = form['message']
+    db.session.add(app)
+    db.session.commit()
+    journalService.newMessaage(form['user'], "Назначен снимок на повторное распознание с сообщением: \""+form['message']+"\"")
+
+
 def get_pics_for_page(page, pics):
     pics = pics.group_by(Picture.Picture.id)
     if PER_PAGE:
@@ -169,6 +196,7 @@ def get_pics_for_page(page, pics):
 
 class picSymps():
     symptom = None
+    users = list()
     count = 0
 
 class picsForm():

@@ -290,30 +290,30 @@ def test_results(test, page):
     summary_percentage_d = 0.0
     for pic in list(all_test_pics):
 
-        test_app = db.session.query(Symptom.Symptom.symptom_name).filter(
+        test_app = db.session.query(Symptom.Symptom).filter(
             Usertests.Usertests.symp_id == Symptom.Symptom.id,
             Usertests.Usertests.dataset_id == test_result.dataset_id,
             Usertests.Usertests.pic_id==pic.pic_id)
-        user_result = db.session.query(Symptom.Symptom.symptom_name).filter(
+        user_result = db.session.query(Symptom.Symptom).filter(
             Testresults.Testresults.symp_id == Symptom.Symptom.id,
             Testresults.Testresults.test_id == test,
             Testresults.Testresults.pic_id==pic.pic_id)
-        test_app_v = db.session.query(Symptom.Symptom.symptom_name).filter(
+        test_app_v = db.session.query(Symptom.Symptom).filter(
             Usertests.Usertests.symp_id == Symptom.Symptom.id,
             Usertests.Usertests.dataset_id == test_result.dataset_id,
             Usertests.Usertests.pic_id==pic.pic_id,
             Symptom.Symptom.diagnos == False)
-        test_app_d = db.session.query(Symptom.Symptom.symptom_name).filter(
+        test_app_d = db.session.query(Symptom.Symptom).filter(
             Usertests.Usertests.symp_id == Symptom.Symptom.id,
             Usertests.Usertests.dataset_id == test_result.dataset_id,
             Usertests.Usertests.pic_id==pic.pic_id,
             Symptom.Symptom.diagnos == True)
-        user_result_v = db.session.query(Symptom.Symptom.symptom_name).filter(
+        user_result_v = db.session.query(Symptom.Symptom).filter(
             Testresults.Testresults.symp_id == Symptom.Symptom.id,
             Testresults.Testresults.test_id == test,
             Testresults.Testresults.pic_id==pic.pic_id,
             Symptom.Symptom.diagnos == False)
-        user_result_d = db.session.query(Symptom.Symptom.symptom_name).filter(
+        user_result_d = db.session.query(Symptom.Symptom).filter(
             Testresults.Testresults.symp_id == Symptom.Symptom.id,
             Testresults.Testresults.test_id == test,
             Testresults.Testresults.pic_id==pic.pic_id,

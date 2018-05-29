@@ -20,16 +20,30 @@ include navBar
                     .card-body
                         each mistake in mistakes
                             if(mistake.pic_id==pic.id)
-                                p(style="color:blue;")="Результат(визуальные признаки): "~mistake.percentage_v~"%"
-                                p(style="color:blue;")="Результат(диагнозы): "~mistake.percentage_d~"%"
+                                b(style="color:blue;")="Результат(диагнозы): "~mistake.percentage_d~"%"
                                 each minus in mistake.minus
-                                    p=minus.symptom_name
+                                    if(minus.diagnos)
+                                        p=minus.symptom_name
                                 hr
                                 each trues in mistake.trues
-                                    p(style="color:green;")=trues.symptom_name
+                                    if(trues.diagnos)
+                                        p(style="color:green;")=trues.symptom_name
                                 hr
                                 each plus in mistake.plus
-                                    p(style="color:red;text-decoration:line-through;")=plus.symptom_name
+                                    if(plus.diagnos)
+                                        p(style="color:red;text-decoration:line-through;")=plus.symptom_name
+                                b(style="color:blue;")="Результат(визуальные признаки): "~mistake.percentage_v~"%"
+                                each minus in mistake.minus
+                                    if not(minus.diagnos)
+                                        p=minus.symptom_name
+                                hr
+                                each trues in mistake.trues
+                                    if not(trues.diagnos)
+                                        p(style="color:green;")=trues.symptom_name
+                                hr
+                                each plus in mistake.plus
+                                    if not(plus.diagnos)
+                                        p(style="color:red;text-decoration:line-through;")=plus.symptom_name
 
 
 .content

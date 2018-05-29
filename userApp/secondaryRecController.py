@@ -10,11 +10,14 @@ import logging
 @login_required
 def sec_rec():
     logging.info('primary_rec')
-    pic = db.session.query(Picture.Picture.id, Picture.Picture.pic_name, Appoint.Appoint.id).filter(Picture.Picture.id==Appoint.Appoint.pic_id, Appoint.Appoint.user_id==current_user.id,Appoint.Appoint.secondary==True).first()
+    pic = db.session.query(Picture.Picture.id, Picture.Picture.pic_name, Appoint.Appoint.id, Appoint.Appoint.message).filter(Picture.Picture.id==Appoint.Appoint.pic_id, Appoint.Appoint.user_id==current_user.id,Appoint.Appoint.secondary==True).first()
     neural = ""
     pic_local = ""
     message = ""
     appointed = ""
+    app_message = ""
+    if(pic):
+        app_message = pic.message
     if(pic):
         neural = db.session.query(Cnnrec.Cnnrec.symp_id, Symptom.Symptom.symptom_name).filter(Cnnrec.Cnnrec.pic_id==pic[0], Symptom.Symptom.id==Cnnrec.Cnnrec.symp_id).group_by(Cnnrec.Cnnrec.symp_id, Symptom.Symptom.symptom_name).all()
         pic_local = "data/" + pic[1]
@@ -78,7 +81,7 @@ def sec_rec():
                            admin=current_user.admin, pic_local=pic_local,
                            message=message, appointed=appointed,
                            today_rec=len(list(pics_today)), in_wait=len(list(pics_in_wait)),
-                           neural=neural, categories=categories, recognized=symp_list, symptom_list=symptom_list)
+                           neural=neural, categories=categories, recognized=symp_list, symptom_list=symptom_list, app_message=app_message)
 
 class picSymps():
     symptom = None

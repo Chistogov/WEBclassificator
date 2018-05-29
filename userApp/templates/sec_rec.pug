@@ -9,6 +9,8 @@ include navBar
                 .card-body
                     if(message)
                         div.alert.alert-danger(role="alert")=message
+                    if(app_message)
+                        div.alert.alert-primary(role="alert")=app_message
                     if(pic_local)
                         img.materialboxed(src=pic_local, width="100%")
                     table.table.table-striped
@@ -39,17 +41,16 @@ include navBar
                             p=rec.symptom.symptom_name
                     hr
                     each rec in symptom_list
-                        if not(rec.symptom.ismedical or rec.symptom.primary)
-                            p(style="color:blue;")=rec.symptom.symptom_name
+                        if(rec.symptom.ismedical and rec.symptom.diagnos and not(rec.symptom.primary))
+                            p(style="color:red;")=rec.symptom.symptom_name~" ("~rec.count~"%)"
                     hr
                     each rec in symptom_list
                         if(rec.symptom.ismedical and not(rec.symptom.diagnos) and not(rec.symptom.primary))
                             p(style="color:green;")=rec.symptom.symptom_name~" ("~rec.symptom.category.category_name~")"~" ("~rec.count~"%)"
                     hr
                     each rec in symptom_list
-                        if(rec.symptom.ismedical and rec.symptom.diagnos and not(rec.symptom.primary))
-                            p(style="color:red;")=rec.symptom.symptom_name~" ("~rec.count~"%)"
-
+                        if not(rec.symptom.ismedical or rec.symptom.primary)
+                            p(style="color:blue;")=rec.symptom.symptom_name
         div.col-md-6
             .card.card-block
                 nav
