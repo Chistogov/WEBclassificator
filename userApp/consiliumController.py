@@ -89,10 +89,12 @@ def consilium_view(page):
     if not(current_user.admin):
         return redirect(request.referrer)
     experts = db.session.query(User.User.id).filter(User.User.expert == True)
-    pics1 = db.session.query(Recognized.Recognized.pic_id, db.func.count(Recognized.Recognized.user_id)).filter(Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.pic_id, Recognized.Recognized.user_id)
+    pics1 = db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.pic_id)
     pics = list()
     for pic in pics1:
-        if(pic[1]>1):
+        tmppic = db.session.query(db.func.count(Recognized.Recognized.pic_id)).filter(Recognized.Recognized.pic_id == pic[0], Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.pic_id).first()
+        print tmppic[0]
+        if(tmppic[0]>2):
             pics.append(pic[0])
     pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(pics))
     count = len(list(pics))
@@ -162,8 +164,7 @@ def consilium_view_post(page):
     if (form.has_key('user')):
         appoint(form)
         user = User.User.query.get(form['user'])
-        return redirect(request.referrer)
-        # return redirect(request.path + "?message=" + "Снимок " + form['pic'] + " назначен пользователю " + user.user_name + " с сообщением: \"" + form['message'] + "\"")
+        return redirect(url_for('consilium_view', page=page, message="Снимок " + form['pic'] + " назначен пользователю " + user.user_name + " с сообщением: \"" + form['message'] + "\""))
     if(form.has_key('pic')):
         db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id == form['pic']).delete()
     for item in form:
