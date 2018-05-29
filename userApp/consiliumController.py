@@ -161,7 +161,7 @@ def consilium_view_post(page):
     if not(current_user.admin):
         return redirect(request.referrer)
     form = request.form
-    if (form.has_key('user')):
+    if (form.has_key('user') and form.has_key('message') and form.has_key('pic')):
         app = Appoint.Appoint()
         app.user_id = form['user']
         app.secondary = True
@@ -172,9 +172,8 @@ def consilium_view_post(page):
         db.session.commit()
         journalService.newMessaage(form['user'],
                                    "Назначен снимок на повторное распознание с сообщением: \"" + form['message'] + "\"")
-        #user = User.User.query.get(form['user'])
-        return redirect(request.referrer)
-        # return redirect(url_for('consilium_view', page=page, message="Снимок " + form['pic'] + " назначен пользователю " + user.user_name + " с сообщением: \"" + form['message'] + "\""))
+        user = User.User.query.get(form['user'])
+        return redirect(url_for('consilium_view', page=page, message="Снимок " + form['pic'] + " назначен пользователю " + user.user_name + " с сообщением: \"" + form['message'] + "\""))
     if(form.has_key('pic')):
         db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id == form['pic']).delete()
     for item in form:
@@ -189,18 +188,6 @@ def consilium_view_post(page):
                 db.session.add(new_tag)
     db.session.commit()
     return redirect(request.referrer)
-
-def appoint(form):
-    app = Appoint.Appoint()
-    app.user_id = form['user']
-    app.secondary = True
-    app.pic_id = form['pic']
-    app.date = datetime.datetime.now().date()
-    app.message = form['message']
-    db.session.add(app)
-    db.session.commit()
-    journalService.newMessaage(form['user'], "Назначен снимок на повторное распознание с сообщением: \""+form['message']+"\"")
-
 
 def get_pics_for_page(page, pics):
     pics = pics.group_by(Picture.Picture.id)
