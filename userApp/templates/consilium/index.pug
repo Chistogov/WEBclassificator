@@ -19,6 +19,7 @@ include navBar
                         a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal"~item.pic.id)
                             img.card-img-top(src='/data/'~item.pic.pic_name, width="100%")
                     .card-body
+                        a.btn.btn-primary(href = "/consilium/pic/"~item.pic.id) Детали
                         each rec in item.symps
                             if(rec.symptom.ismedical and rec.symptom.diagnos and not(rec.symptom.primary))
                                 each usr in rec.users
