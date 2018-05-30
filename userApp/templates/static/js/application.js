@@ -36,6 +36,16 @@ $(document).ready(function() {
             }
         }
     });
+    $('.checktag_d').click(function() {
+        var checks = document.getElementsByClassName("checkitem_d");
+        document.getElementById("params_d").innerText="";
+        for (var i = 0; i < checks.length; i++) {
+            if(checks[i].checked)
+            {
+                document.getElementById("params_d").innerHTML += '<li>'+checks[i].dataset.name;
+            }
+        }
+    });
     $('.dropdown-toggle').dropdown();
     $('[data-toggle="tooltip"]').tooltip()
     $('.datepicker').datepicker({
