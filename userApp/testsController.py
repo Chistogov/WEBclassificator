@@ -331,11 +331,16 @@ def test_results(test, page):
         minus_d = list(set(list(test_app_d)) - set(list(user_result_d)))
         plus_d = list(set(list(user_result_d)) - set(list(test_app_d)))
         trues_d = list(set(list(user_result_d)) & set(list(test_app_d)))
-
-        mistake.percentage_v = (100/(len(list(minus_v))+len(list(plus_v))+len(list(trues_v))))*len(list(trues_v))
+        if(len(list(minus_v))+len(list(plus_v))+len(list(trues_v)) != 0):
+            mistake.percentage_v = (100/(len(list(minus_v))+len(list(plus_v))+len(list(trues_v))))*len(list(trues_v))
+        else:
+            mistake.percentage_v = 0
         i+=1
         summary_percentage_v = summary_percentage_v+mistake.percentage_v
-        mistake.percentage_d = (100 / (len(list(minus_d)) + len(list(plus_d)) + len(list(trues_d)))) * len(list(trues_d))
+        if(len(list(minus_d)) + len(list(plus_d)) + len(list(trues_d)) != 0):
+            mistake.percentage_d = (100 / (len(list(minus_d)) + len(list(plus_d)) + len(list(trues_d)))) * len(list(trues_d))
+        else:
+            mistake.percentage_d = 0
         if(mistake.percentage_d>0):
             mistake.percentage_d = 100
         summary_percentage_d = summary_percentage_d + mistake.percentage_d

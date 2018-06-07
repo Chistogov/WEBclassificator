@@ -16,10 +16,10 @@ PER_PAGE = 21
 def pic_view(path, page):
     symptomId = path
     symptom = Symptom.Symptom.query.filter(Symptom.Symptom.id==symptomId).first()
-    pics_by_symp = db.session.query(Picture.Picture.pic_name) \
+    pics_by_symp = db.session.query(Picture.Picture) \
         .join(Recognized.Recognized) \
         .filter(Recognized.Recognized.symp_id==symptomId) \
-        .group_by(Recognized.Recognized.symp_id, Picture.Picture.pic_name)
+        .group_by(Recognized.Recognized.symp_id, Picture.Picture.pic_name, Picture.Picture.id)
     count = len(list(pics_by_symp))
     pics = get_pics_for_page(page, symptomId)
     message = ""

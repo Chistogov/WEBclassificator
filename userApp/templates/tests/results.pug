@@ -15,8 +15,10 @@ include navBar
                 div.alert.alert-danger(role="alert")=message
         each pic in pictures
             div.col-4
-                .card.card-bloc
-                    img.materialboxed(src='/data/'~pic.pic_name, width="100%")
+                .card.card-block
+                    .card-title
+                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal"~pic.id)
+                            img.card-img-top(src='/data/'~pic.pic_name, width="100%")
                     .card-body
                         each mistake in mistakes
                             if(mistake.pic_id==pic.id)
@@ -68,3 +70,13 @@ include navBar
                         a.page-link(href='/tests/results/'~testid~'/'~(pagination.page + 1)) &raquo;
                 li.page-item
                     a.page-link(href='/tests/results/'~testid~'/'~(pagination.total_pages)) Последняя
+
+each item in pictures
+    div.modal.fade(id = "pic-modal"~item.id, tabindex="-1", role="dialog", aria-hidden="true")
+        div.modal-dialog.modal-lg(role="document")
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true")&times;
+                div.modal-body
+                    img.card-img-top(src='/data/'~item.pic_name, width="100%")

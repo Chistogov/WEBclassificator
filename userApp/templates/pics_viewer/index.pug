@@ -11,10 +11,12 @@ include navBar
         each pic in pictures
             div.col-4
                 .card.card-block
+                    a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal"~pic.id)
+                        img.card-img-top(src='/data/'~pic.pic_name, width="100%")
                     .card-body
                         a(href="/pics/"~pic.id~"/"~symptom.id~"/remove")="Снять признак"
                         p=pic.user_name~' ('~pic.date~')'
-                        img.materialboxed(src='/data/'~pic.pic_name, width="100%")
+
 
 .content
     .row
@@ -38,3 +40,13 @@ include navBar
                         a.page-link(href='/pics/'~symptom.id~'/'~(pagination.page + 1)) &raquo;
                 li.page-item
                     a.page-link(href='/pics/'~symptom.id~'/'~(pagination.total_pages)) Последняя
+
+each item in pictures
+    div.modal.fade(id = "pic-modal"~item.id, tabindex="-1", role="dialog", aria-hidden="true")
+        div.modal-dialog.modal-lg(role="document")
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true")&times;
+                div.modal-body
+                    img.card-img-top(src='/data/'~item.pic_name, width="100%")

@@ -14,7 +14,8 @@ include navBar
                     .card-title
                         a(href="/tests/"~pic.id~"/"~dataset.id~"/pic_data_remove")
                             i.material-icons.tiny close
-                    img.materialboxed(src='/data/'~pic.pic_name, width="100%")
+                    a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal"~pic.id)
+                        img.card-img-top(src='/data/'~pic.pic_name, width="100%")
                     .card-body
                         each item in pic.user_tests
                             if(item.dataset_id == dataset.id)
@@ -43,3 +44,13 @@ include navBar
                         a.page-link(href='/tests/'~testid~'/'~(pagination.page + 1)) &raquo;
                 li.page-item
                     a.page-link(href='/tests/'~testid~'/'~(pagination.total_pages)) Последняя
+
+each item in pictures
+    div.modal.fade(id = "pic-modal"~item.id, tabindex="-1", role="dialog", aria-hidden="true")
+        div.modal-dialog.modal-lg(role="document")
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true")&times;
+                div.modal-body
+                    img.card-img-top(src='/data/'~item.pic_name, width="100%")

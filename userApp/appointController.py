@@ -45,11 +45,26 @@ def appoint_post():
     forUser = form['forUser']
     count = form['count']
     in_app = db.session.query(Appoint.Appoint.pic_id).filter(Appoint.Appoint.user_id == forUser)
+    alredyrec = db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.user_id == forUser)
     for item in form:
         if (item == 'fromRec'):
             if (form['fromUser'] != "0"):
-                rec = db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.user_id == form['fromUser'])
-                pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(in_app)).limit(count)
+                # oe = list(db.session.query(Recognized.Recognized.pic_id).filter(
+                #     Recognized.Recognized.symp_id.in_([23, 37, 49, 53])))
+                # rec = db.session.query(Recognized.Recognized.pic_id).filter(
+                #     # Recognized.Recognized.user_id == form['fromUser'])
+                #     Recognized.Recognized.symp_id == 20,
+                #     db.func.DATE(Recognized.Recognized.date) > "2018-05-10")
+                # pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(rec),
+                #                                                 ~Picture.Picture.id.in_(in_app),
+                #                                                 Picture.Picture.id.notin_(oe),
+                #                                                 Picture.Picture.id.notin_(alredyrec)).limit(count)
+                # appointService.toAppDb(pics, forUser)
+                # return redirect('/appoint')
+                rec = db.session.query(Recognized.Recognized.pic_id).filter(
+                    Recognized.Recognized.user_id == form['fromUser'])
+                pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(rec),
+                                                                ~Picture.Picture.id.in_(in_app)).limit(count)
                 appointService.toAppDb(pics, forUser)
                 return redirect('/appoint')
             else:
