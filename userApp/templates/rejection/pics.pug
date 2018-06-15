@@ -7,77 +7,70 @@ include navBar
         if(message)
             div.col-12
                 div.alert.alert-danger(role="alert")=message
-        each pic in pictures
-            div.col-3
-                .card.card-block
+        each item in pictures
+            div.col-4
+                - var color = 'white'
+                if(item.confRecs)
+                    color = '#ecffe6'
+                .card.card-block(style='background-color:'~color~';')
                     .card-title
-                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal"~pic.id)
-                            img.card-img-top(src='/data/'~pic.pic_name, width="100%")
+                        p=" № "~item.pic.id
+                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal"~item.pic.id)
+                            img.card-img-top(src='/data/'~item.pic.pic_name, width="100%")
                     .card-body
-                        if (pic.recognized.first())
-                            each item in pic.recognized
-                                if(user_owner != 0)
-                                    if(user_owner == item.user_id)
-                                        p(title=item.user.user_name)=item.symptom.symptom_name
-                                            a(href="/pics/"~pic.id~"/"~item.symptom.id~"/remove")
-                                                i.material-icons.tiny close
+                        a.btn.btn-link(data-toggle="collapse", href="#usr"~item.user.id~"_"~item.pic.id, aria-expanded="true", aria-controls="#usr"~item.user.id~"_"~item.pic.id)="Назначить пользователю: "~item.user.user_name
+                        div.collapse(id="usr"~item.user.id~"_"~item.pic.id)
+                            form(id = "form"~item.user.id~"_"~item.pic.id, method="post", action="#")
+                                input.hidden(name = "pic", value=item.pic.id, hidden)
+                                input.hidden(name = "user", value=item.user.id, hidden)
+                                div.form-group
+                                    textarea#textarea1.form-control(placeholder="Сообщение", name="message", rows="3")
+                                button.btn.btn-primary(href="#" type="submit")="Назначить"
+                            hr
+                        form(id = "form"~item.user.id~"_"~item.pic.id~"_"~"recs", method="post", action="#")
+                            input.hidden(name = "rec_pic", value=item.pic.id, hidden)
+                            input.hidden(name = "user", value=item.user.id, hidden)
+                            each symp in item.recs
+                                if(symp.id in item.confRecs)
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                        input.custom-control-input.checkitem(type="checkbox", id=symp.symptom.id~item.pic.id~item.user.id, name=symp.id, data-name=symp.symptom.symptom_name, checked)
+                                        label.custom-control-label(style="color:red;", for=symp.symptom.id~item.pic.id~item.user.id)=symp.symptom.symptom_name
                                 else
-                                    p(title=item.user.user_name)=item.symptom.symptom_name
-                                        a(href="/pics/"~pic.id~"/"~item.symptom.id~"/remove")
-                                            i.material-icons.tiny close
-                        div.dropdown
-                            button.btn.btn-secondary.dropdown-toggle(type="button", id="dropdownMenu"~pic.id, data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Добавить признак"
-                            div.dropdown-menu(aria-labelledby="dropdownMenu"~pic.id)
-                                each symp in symptoms
-                                    if not(symp.ismedical)
-                                        a.dropdown-item(style="color:black;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
-                                    else
-                                        if (symp.ear)
-                                            a.dropdown-item(style="color:red;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
-                                        else
-                                            if (symp.nose)
-                                                a.dropdown-item(style="color:green;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
-                                            else
-                                                if (symp.throat)
-                                                    a.dropdown-item(style="color:blue;" href="/pics/"~pic.id~"/"~symp.id~"/add")=symp.symptom_name
-                        hr
-                        if(user_owner != 0)
-                            a.btn.btn-success(href = "/rejection/submit/"~pic.id~"/"~user_owner)="Подтвердить"
-                        else
-                            a.btn.btn-success(href = "/rejection/submit/"~pic.id)="Подтвердить"
-                        each conf in confirmed
-                            if(conf.pic_id == pic.id)
-                                i.material-icons.tiny check
+                                    div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                        input.custom-control-input.checkitem(type="checkbox", id=symp.symptom.id~item.pic.id~item.user.id, name=symp.id, data-name=symp.symptom.symptom_name)
+                                        label.custom-control-label(style="color:red;", for=symp.symptom.id~item.pic.id~item.user.id)=symp.symptom.symptom_name
+                            button.btn.btn-success(href="#", type="submit")="Подтвердить"
+
 
 .content
     .row
         div.col-s4.pagination-center
             ul.pagination
                 li.page-item
-                    a.page-link(href=url_for('rejection_search', page=0, p=request.args.getlist('p'))) Первая
+                    a.page-link(href=url_for('rejection_search', page=0, user_owner=request.args.get('user_owner'), p=request.args.getlist('p'))) Первая
                 if(pagination.page == 0)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, p=request.args.getlist('p'))) &laquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, user_owner=request.args.get('user_owner'), p=request.args.getlist('p'))) &laquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, p=request.args.getlist('p'))) &laquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page - 1, user_owner=request.args.get('user_owner'), p=request.args.getlist('p'))) &laquo;
                 li.page-item
                     a.page-link(href='')=(pagination.page+1)
                 if(pagination.page == pagination.total_pages)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, p=request.args.getlist('p'))) &raquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, user_owner=request.args.get('user_owner'), p=request.args.getlist('p'))) &raquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, p=request.args.getlist('p'))) &raquo;
+                        a.page-link(href=url_for('rejection_search', page=pagination.page + 1, user_owner=request.args.get('user_owner'), p=request.args.getlist('p'))) &raquo;
                 li.page-item
-                    a.page-link(href=url_for('rejection_search', page=pagination.total_pages, p=request.args.getlist('p'))) Последняя
+                    a.page-link(href=url_for('rejection_search', page=pagination.total_pages, user_owner=request.args.get('user_owner'), p=request.args.getlist('p'))) Последняя
 
 each item in pictures
-    div.modal.fade(id = "pic-modal"~item.id, tabindex="-1", role="dialog", aria-hidden="true")
+    div.modal.fade(id = "pic-modal"~item.pic.id, tabindex="-1", role="dialog", aria-hidden="true")
         div.modal-dialog.modal-lg(role="document")
             div.modal-content
                 div.modal-header
                     button.close(type="button", data-dismiss="modal", aria-label="Close")
                         span(aria-hidden="true")&times;
                 div.modal-body
-                    img.card-img-top(src='/data/'~item.pic_name, width="100%")
+                    img.card-img-top(src='/data/'~item.pic.pic_name, width="100%")

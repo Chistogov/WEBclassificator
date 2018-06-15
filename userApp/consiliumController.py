@@ -89,6 +89,10 @@ def consilium_view(page):
     if not(current_user.admin):
         return redirect(request.referrer)
     experts = db.session.query(User.User.id).filter(User.User.expert == True)
+    hide = False
+    if(request.args.has_key('hide')):
+        hide = request.args.get('hide')
+    print hide
     pics1 = db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.pic_id)
     pics = list()
     for pic in pics1:
@@ -96,6 +100,10 @@ def consilium_view(page):
         if(tmppic[0]>2):
             pics.append(pic[0])
     pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(pics))
+    if(hide):
+        cons = db.session.query(Consilium.Consilium.pic_id)
+        pics = pics.filter(Picture.Picture.id.notin_(cons))
+        print "HERE"
     count = len(list(pics))
     pics = get_pics_for_page(page, pics)
     pagination = Pagination.Pagination(page, PER_PAGE, count)
@@ -149,7 +157,7 @@ def consilium_view(page):
                 form.consilium.append(cns.symp_id)
         pics_list.append(form)
 
-    return render_template('/consilium/index.pug', admin=current_user.admin, pagination=pagination, pictures=pics_list, message=message)
+    return render_template('/consilium/index.pug', admin=current_user.admin, pagination=pagination, pictures=pics_list, message=message, hidden=hide)
 
 @userApp.route('/consilium/', methods=['POST'], defaults={'page': 0})
 @userApp.route('/consilium/<int:page>', methods=['POST'])
@@ -160,7 +168,6 @@ def consilium_view_post(page):
     if not(current_user.admin):
         return redirect(request.referrer)
     form = request.form
-
     if (form.has_key('user') and form.has_key('message') and form.has_key('pic')):
         app = Appoint.Appoint()
         app.user_id = form['user']

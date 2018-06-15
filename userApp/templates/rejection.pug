@@ -62,7 +62,7 @@ include navBar
                                         label.custom-control-label(for='oEar')="Исключить все оптически неверные"
                                     hr
                                     div.form-group
-                                        select.form-control(name="forUser")
+                                        select.form-control(name="forUser", required)
                                             option(value="", disabled, selected)="Пользователь"
                                             for _user in users
                                                 option(value=_user.id)=_user.user_name
@@ -104,7 +104,7 @@ include navBar
                                         label.custom-control-label(for='oThroat')="Исключить все оптически неверные"
                                     hr
                                     div.form-group
-                                        select.form-control(name="forUser")
+                                        select.form-control(name="forUser", required)
                                             option(value="", disabled, selected)="Пользователь"
                                             for _user in users
                                                 option(value=_user.id)=_user.user_name
@@ -146,7 +146,7 @@ include navBar
                                         label.custom-control-label(for='oNose')="Исключить все оптически неверные"
                                     hr
                                     div.form-group
-                                        select.form-control(name="forUser")
+                                        select.form-control(name="forUser", required)
                                             option(value="", disabled, selected)="Пользователь"
                                             for _user in users
                                                 option(value=_user.id)=_user.user_name

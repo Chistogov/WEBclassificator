@@ -3,17 +3,23 @@ currentPage = "/consilium"
 include navBar
 
 
-
 .content
     h3="Консилиум"
     h5="Подтверждение снимков распознанных экспертами"
+    if not(hidden)
+        a.btn.btn-primary(href=url_for('consilium_view', page=pagination.page, hide=True))="Скрыть подтвержденные"
+    else
+        a.btn.btn-primary(href=url_for('consilium_view', page = pagination.page))="Показать подтвержденные"
     .row
         if(message)
             div.col-12
                 div.alert.alert-success(role="alert")=message
         each item in pictures
             div.col-4
-                .card.card-block
+                - var color = 'white'
+                if(item.consilium)
+                    color = '#ecffe6'
+                .card.card-block(style='background-color:'~color~';')
                     .card-title
                         p=" № "~item.pic.id
                         a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal"~item.pic.id)
@@ -86,23 +92,24 @@ include navBar
         div.col-s4.pagination-center
             ul.pagination
                 li.page-item
-                    a.page-link(href='/consilium/0') Первая
+                    a.page-link(href=url_for('consilium_view', page=0, hide=request.args.get('hide'))) Первая
                 if(pagination.page == 0)
                     li.page-item(hidden=true)
-                        a.page-link(href='/consilium/'~(pagination.page - 1)) &laquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hide=request.args.get('hide'))) &laquo;
                 else
                     li.page-item
-                        a.page-link(href='/consilium/'~(pagination.page - 1)) &laquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hide=request.args.get('hide'))) &laquo;
                 li.page-item
                     a.page-link(href='')=(pagination.page+1)
                 if(pagination.page == pagination.total_pages)
                     li.page-item(hidden=true)
-                        a.page-link(href='/consilium/'~(pagination.page + 1)) &raquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hide=request.args.get('hide'))) &raquo;
                 else
                     li.page-item
-                        a.page-link(href='/consilium/'~(pagination.page + 1)) &raquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hide=request.args.get('hide'))) &raquo;
                 li.page-item
-                    a.page-link(href='/consilium/'~(pagination.total_pages)) Последняя
+                    a.page-link(href=url_for('consilium_view', page=pagination.total_pages, hide=request.args.get('hide'))) Последняя
+
 each item in pictures
     div.modal.fade(id = "pic-modal"~item.pic.id, tabindex="-1", role="dialog", aria-hidden="true")
         div.modal-dialog.modal-lg(role="document")

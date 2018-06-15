@@ -126,7 +126,8 @@ def tests_users():
         message = request.args['message']
     tests = db.session.query(Datasets.Datasets)
     users = db.session.query(User.User)
-    return render_template('tests/users.pug', admin=current_user.admin, message=message, tests = tests,users=users)
+    user_tests = db.session.query(Tests.Tests).filter(Tests.Tests.results==None).order_by(Tests.Tests.id.desc())
+    return render_template('tests/users.pug', admin=current_user.admin, message=message, tests = tests,users=users, user_tests=user_tests)
 
 @userApp.route('/tests/users', methods=['POST'])
 @login_required
@@ -168,13 +169,12 @@ def tests_forming_post():
     if not(current_user.admin):
         return redirect('/')
     form = request.form
-    consilium = db.session.query(Consilium.Consilium)
+    consilium_pics = db.session.query(Consilium.Consilium.pic_id).group_by(Consilium.Consilium.pic_id).limit(int(form['count']))
+    consilium = db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id.in_(consilium_pics))
     if (form.has_key('notUsing')):
-        print "notUsing"
         intest = db.session.query(Usertests.Usertests.pic_id)
-        consilium = db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id.notin_(intest))
+        consilium = db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id.notin_(intest), Consilium.Consilium.pic_id.in_(consilium_pics))
     for conf in consilium:
-        print "new_tag"
         new_tag = Usertests.Usertests()
         new_tag.pic_id = conf.pic_id
         new_tag.user_id = current_user.id

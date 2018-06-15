@@ -11,8 +11,10 @@ include navBar
         each pic in pictures
             div.col-4
                 .card.card-block
-                    a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal"~pic.id)
-                        img.card-img-top(src='/data/'~pic.pic_name, width="100%")
+                    .card-title
+                        p=" № "~pic.id
+                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal"~pic.id)
+                            img.card-img-top(src='/data/'~pic.pic_name, width="100%")
                     .card-body
                         a(href="/pics/"~pic.id~"/"~symptom.id~"/remove")="Снять признак"
                         p=pic.user_name~' ('~pic.date~')'

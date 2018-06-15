@@ -22,3 +22,11 @@ include navBar
                                 for test in tests
                                     option(value=test.id)=test.dataset_name
                         button.btn.btn-primary(href="#" type="submit")="Назначить"
+
+        div.col-12
+            .card.card-block
+                div.card-body
+                    ul.list-group
+                        each usertest in user_tests
+                            li.list-group-item.list-group-item-action
+                                span=usertest.user.user_name~" (Назначен тест: "~usertest.dataset.dataset_name~")"
