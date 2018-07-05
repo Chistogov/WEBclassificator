@@ -92,18 +92,28 @@ def consilium_view(page):
     hide = False
     if(request.args.has_key('hide')):
         hide = request.args.get('hide')
-    print hide
     pics1 = db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.pic_id)
     pics = list()
     for pic in pics1:
         tmppic = db.session.query(db.func.count(Recognized.Recognized.pic_id)).filter(Recognized.Recognized.pic_id == pic[0], Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.pic_id).first()
         if(tmppic[0]>2):
             pics.append(pic[0])
+    iForm = infoForm()
+    app_users = db.session.query(Picture.Picture).filter(Appoint.Appoint.secondary == True,
+                                                   Picture.Picture.id == Appoint.Appoint.pic_id,
+                                                   Appoint.Appoint.pic_id.in_(pics)).group_by(Picture.Picture.id)
+    if (len(list(app_users)) > 0):
+        iForm.sec_app = len(list(app_users))
+    iForm.cons_count = len(list(db.session.query(Picture.Picture).filter(Picture.Picture.id == Consilium.Consilium.pic_id).group_by(Consilium.Consilium.pic_id, Picture.Picture.id)))
     pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(pics))
+
     if(hide):
-        cons = db.session.query(Consilium.Consilium.pic_id)
+        cons = db.session.query(Usertests.Usertests.pic_id)
         pics = pics.filter(Picture.Picture.id.notin_(cons))
-        print "HERE"
+    conss = db.session.query(Consilium.Consilium.pic_id)
+    picsto = pics.filter(Picture.Picture.id.notin_(conss))
+
+    iForm.cons_to_rec = len(list(picsto))
     count = len(list(pics))
     pics = get_pics_for_page(page, pics)
     pagination = Pagination.Pagination(page, PER_PAGE, count)
@@ -114,7 +124,6 @@ def consilium_view(page):
     for pic in pics:
         form = picsForm()
         form.pic = pic
-
         symp_ids = list()
         for item in db.session.query(Recognized.Recognized.symp_id).filter(
                 Recognized.Recognized.pic_id == pic.id, Recognized.Recognized.user_id.in_(
@@ -143,6 +152,13 @@ def consilium_view(page):
             symp.users=list()
             for usr in users:
                 symp.users.append(usr)
+            app_users = db.session.query(User.User).filter(User.User.expert == True,
+                                                       User.User.id == Appoint.Appoint.user_id,
+                                                       Appoint.Appoint.pic_id == pic.id)
+            symp.app_users = list()
+            for usr in app_users:
+                print usr.id
+                symp.app_users.append(usr.id)
             symp.symptom = symptom
             if (symptom.ismedical and not (symptom.primary)):
                 symp.count = (100 / count_users) * symp_ids.count(symptom.id)
@@ -157,7 +173,7 @@ def consilium_view(page):
                 form.consilium.append(cns.symp_id)
         pics_list.append(form)
 
-    return render_template('/consilium/index.pug', admin=current_user.admin, pagination=pagination, pictures=pics_list, message=message, hidden=hide)
+    return render_template('/consilium/index.pug', admin=current_user.admin, pagination=pagination, pictures=pics_list, message=message, hidden=hide, info=iForm)
 
 @userApp.route('/consilium/', methods=['POST'], defaults={'page': 0})
 @userApp.route('/consilium/<int:page>', methods=['POST'])
@@ -177,7 +193,10 @@ def consilium_view_post(page):
         app.message = form['message']
         db.session.add(app)
         db.session.commit()
-        return redirect(url_for('consilium_view', page=page))
+        hide = False
+        if (request.args.has_key('hide')):
+            hide = request.args.get('hide')
+        return redirect(url_for('consilium_view', page=page, hidden=hide))
     if(form.has_key('pic')):
         db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id == form['pic']).delete()
     for item in form:
@@ -204,9 +223,15 @@ def get_pics_for_page(page, pics):
 class picSymps():
     symptom = None
     users = list()
+    app_users = list()
     count = 0
 
 class picsForm():
     pic = None
     symps = picSymps()
     consilium = list()
+
+class infoForm():
+    cons_count = 0
+    sec_app = 0
+    cons_to_rec = 0

@@ -39,7 +39,3 @@ class infoForm():
     all_pics = 0
     wait_pics = 0
     app_pics = 0
-
-
-
-

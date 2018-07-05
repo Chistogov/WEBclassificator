@@ -69,8 +69,3 @@ class recHistory():
     date = ""
     count_rec = 0
     time = 0.0
-
-
-
-
-

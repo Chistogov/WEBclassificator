@@ -103,10 +103,3 @@ class recHistory():
 class userForm():
     user_name = ""
     app = 0
-
-
-
-
-
-
-

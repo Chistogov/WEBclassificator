@@ -6,6 +6,10 @@ include navBar
 .content
     h3="Консилиум"
     h5="Подтверждение снимков распознанных экспертами"
+    ul
+        li="Подтвержденных снимков: "~info.cons_count
+        li="Ожидают перераспознания: "~info.sec_app
+        li="Ожидают подтверждения: "~info.cons_to_rec
     if not(hidden)
         a.btn.btn-primary(href=url_for('consilium_view', page=pagination.page, hide=True))="Скрыть подтвержденные"
     else
@@ -61,7 +65,10 @@ include navBar
                                             input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~item.pic.id, name=rec.symptom.id, data-name=rec.symptom.symptom_name)
                                             label.custom-control-label(style="color:red;", for=rec.symptom.id~item.pic.id)=rec.symptom.symptom_name~" ("~rec.count~"%)"
                                     each usr in rec.users
-                                        a.btn.btn-link(data-toggle="collapse", href="#usr"~usr.id~"_"~item.pic.id, aria-expanded="true", aria-controls="#usr"~usr.id~"_"~item.pic.id)=usr.user_name
+                                        if(usr.id in rec.app_users)
+                                            a.btn.btn-link(data-toggle="collapse", href="#usr"~usr.id~"_"~item.pic.id, aria-expanded="true", aria-controls="#usr"~usr.id~"_"~item.pic.id, style="color:lightgreen;")=usr.user_name
+                                        else
+                                            a.btn.btn-link(data-toggle="collapse", href="#usr"~usr.id~"_"~item.pic.id, aria-expanded="true", aria-controls="#usr"~usr.id~"_"~item.pic.id)=usr.user_name
 
                             hr
                             each rec in item.symps

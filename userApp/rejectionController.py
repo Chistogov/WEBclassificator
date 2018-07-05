@@ -223,4 +223,3 @@ class picsForm():
     user = None
     recs = list()
     confRecs = list()
-

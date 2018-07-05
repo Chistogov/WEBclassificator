@@ -38,8 +38,3 @@ def update_post():
     else:
         return redirect(url_for('updates', message="Введите сообщение"))
     return redirect('/updates')
-
-
-
-
-
