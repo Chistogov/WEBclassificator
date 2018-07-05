@@ -16,7 +16,7 @@ def tests():
         message = request.args['message']
     tests = db.session.query(Datasets.Datasets)
     user_tests = db.session.query(Tests.Tests).filter(Tests.Tests.user_id==current_user.id, Tests.Tests.results==None)
-    if(current_user.admin):
+    if(current_user.expert or current_user.admin):
         test_results = db.session.query(Tests.Tests).filter(Tests.Tests.results!=None)
     else:
         test_results = db.session.query(Tests.Tests).filter(Tests.Tests.results != None, Tests.Tests.user_id==current_user.id)

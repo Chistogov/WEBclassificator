@@ -11,9 +11,9 @@ include navBar
         li="Ожидают перераспознания: "~info.sec_app
         li="Ожидают подтверждения: "~info.cons_to_rec
     if not(hidden)
-        a.btn.btn-primary(href=url_for('consilium_view', page=pagination.page, hide=True))="Скрыть подтвержденные"
+        a.btn.btn-primary(href=url_for('consilium_view', page=pagination.page, hide=True))="Скрыть снимки из тестов"
     else
-        a.btn.btn-primary(href=url_for('consilium_view', page = pagination.page))="Показать подтвержденные"
+        a.btn.btn-primary(href=url_for('consilium_view', page = pagination.page))="Показать все снимки"
     .row
         if(message)
             div.col-12
@@ -38,6 +38,7 @@ include navBar
                                             p="Назначить пользователю: "~usr.user_name
                                             input.hidden(name = "pic", value=item.pic.id, hidden)
                                             input.hidden(name = "user", value=usr.id, hidden)
+                                            input.hidden(name = "user", value=hidden, hidden)
                                             div.form-group
                                                 textarea#textarea1.form-control(placeholder="Сообщение", name="message", rows="3")
                                             button.btn.btn-primary(href="#" type="submit")="Назначить"

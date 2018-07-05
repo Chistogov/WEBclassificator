@@ -99,17 +99,24 @@ def consilium_view(page):
         if(tmppic[0]>2):
             pics.append(pic[0])
     iForm = infoForm()
-    app_users = db.session.query(Picture.Picture).filter(Appoint.Appoint.secondary == True,
+
+    hidden_pics = db.session.query(Usertests.Usertests.pic_id)
+    if(hide):
+        iForm.sec_app = len(list(db.session.query(Picture.Picture).filter(Appoint.Appoint.secondary == True,
                                                    Picture.Picture.id == Appoint.Appoint.pic_id,
-                                                   Appoint.Appoint.pic_id.in_(pics)).group_by(Picture.Picture.id)
-    if (len(list(app_users)) > 0):
-        iForm.sec_app = len(list(app_users))
-    iForm.cons_count = len(list(db.session.query(Picture.Picture).filter(Picture.Picture.id == Consilium.Consilium.pic_id).group_by(Consilium.Consilium.pic_id, Picture.Picture.id)))
+                                                   Picture.Picture.id.notin_(hidden_pics),
+                                                   Appoint.Appoint.pic_id.in_(pics)).group_by(Picture.Picture.id)))
+        iForm.cons_count = len(list(db.session.query(Picture.Picture).filter(Picture.Picture.id == Consilium.Consilium.pic_id, Picture.Picture.id.notin_(hidden_pics)).group_by(Consilium.Consilium.pic_id, Picture.Picture.id)))
+
+    else:
+        iForm.sec_app = len(list(db.session.query(Picture.Picture).filter(Appoint.Appoint.secondary == True,
+                                                                          Picture.Picture.id == Appoint.Appoint.pic_id,
+                                                                          Appoint.Appoint.pic_id.in_(pics)).group_by(Picture.Picture.id)))
+        iForm.cons_count = len(list(db.session.query(Picture.Picture).filter(Picture.Picture.id == Consilium.Consilium.pic_id).group_by(Consilium.Consilium.pic_id, Picture.Picture.id)))
     pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(pics))
 
     if(hide):
-        cons = db.session.query(Usertests.Usertests.pic_id)
-        pics = pics.filter(Picture.Picture.id.notin_(cons))
+        pics = pics.filter(Picture.Picture.id.notin_(hidden_pics))
     conss = db.session.query(Consilium.Consilium.pic_id)
     picsto = pics.filter(Picture.Picture.id.notin_(conss))
 
@@ -146,15 +153,15 @@ def consilium_view(page):
                                                                    diagnoses),Recognized.Recognized.user_id.in_(
                                                                    experts)).group_by(
                                                                    Recognized.Recognized.user_id)))
+        app_users = db.session.query(User.User).filter(User.User.expert == True,
+                                                       User.User.id == Appoint.Appoint.user_id,
+                                                       Appoint.Appoint.pic_id == pic.id)
         for symptom in symptoms:
             symp = picSymps()
             users = db.session.query(User.User).filter(User.User.expert==True, User.User.id==Recognized.Recognized.user_id, Recognized.Recognized.symp_id==symptom.id, Recognized.Recognized.pic_id==pic.id)
             symp.users=list()
             for usr in users:
                 symp.users.append(usr)
-            app_users = db.session.query(User.User).filter(User.User.expert == True,
-                                                       User.User.id == Appoint.Appoint.user_id,
-                                                       Appoint.Appoint.pic_id == pic.id)
             symp.app_users = list()
             for usr in app_users:
                 print usr.id
@@ -194,9 +201,10 @@ def consilium_view_post(page):
         db.session.add(app)
         db.session.commit()
         hide = False
-        if (request.args.has_key('hide')):
-            hide = request.args.get('hide')
-        return redirect(url_for('consilium_view', page=page, hidden=hide))
+        if (form.has_key('hide')):
+            hide = form.has_key('hide')
+        # return redirect(url_for('consilium_view', page=page, hidden=hide))
+        return redirect(request.referrer)
     if(form.has_key('pic')):
         db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id == form['pic']).delete()
     for item in form:
