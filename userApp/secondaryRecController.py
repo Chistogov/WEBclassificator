@@ -109,6 +109,7 @@ def sec_rec_post():
                 new_tag.symp_id=item
                 new_tag.pic_id=appointed.pic_id
                 new_tag.date=datetime.datetime.now()
+                new_tag.secondary=True
                 if(form.has_key('timer')):
                     if(int(form['timer'])>max_time_rec or int(form['timer'])==0):
                         new_tag.timer = max_time_rec

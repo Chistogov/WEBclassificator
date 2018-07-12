@@ -10,6 +10,7 @@ class Recognized(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     timer = db.Column(db.Integer, default=0)
     date = db.Column(db.Date)
+    secondary = db.Column(db.Boolean, default=False)
 
     symptom = db.relationship("Symptom", back_populates="recognized")
 

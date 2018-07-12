@@ -39,14 +39,17 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                     div(div class="dropdown-menu", aria-labelledby="navbarStatsMenuLink")
                         a.dropdown-item(href="/stats_cnn", target="_self") Статистика(НС)
                         a.dropdown-item(href="/stats", target="_self") Статистика
+                        a.dropdown-item(href="/consilium/stats", target="_self") Статистика консилиума
+                        a.dropdown-item(href="/stats/search", target="_self") Подсчет статистики
 
-            if(admin)
-                li.nav-item.dropdown
-                    a(class="nav-link dropdown-toggle", href="#", id="navbarPicsMenuLink", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Работа со снимками"
-                    div(div class="dropdown-menu", aria-labelledby="navbarPicsMenuLink")
+
+            li.nav-item.dropdown
+                a(class="nav-link dropdown-toggle", href="#", id="navbarPicsMenuLink", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Работа со снимками"
+                div(div class="dropdown-menu", aria-labelledby="navbarPicsMenuLink")
+                    if(admin)
                         a.dropdown-item(href="/rejection", target="_self") Подтверждение
-                        a.dropdown-item(href="/consilium/0", target="_self") Консилиум
-                            //a.dropdown-item(href="/indexing", target="_self", hidden=True) Индексация
+                    a.dropdown-item(href="/consilium/0", target="_self") Консилиум
+                        //a.dropdown-item(href="/indexing", target="_self", hidden=True) Индексация
 
             if(admin)
                 li.nav-item.dropdown

@@ -10,11 +10,29 @@ include navBar
         li="Подтвержденных снимков: "~info.cons_count
         li="Ожидают перераспознания: "~info.sec_app
         li="Ожидают подтверждения: "~info.cons_to_rec
-    if not(hidden)
-        a.btn.btn-primary(href=url_for('consilium_view', page=pagination.page, hide=True))="Скрыть снимки из тестов"
-    else
-        a.btn.btn-primary(href=url_for('consilium_view', page = pagination.page))="Показать все снимки"
+        //if not(hidden)
+            a.btn.btn-primary(href=url_for('consilium_view', page=pagination.page, hide=True))="Скрыть снимки из тестов"
+        //else
+            a.btn.btn-primary(href=url_for('consilium_view', page = pagination.page))="Показать все снимки"
     .row
+        div.col-12
+            .card.card-block
+                div.card-body
+                    form#regForm(method="post")
+                        input.hidden(name = "hideForm", value="hideForm", hidden)
+                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                            input.custom-control-input.checkitem(type="checkbox", id='hideTest', name='hideTest', checked=hideTest)
+                            label.custom-control-label(for='hideTest')="Скрывать снимки из тестов"
+                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                            input.custom-control-input.checkitem(type="checkbox", id='hideConf', name='hideConf', checked=hideConf)
+                            label.custom-control-label(for='hideConf')="Скрывать подтвержденные"
+                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                            input.custom-control-input.checkitem(type="checkbox", id='hideApp', name='hideApp', checked=hideApp)
+                            label.custom-control-label(for='hideApp')="Скрывать назначенные на перераспознание"
+                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                            input.custom-control-input.checkitem(type="checkbox", id='hideSecRec', name='hideSecRec', checked=hideSecRec)
+                            label.custom-control-label(for='hideSecRec')="Скрывать не перераспознанные"
+                        button.btn.btn-primary(href="#" type="submit")="Применить"
         if(message)
             div.col-12
                 div.alert.alert-success(role="alert")=message
@@ -23,6 +41,8 @@ include navBar
                 - var color = 'white'
                 if(item.consilium)
                     color = '#ecffe6'
+                if(item.secondary)
+                    color = '#ccccff'
                 .card.card-block(style='background-color:'~color~';')
                     .card-title
                         p=" № "~item.pic.id
@@ -103,20 +123,20 @@ include navBar
                     a.page-link(href=url_for('consilium_view', page=0, hide=request.args.get('hide'))) Первая
                 if(pagination.page == 0)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hide=request.args.get('hide'))) &laquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'))) &laquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hide=request.args.get('hide'))) &laquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'))) &laquo;
                 li.page-item
                     a.page-link(href='')=(pagination.page+1)
                 if(pagination.page == pagination.total_pages)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hide=request.args.get('hide'))) &raquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'))) &raquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hide=request.args.get('hide'))) &raquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'))) &raquo;
                 li.page-item
-                    a.page-link(href=url_for('consilium_view', page=pagination.total_pages, hide=request.args.get('hide'))) Последняя
+                    a.page-link(href=url_for('consilium_view', page=pagination.total_pages, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'))) Последняя
 
 each item in pictures
     div.modal.fade(id = "pic-modal"~item.pic.id, tabindex="-1", role="dialog", aria-hidden="true")

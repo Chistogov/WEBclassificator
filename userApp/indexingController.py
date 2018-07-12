@@ -42,20 +42,20 @@ def indexing_post():
         # if(len(num) == 0):
         # print listt
         # if not(file in listt):
-            # pic = Picture.Picture()
-            # pic.pic_name = file
-            # pic.first_rec = False
-            # pic.skipped = False
-            # pic.index_date = datetime.datetime.now().date()
-            # db.session.add(pic)
-            cnn = Cnnrec.Cnnrec()
-            picture = db.session.query(Picture.Picture).filter(Picture.Picture.pic_name == file).first()
-            cnn.pic_id = picture.id
-            cnn.symp_id = 20
-            print i
-            print file
-            i = i + 1
-            db.session.add(cnn)
+        #     pic = Picture.Picture()
+        #     pic.pic_name = file
+        #     pic.first_rec = False
+        #     pic.skipped = False
+        #     pic.index_date = datetime.datetime.now().date()
+        #     db.session.add(pic)
+        cnn = Cnnrec.Cnnrec()
+        picture = db.session.query(Picture.Picture).filter(Picture.Picture.pic_name == file).first()
+        cnn.pic_id = picture.id
+        cnn.symp_id = 20
+        print i
+        print file
+        i = i + 1
+        db.session.add(cnn)
             # db.session.commit()
     db.session.commit()
     return redirect(url_for('indexing', message = "Проиндексировано " + str(i) + "записей"))

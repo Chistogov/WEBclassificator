@@ -16,7 +16,7 @@ def stats_cnn():
         .join(Cnnrec.Cnnrec) \
         .group_by(Symptom.Symptom.symptom_name, Symptom.Symptom.nose, Symptom.Symptom.throat, Symptom.Symptom.ear, Symptom.Symptom.id)
 
-    return render_template('cnnStats.pug', pics_by_symp=pics_by_symp, admin=current_user.admin)
+    return render_template('/statistic/cnnStats.pug', pics_by_symp=pics_by_symp, admin=current_user.admin)
 
 PER_PAGE = 21
 
