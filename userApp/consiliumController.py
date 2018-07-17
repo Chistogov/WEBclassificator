@@ -12,13 +12,14 @@ import logging
 @login_required
 def consilium(pic_id):
     # ***
-    experts = db.session.query(User.User.id).filter(User.User.expert == True)
+    experts = db.session.query(Usercons.Usercons.user_id)
+    # experts = db.session.query(User.User.id).filter(User.User.id.in_(users_cons))
     recognized = db.session.query(Recognized.Recognized).filter(Recognized.Recognized.pic_id == pic_id, Recognized.Recognized.user_id.in_(experts))
     symp_ids = list()
     for item in db.session.query(Recognized.Recognized.symp_id).filter(Recognized.Recognized.pic_id == pic_id).group_by(Recognized.Recognized.user_id, Recognized.Recognized.symp_id):
         symp_ids.append(item.symp_id)
     user_rec = db.session.query(Recognized.Recognized.user_id).filter(Recognized.Recognized.pic_id == pic_id, Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.user_id)
-    user_rec = db.session.query(User.User).filter(User.User.id.in_(user_rec), User.User.expert == True)
+    user_rec = db.session.query(User.User).filter(User.User.id.in_(user_rec))
     recognized_count = db.session.query(db.func.count(Recognized.Recognized.symp_id)).filter(Recognized.Recognized.pic_id == pic_id, Recognized.Recognized.user_id.in_(experts)).group_by(Recognized.Recognized.symp_id)
     symptoms = db.session.query(Symptom.Symptom).filter(Symptom.Symptom.id.in_(symp_ids))
     symptom_list = list()
@@ -29,9 +30,15 @@ def consilium(pic_id):
         symp = picSymps()
         symp.symptom=symptom
         if (symptom.ismedical and not(symptom.primary)):
-            symp.count = (100 / count_users) * symp_ids.count(symptom.id)
+            if (count_users > 0):
+                symp.count = (100 / count_users) * symp_ids.count(symptom.id)
+            else:
+                symp.count = 0
         if(symptom.diagnos):
-            symp.count=(100/count_diagnoses)*symp_ids.count(symptom.id)
+            if(count_diagnoses > 0):
+                symp.count=(100/count_diagnoses)*symp_ids.count(symptom.id)
+            else:
+                symp.count =0
         symptom_list.append(symp)
     # ***
     pic = Picture.Picture.query.get(pic_id)
@@ -45,8 +52,8 @@ def consilium(pic_id):
 @userApp.route('/consilium/pic/<int:pic_id>', methods=['POST'])
 @login_required
 def consilium_post(pic_id):
-    if not(current_user.admin):
-        return redirect(request.referrer)
+    # if not(current_user.admin):
+    #     return redirect(request.referrer)
     if (current_user.user_name == "demo"):
         return redirect(url_for('/'))
     form = request.form
@@ -93,6 +100,7 @@ def consilium_view(page):
     hideConf = False
     hideApp = False
     hideSecRec = False
+    hideAlone = False
 
     if (request.args.has_key('hideTest')):
         if request.args.get('hideTest') == 'True':
@@ -109,6 +117,10 @@ def consilium_view(page):
     if (request.args.has_key('hideSecRec')):
         if request.args.get('hideSecRec') == 'True':
             hideSecRec = True
+
+    if (request.args.has_key('hideAlone')):
+        if request.args.get('hideAlone') == 'True':
+            hideAlone = True
 
     usercons = db.session.query(Usercons.Usercons.cons_num).filter(Usercons.Usercons.user_id==current_user.id, Usercons.Usercons.manager==True)
     consdata = db.session.query(Consdata.Consdata).filter(Consdata.Consdata.cons_num.in_(usercons))
@@ -133,6 +145,7 @@ def consilium_view(page):
                                                                           Picture.Picture.id == Appoint.Appoint.pic_id,
                                                                           Appoint.Appoint.pic_id.in_(pics)).group_by(Picture.Picture.id)))
         iForm.cons_count = len(list(db.session.query(Picture.Picture).filter(Picture.Picture.id == Consilium.Consilium.pic_id).group_by(Consilium.Consilium.pic_id, Picture.Picture.id)))
+    pics_old = pics
     pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(pics))
 
     if hideTest:
@@ -144,9 +157,20 @@ def consilium_view(page):
         hiddenApp = db.session.query(Appoint.Appoint.pic_id).filter(Appoint.Appoint.secondary == True).group_by(
             Appoint.Appoint.pic_id)
         pics = pics.filter(Picture.Picture.id.notin_(hiddenApp))
+    if hideAlone:
+        two_plus_users = db.session.query(Recognized.Recognized.pic_id.distinct(), db.func.count(Recognized.Recognized.user_id.distinct()))\
+            .filter(Recognized.Recognized.user_id.in_(users_cons), Recognized.Recognized.pic_id.in_(pics_old))\
+            .group_by(Recognized.Recognized.pic_id)
+        lp = list()
+        for item in two_plus_users:
+            if(item[1]>1):
+                print "+++" + str(item[0]) + " " + str(item[1])
+                lp.append(item[0])
+        pics = pics.filter(Picture.Picture.id.in_(lp))
 
     if hideSecRec:
-        hiddenSecRec = db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.secondary==True).group_by(Recognized.Recognized.pic_id)
+        hiddenSecRec = db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.secondary==True)\
+            .group_by(Recognized.Recognized.pic_id)
         pics = pics.filter(Picture.Picture.id.in_(hiddenSecRec))
         print 'Not yet'
 
@@ -219,7 +243,7 @@ def consilium_view(page):
         pics_list.append(form)
     print '5'
     return render_template('/consilium/index.pug', admin=current_user.admin, pagination=pagination, pictures=pics_list,
-                           message=message, hideTest=hideTest, hideConf=hideConf, info=iForm, hideApp=hideApp, hideSecRec=hideSecRec)
+                           message=message, hideTest=hideTest, hideConf=hideConf, info=iForm, hideApp=hideApp, hideSecRec=hideSecRec, hideAlone=hideAlone)
 
 @userApp.route('/consilium/', methods=['POST'], defaults={'page': 0})
 @userApp.route('/consilium/<int:page>', methods=['POST'])
@@ -227,14 +251,15 @@ def consilium_view(page):
 def consilium_view_post(page):
     if (current_user.user_name == "demo"):
         return redirect(request.referrer)
-    if not(current_user.admin):
-        return redirect(request.referrer)
+    # if not(current_user.admin):
+    #     return redirect(request.referrer)
     form = request.form
     if(form.has_key('hideForm')):
         hideTest = False
         hideConf = False
         hideApp = False
         hideSecRec = False
+        hideAlone = False
         if (form.has_key('hideTest')):
             hideTest = True
         if (form.has_key('hideConf')):
@@ -243,7 +268,9 @@ def consilium_view_post(page):
             hideApp = True
         if (form.has_key('hideSecRec')):
             hideSecRec = True
-        return redirect(url_for('consilium_view', hideTest=hideTest, hideConf=hideConf, hideApp=hideApp, hideSecRec=hideSecRec))
+        if (form.has_key('hideAlone')):
+            hideAlone = True
+        return redirect(url_for('consilium_view', hideTest=hideTest, hideConf=hideConf, hideApp=hideApp, hideSecRec=hideSecRec, hideAlone=hideAlone))
     if (form.has_key('user') and form.has_key('message') and form.has_key('pic')):
         app = Appoint.Appoint()
         app.user_id = form['user']
@@ -280,19 +307,14 @@ def consilium_stats():
     if not(current_user.admin):
         return redirect('/')
     logging.info("ConsiliumStats")
-    usercons = db.session.query(Usercons.Usercons.user_id)
-    cons_pics = db.session.query(Consdata.Consdata.pic_id).group_by(Consdata.Consdata.pic_id).all()
-    cons_pics_count = len(list(db.session.query(Consdata.Consdata.pic_id).group_by(Consdata.Consdata.pic_id).all()))
-    pics_by_cons = db.session.query(Consnames.Consnames.cons_name, db.func.count(Consdata.Consdata.pic_id))\
-        .join(Consdata.Consdata).group_by(Consnames.Consnames.cons_name, Consnames.Consnames.id)
+    cons_pics = db.session.query(Consilium.Consilium.pic_id).group_by(Consilium.Consilium.pic_id).all()
+    cons_pics_count = len(list(cons_pics))
 
-    pics_by_symp = db.session.query(Symptom.Symptom.symptom_name, db.func.count(Recognized.Recognized.id).label('total')) \
-        .join(Recognized.Recognized)\
-        .filter(Recognized.Recognized.pic_id.in_(cons_pics), Recognized.Recognized.user_id.in_(usercons),
-                Symptom.Symptom.diagnos==True) \
+    pics_by_symp = db.session.query(Symptom.Symptom.symptom_name, db.func.count(Symptom.Symptom.symptom_name).label('total')) \
+        .join(Consilium.Consilium)\
+        .filter(Symptom.Symptom.diagnos==True) \
         .group_by(Symptom.Symptom.symptom_name).order_by(db.desc('total'))
-
-    return render_template('/consilium/stats.pug', cons_pics=cons_pics_count, pics_by_cons= pics_by_cons, pics_by_symp=pics_by_symp, admin=current_user.admin)
+    return render_template('/consilium/stats.pug', cons_pics=cons_pics_count, pics_by_symp=pics_by_symp, admin=current_user.admin)
 
 def get_pics_for_page(page, pics):
     pics = pics.group_by(Picture.Picture.id)

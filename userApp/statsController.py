@@ -7,7 +7,7 @@ from flask_login import login_required, current_user
 import logging, datetime, decimal, json
 
 
-@userApp.route('/stats')
+@userApp.route('/stats', methods=['GET'])
 @login_required
 def stats():
     if not(current_user.admin):
@@ -23,8 +23,57 @@ def stats():
     infoForm.rec_pics = len(list(rec_pics))
     infoForm.app_pics = len(list(app_pics))
     infoForm.wait_pics = infoForm.all_pics-infoForm.rec_pics
+    users = User.User.query.all()
+    return render_template('/statistic/stats.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, admin=current_user.admin, users=users)
 
-    return render_template('/statistic/stats.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, admin=current_user.admin)
+@userApp.route('/stats', methods=['POST'])
+@login_required
+def stats_view_form():
+    if not(current_user.admin):
+        return redirect('/')
+    if(current_user.user_name == "demo"):
+        return redirect(url_for('stats_form', message="Demo user, read only"))
+    logging.info("Stats")
+    form = request.form
+    users = list()
+    pics = db.session.query(Picture.Picture).join(Recognized.Recognized)
+    rec_pics = db.session.query(Recognized.Recognized.pic_id).group_by(Recognized.Recognized.pic_id)
+    app_pics = db.session.query(Appoint.Appoint)
+    for item in form:
+        if ('user' in item):
+            print form[item]
+            users.append(form[item])
+    if(len(users)>0):
+        pics = pics.filter(Recognized.Recognized.user_id.in_(users))
+        rec_pics = rec_pics.filter(Recognized.Recognized.user_id.in_(users))
+        app_pics = app_pics.filter(Appoint.Appoint.user_id.in_(users))
+
+    if (form['dateRecFrom']):
+        date = datetime.datetime.strptime(form['dateRecFrom'], "%Y-%m-%d")
+        pics = pics.filter(db.func.DATE(Recognized.Recognized.date) > date)
+        rec_pics = rec_pics.filter(db.func.DATE(Recognized.Recognized.date) > date)
+    if (form['dateRecTo']):
+        date = datetime.datetime.strptime(form['dateRecTo'], "%Y-%m-%d")
+        pics = pics.filter(db.func.DATE(Recognized.Recognized.date) < date)
+        rec_pics = rec_pics.filter(db.func.DATE(Recognized.Recognized.date) < date)
+
+    picslist = list()
+    for item in pics:
+        picslist.append(item.id)
+    pics_by_symp = db.session.query(Symptom.Symptom.symptom_name, Symptom.Symptom.ear, Symptom.Symptom.throat,
+                                    Symptom.Symptom.nose, db.func.count(Recognized.Recognized.pic_id).label('total'),
+                                    Symptom.Symptom.ismedical, Symptom.Symptom.id, Symptom.Symptom.primary, Symptom.Symptom.diagnos) \
+        .join(Recognized.Recognized).filter(Recognized.Recognized.pic_id.in_(picslist)) \
+        .group_by(Symptom.Symptom.symptom_name, Symptom.Symptom.nose, Symptom.Symptom.throat, Symptom.Symptom.ear,
+                  Symptom.Symptom.ismedical, Symptom.Symptom.id).order_by(db.desc('total'))
+
+    infoForm.all_pics = len(list(pics))
+    infoForm.rec_pics = len(list(rec_pics))
+    infoForm.app_pics = len(list(app_pics))
+    infoForm.wait_pics = 0
+    users = User.User.query.all()
+    return render_template('/statistic/stats.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, admin=current_user.admin, users=users)
+
 
 # /stats/search
 

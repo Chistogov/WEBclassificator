@@ -32,6 +32,9 @@ include navBar
                         div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
                             input.custom-control-input.checkitem(type="checkbox", id='hideSecRec', name='hideSecRec', checked=hideSecRec)
                             label.custom-control-label(for='hideSecRec')="Скрывать не перераспознанные"
+                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                            input.custom-control-input.checkitem(type="checkbox", id='hideAlone', name='hideAlone', checked=hideAlone)
+                            label.custom-control-label(for='hideAlone')="Распознанные двумя и более экспертами"
                         button.btn.btn-primary(href="#" type="submit")="Применить"
         if(message)
             div.col-12
@@ -123,20 +126,20 @@ include navBar
                     a.page-link(href=url_for('consilium_view', page=0, hide=request.args.get('hide'))) Первая
                 if(pagination.page == 0)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'))) &laquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &laquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'))) &laquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &laquo;
                 li.page-item
                     a.page-link(href='')=(pagination.page+1)
                 if(pagination.page == pagination.total_pages)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'))) &raquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &raquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'))) &raquo;
+                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &raquo;
                 li.page-item
-                    a.page-link(href=url_for('consilium_view', page=pagination.total_pages, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'))) Последняя
+                    a.page-link(href=url_for('consilium_view', page=pagination.total_pages, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) Последняя
 
 each item in pictures
     div.modal.fade(id = "pic-modal"~item.pic.id, tabindex="-1", role="dialog", aria-hidden="true")

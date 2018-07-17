@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, redirect, url_for
 from userApp import *
-from userApp.dbc import User, db, Testresults, Datasets, Category, Confirmed, Picture, Symptom, Recognized, Usertests, Tests, Consilium
+from userApp.dbc import User, db, Testresults, Datasets, Category, Confirmed, Picture, Symptom, Recognized, Usertests, Tests, Consilium, Usercons, Consnames, Consdata
 from flask_login import login_required, current_user
 import datetime
 import logging, collections
@@ -158,7 +158,8 @@ def tests_forming():
         message = request.args['message']
     tests = db.session.query(Datasets.Datasets)
     users = db.session.query(User.User)
-    return render_template('tests/forming.pug', admin=current_user.admin, message=message, tests = tests,users=users)
+    consnames = db.session.query(Consnames.Consnames)
+    return render_template('tests/forming.pug', admin=current_user.admin, message=message, tests = tests,users=users, consnames=consnames)
 
 @userApp.route('/tests/forming', methods=['POST'])
 @login_required
@@ -169,10 +170,15 @@ def tests_forming_post():
     if not(current_user.admin):
         return redirect('/')
     form = request.form
-    consilium_pics = db.session.query(Consilium.Consilium.pic_id).group_by(Consilium.Consilium.pic_id).limit(int(form['count']))
+    # Тут
+    # Picture.Picture.id.notin_(hidden_pics)
+    cons = db.session.query(Consdata.Consdata.pic_id).filter(Consdata.Consdata.cons_num==form['consilium']).group_by(Consdata.Consdata.pic_id)
+    consilium_pics = db.session.query(Picture.Picture.id).filter(Picture.Picture.id == Consilium.Consilium.pic_id, Picture.Picture.id.in_(cons)).group_by(
+        Consilium.Consilium.pic_id, Picture.Picture.id).limit(form['count'])
+    print str(len(list(consilium_pics)))
     consilium = db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id.in_(consilium_pics))
     if (form.has_key('notUsing')):
-        intest = db.session.query(Usertests.Usertests.pic_id)
+        intest = db.session.query(Usertests.Usertests.pic_id).group_by(Usertests.Usertests.pic_id)
         consilium = db.session.query(Consilium.Consilium).filter(Consilium.Consilium.pic_id.notin_(intest), Consilium.Consilium.pic_id.in_(consilium_pics))
     for conf in consilium:
         new_tag = Usertests.Usertests()
@@ -186,7 +192,6 @@ def tests_forming_post():
         if (len(list(exist)) == 0):
             db.session.add(new_tag)
     db.session.commit()
-
     return redirect('/tests/forming')
 
 @userApp.route('/tests/testing/<int:test>', methods=['GET'])

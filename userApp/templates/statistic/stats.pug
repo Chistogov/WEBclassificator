@@ -3,8 +3,31 @@ currentPage = "/stats"
 include navBar
 
 .content
+
     .row
         div.col-md-12
+            .card.card-block
+                .card-body
+                    form#noseform(method="post" action="#")
+                        div#accordion_nose
+                            .card
+                                .card-header#nose-head
+                                    a.btn.btn-link.collapsed(data-toggle="collapse", data-target="#nose-users", aria-expanded="false")="Пользователи"
+                                div#nose-users.collapse(aria-labelledby="nose-head" data-parent="#accordion_nose")
+                                    div.card-body
+                                        for _user in users
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2
+                                                input.custom-control-input(type="checkbox", id='nUser'~_user.id, name="user"~_user.id, value=_user.id)
+                                                label.custom-control-label(for='nUser'~_user.id)=_user.user_name
+                        hr
+                        div.form-group
+                            label(for="NosedateRecFrom")="От:"
+                            input.form-control(type="date", name="dateRecFrom", id="NosedateRecFrom")
+                        div.form-group
+                            label(for="NosedateRecTo")="До:"
+                            input.form-control(type="date", name="dateRecTo", id="NosedateRecTo")
+                        hr
+                        button.btn.btn-success(href="#" type="submit")="Показать"
             .card.card-block
                 .card-body
                     table.table.table-striped
@@ -26,12 +49,30 @@ include navBar
                                 div.card-body
                                     ul.list-group
                                         each item in pics_by_symp
-                                            if(item[1]==True and item[5]==True)
+                                            if(item[1] == True and item[7]==True)
                                                 a(href='/pics/'~item[6]~'/0')
                                                     li.list-group-item.list-group-item-action
                                                         .row
                                                             .col-6
-                                                                h6.text-left=item[0]
+                                                                h6.text-left(style="color:red;")=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
+                                        each item in pics_by_symp
+                                            if(item[1]==True and item[5]==True and item[7]==False and item[8]==True)
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left(style="color:green;")=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
+                                        each item in pics_by_symp
+                                            if(item[1] == True and item[5]==True and item[7]==False and item[8]==False)
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left(style="color:blue;")=item[0]
                                                             .col-6
                                                                 h6.text-right=item[4]
                                         each item in pics_by_symp
@@ -50,12 +91,30 @@ include navBar
                                 div.card-body
                                     ul.list-group
                                         each item in pics_by_symp
-                                            if(item[2] == True and item[5]==True)
+                                            if(item[2] == True and item[7]==True)
                                                 a(href='/pics/'~item[6]~'/0')
                                                     li.list-group-item.list-group-item-action
                                                         .row
                                                             .col-6
-                                                                h6.text-left=item[0]
+                                                                h6.text-left(style="color:red;")=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
+                                        each item in pics_by_symp
+                                            if(item[2] == True and item[5]==True and item[7]==False and item[8]==True)
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left(style="color:green;")=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
+                                        each item in pics_by_symp
+                                            if(item[2] == True and item[5]==True and item[7]==False and item[8]==False)
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left(style="color:blue;")=item[0]
                                                             .col-6
                                                                 h6.text-right=item[4]
                                         each item in pics_by_symp
@@ -74,12 +133,30 @@ include navBar
                                 div.card-body
                                     ul.list-group
                                         each item in pics_by_symp
-                                            if(item[3] == True and item[5]==True)
+                                            if(item[3] == True and item[7]==True)
                                                 a(href='/pics/'~item[6]~'/0')
                                                     li.list-group-item.list-group-item-action
                                                         .row
                                                             .col-6
-                                                                h6.text-left=item[0]
+                                                                h6.text-left(style="color:red;")=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
+                                        each item in pics_by_symp
+                                            if(item[3] == True and item[5]==True and item[7]==False and item[8]==True)
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left(style="color:green;")=item[0]
+                                                            .col-6
+                                                                h6.text-right=item[4]
+                                        each item in pics_by_symp
+                                            if(item[3] == True and item[5]==True and item[7]==False and item[8]==False)
+                                                a(href='/pics/'~item[6]~'/0')
+                                                    li.list-group-item.list-group-item-action
+                                                        .row
+                                                            .col-6
+                                                                h6.text-left(style="color:blue;")=item[0]
                                                             .col-6
                                                                 h6.text-right=item[4]
                                         each item in pics_by_symp
