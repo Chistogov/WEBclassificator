@@ -29,7 +29,10 @@ def appoint():
     infoForm.app_pics = len(list(app_pics))
     infoForm.wait_pics = infoForm.all_pics-infoForm.rec_pics
     users = User.User.query.all()
-    return render_template('appoint.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, users=users, message=message, admin=current_user.admin)
+    cnnrec_symps = db.session.query(Symptom.Symptom).filter(Cnnrec.Cnnrec.symp_id==Symptom.Symptom.id).group_by(Symptom.Symptom.id)
+    for item in cnnrec_symps:
+        print item.symptom_name
+    return render_template('appoint.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, users=users, message=message, admin=current_user.admin, cnnrec_symps=cnnrec_symps)
 
 @userApp.route('/appoint', methods=['POST'])
 @login_required
@@ -46,6 +49,7 @@ def appoint_post():
     count = form['count']
     in_app = db.session.query(Appoint.Appoint.pic_id).filter(Appoint.Appoint.user_id == forUser)
     alredyrec = db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.user_id == forUser)
+    toCnnConf = False
     for item in form:
         if (item == 'fromRec'):
             if (form['fromUser'] != "0"):
@@ -65,47 +69,34 @@ def appoint_post():
                     Recognized.Recognized.user_id == form['fromUser'])
                 pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(rec),
                                                                 ~Picture.Picture.id.in_(in_app)).limit(count)
-                appointService.toAppDb(pics, forUser)
+                appointService.toAppDb(pics, forUser, toCnnConf)
                 return redirect('/appoint')
             else:
                 rec = db.session.query(Recognized.Recognized.pic_id)
                 pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(in_app)).limit(count)
-                appointService.toAppDb(pics, forUser)
+                appointService.toAppDb(pics, forUser, toCnnConf)
                 return redirect('/appoint')
         if (item == 'fromApp'):
             app = db.session.query(Appoint.Appoint.pic_id)
             pics = db.session.query(Picture.Picture).filter(Picture.Picture.id.in_(app), ~Picture.Picture.id.in_(in_app)).limit(count)
-            appointService.toAppDb(pics, forUser)
+            appointService.toAppDb(pics, forUser, toCnnConf)
             return redirect('/appoint')
-        if(item == 'ear'):
+        if (item.isdigit()):
+            if(form['cnnConf'] != 0):
+                toCnnConf = True
+                print 'toCnnConf'
             rec = db.session.query(Recognized.Recognized.pic_id)
             app = db.session.query(Appoint.Appoint.pic_id)
-            ear = db.session.query(Cnnrec.Cnnrec.pic_id).filter(Cnnrec.Cnnrec.symp_id == 20)
+            ear = db.session.query(Cnnrec.Cnnrec.pic_id).filter(Cnnrec.Cnnrec.symp_id == item)
             pics = db.session.query(Picture.Picture).filter(~Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(app),
                                                             ~Picture.Picture.id.in_(in_app), Picture.Picture.id.in_(ear), Picture.Picture.skipped==False).limit(count)
-            appointService.toAppDb(pics, forUser)
-            return redirect('/appoint')
-        if (item == 'nose'):
-            rec = db.session.query(Recognized.Recognized.pic_id)
-            app = db.session.query(Appoint.Appoint.pic_id)
-            nose = db.session.query(Cnnrec.Cnnrec.pic_id).filter(Cnnrec.Cnnrec.symp_id == 22)
-            pics = db.session.query(Picture.Picture).filter(~Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(app),
-                                                            ~Picture.Picture.id.in_(in_app), Picture.Picture.id.in_(nose)).limit(count)
-            appointService.toAppDb(pics, forUser)
-            return redirect('/appoint')
-        if (item == 'throat'):
-            rec = db.session.query(Recognized.Recognized.pic_id)
-            app = db.session.query(Appoint.Appoint.pic_id)
-            throat = db.session.query(Cnnrec.Cnnrec.pic_id).filter(Cnnrec.Cnnrec.symp_id == 21)
-            pics = db.session.query(Picture.Picture).filter(~Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(app),
-                                                            ~Picture.Picture.id.in_(in_app), Picture.Picture.id.in_(throat)).limit(count)
-            appointService.toAppDb(pics, forUser)
+            appointService.toAppDb(pics, forUser, toCnnConf)
             return redirect('/appoint')
     rec = db.session.query(Recognized.Recognized.pic_id)
     app = db.session.query(Appoint.Appoint.pic_id)
     pics = db.session.query(Picture.Picture).filter(~Picture.Picture.id.in_(rec), ~Picture.Picture.id.in_(app), ~Picture.Picture.id.in_(in_app)).limit(count)
-    appointService.toAppDb(pics, forUser)
-    journalService.newMessaage(forUser, "Назначены новые снимки (" + str(len(list(pics))) + " шт.)")
+    appointService.toAppDb(pics, forUser, toCnnConf)
+    # journalService.newMessaage(forUser, "Назначены новые снимки (" + str(len(list(pics))) + " шт.)")
     #--------------------------------------
     # cnnrec = db.session.query(Cnnrec.Cnnrec.pic_id).filter(Cnnrec.Cnnrec.symp_id == 20)
     # recbad = list(db.session.query(Recognized.Recognized.pic_id).filter(Recognized.Recognized.symp_id.in_([23, 37, 49, 53])))

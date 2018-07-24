@@ -16,7 +16,11 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                 a(class="nav-link dropdown-toggle", href="#", id="navbarRecMenuLink", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")="Разметка"
                 div(div class="dropdown-menu", aria-labelledby="navbarRecMenuLink")
                     a.dropdown-item(href="/rec", target="_self") Первичная
+                        if(count_app>0)
+                            .badge.badge-primary=count_app
                     a.dropdown-item(href="/sec_rec", target="_self") Повторная
+                        if(count_sec_app>0)
+                            .badge.badge-primary=count_sec_app
 
             if(admin)
                 if(currentPage == "/settings")
@@ -29,9 +33,13 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
             if(currentPage == "/tests")
                 li.nav-item
                     a.nav-link.active(href="/tests", target="_self") Тестирование
+                        if(count_tests > 0)
+                            .badge.badge-primary=count_tests
             else
                 li.nav-item
                     a.nav-link(href="/tests", target="_self") Тестирование
+                        if(count_tests>0)
+                            .badge.badge-primary=count_tests
 
             if(admin)
                 li.nav-item.dropdown
@@ -48,7 +56,12 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                 div(div class="dropdown-menu", aria-labelledby="navbarPicsMenuLink")
                     if(admin)
                         a.dropdown-item(href="/rejection", target="_self") Подтверждение
-                    a.dropdown-item(href="/consilium/0", target="_self") Консилиум
+                    if(usercons.first().id)
+                        a.dropdown-item(href="/consilium/"~usercons.first().cons_num~"/0", target="_self") Консилиум
+                    a.dropdown-item(href="/cnn_rec", target="_self") Подтверждение НС
+                        if(count_cnn_app>0)
+                            .badge.badge-primary=count_cnn_app
+
                         //a.dropdown-item(href="/indexing", target="_self", hidden=True) Индексация
 
             if(admin)

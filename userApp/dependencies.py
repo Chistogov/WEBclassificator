@@ -51,3 +51,4 @@ def send_dev_img(path):
 def send_data(path):
     logging.info("Incude: " + path)
     return send_from_directory(userApp.config.get('DATA_PATH'), path)
+

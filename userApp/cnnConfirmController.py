@@ -6,11 +6,11 @@ from flask_login import login_required, current_user
 import datetime
 import logging
 
-@userApp.route('/rec', methods=['GET'])
+@userApp.route('/cnn_rec', methods=['GET'])
 @login_required
-def rec():
+def cnn_rec():
     logging.info('primary_rec')
-    pic = db.session.query(Picture.Picture.id, Picture.Picture.pic_name, Appoint.Appoint.id).filter(Picture.Picture.id==Appoint.Appoint.pic_id, Appoint.Appoint.user_id==current_user.id,Appoint.Appoint.secondary==False, Appoint.Appoint.from_cnn==False).first()
+    pic = db.session.query(Picture.Picture.id, Picture.Picture.pic_name, Appoint.Appoint.id).filter(Picture.Picture.id==Appoint.Appoint.pic_id, Appoint.Appoint.user_id==current_user.id,Appoint.Appoint.from_cnn==True).first()
     neural = ""
     pic_local = ""
     message = ""
@@ -26,20 +26,20 @@ def rec():
                                                                       Recognized.Recognized.user_id==current_user.id)\
                                                                     .group_by(Recognized.Recognized.pic_id)
 
-    pics_in_wait = Appoint.Appoint.query.filter_by(user_id=current_user.id, secondary=False, from_cnn=False)
+    pics_in_wait = Appoint.Appoint.query.filter_by(user_id=current_user.id, secondary=False, from_cnn=True)
     categories = Category.Category.query.order_by(Category.Category.id).all()
 
     if ('message' in request.args):
         message = request.args['message']
-    return render_template('rec.pug', symptoms=symptoms,
+    return render_template('/cnn/confirm.pug', symptoms=symptoms,
                            admin=current_user.admin, pic_local=pic_local,
                            message=message, appointed=appointed,
                            today_rec=len(list(pics_today)), in_wait=len(list(pics_in_wait)),
                            neural=neural, categories=categories)
 
-@userApp.route('/rec', methods=['POST'])
+@userApp.route('/cnn_rec', methods=['POST'])
 @login_required
-def rec_post():
+def cnn_rec_post():
     if(current_user.user_name == "demo"):
         return redirect(url_for('sec_rec', message="Demo user, read only"))
     max_time_rec = userApp.config.get('MAX_TIME_REC')
@@ -67,11 +67,11 @@ def rec_post():
         db.session.delete(appointed)
         db.session.commit()
 
-    return redirect('/rec')
+    return redirect('/cnn_rec')
 
-@userApp.route('/rec/skip/<path:path>')
+@userApp.route('/cnn_rec/skip/<path:path>')
 @login_required
-def skip(path):
+def cnn_skip(path):
     if(current_user.user_name == "demo"):
         return redirect(url_for('sec_rec', message="Demo user, read only"))
     appointed = Appoint.Appoint.query.get(int(path))
@@ -82,3 +82,4 @@ def skip(path):
     db.session.commit()
 
     return redirect('/rec')
+

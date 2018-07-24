@@ -198,7 +198,6 @@ def tests_forming_post():
 @login_required
 def testing(test):
     logging.info('primary_rec')
-    message = ""
     test_u = Tests.Tests.query.get(test)
     if(test_u.user_id != current_user.id):
         return redirect('/')
@@ -246,15 +245,12 @@ def testing(test):
         test_c.results = summary_percentage_d
         test_c.date = datetime.datetime.now()
         db.session.commit()
-        message="Тестирование завершено"
+        return test_results(test,0)
     symptoms = Symptom.Symptom.query.order_by(Symptom.Symptom.id)
     categories = Category.Category.query.order_by(Category.Category.id).all()
 
-    if ('message' in request.args):
-        message = request.args['message']
     return render_template('tests/testing.pug', symptoms=symptoms,
-                           admin=current_user.admin,
-                           message=message, categories=categories,
+                           admin=current_user.admin, categories=categories,
                            picture = pics_in_wait.first(), pic_wait=len(list(pics_in_wait)),
                            pic_ready=len(list(all_pics))-len(list(pics_in_wait)))
 

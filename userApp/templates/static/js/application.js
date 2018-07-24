@@ -12,6 +12,12 @@ $('#tabForm a').on('click', function (e) {
 
 $(document).ready(function() {
     console.log('ready');
+    $('#datatable').DataTable( {
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json"
+            }
+        } );
+
     if (document.getElementsByClassName("timer")[0]){
         sec = 0;
         setInterval(function(){

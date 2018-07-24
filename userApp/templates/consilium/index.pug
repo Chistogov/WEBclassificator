@@ -4,16 +4,18 @@ include navBar
 
 
 .content
-    h3="Консилиум"
+    h3=consname.cons_name
+    ul
+        each cons in usercons
+            if(consname.id!=cons.cons_num)
+                li
+                    a(href=url_for('consilium_view', cons_num = cons.cons_num, page = 0, hideTest = request.args.get('hideTest'), hideConf = request.args.get('hideConf'), hideApp = request.args.get('hideApp'), hideSecRec = request.args.get('hideSecRec'), hideAlone = request.args.get('hideAlone')))=cons.consname.cons_name
+
     h5="Подтверждение снимков распознанных экспертами"
     ul
         li="Подтвержденных снимков: "~info.cons_count
         li="Ожидают перераспознания: "~info.sec_app
         li="Ожидают подтверждения: "~info.cons_to_rec
-        //if not(hidden)
-            a.btn.btn-primary(href=url_for('consilium_view', page=pagination.page, hide=True))="Скрыть снимки из тестов"
-        //else
-            a.btn.btn-primary(href=url_for('consilium_view', page = pagination.page))="Показать все снимки"
     .row
         div.col-12
             .card.card-block
@@ -123,23 +125,23 @@ include navBar
         div.col-s4.pagination-center
             ul.pagination
                 li.page-item
-                    a.page-link(href=url_for('consilium_view', page=0, hide=request.args.get('hide'))) Первая
+                    a.page-link(href=url_for('consilium_view', cons_num=cons_number, page=0, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) Первая
                 if(pagination.page == 0)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &laquo;
+                        a.page-link(href=url_for('consilium_view', cons_num=cons_number, page=pagination.page - 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &laquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('consilium_view', page=pagination.page - 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &laquo;
+                        a.page-link(href=url_for('consilium_view', cons_num=cons_number, page=pagination.page - 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &laquo;
                 li.page-item
                     a.page-link(href='')=(pagination.page+1)
                 if(pagination.page == pagination.total_pages)
                     li.page-item(hidden=true)
-                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &raquo;
+                        a.page-link(href=url_for('consilium_view', cons_num=cons_number, page=pagination.page + 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &raquo;
                 else
                     li.page-item
-                        a.page-link(href=url_for('consilium_view', page=pagination.page + 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &raquo;
+                        a.page-link(href=url_for('consilium_view', cons_num=cons_number, page=pagination.page + 1, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) &raquo;
                 li.page-item
-                    a.page-link(href=url_for('consilium_view', page=pagination.total_pages, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) Последняя
+                    a.page-link(href=url_for('consilium_view', cons_num=cons_number, page=pagination.total_pages, hideTest=request.args.get('hideTest'), hideConf=request.args.get('hideConf'), hideApp=request.args.get('hideApp'), hideSecRec=request.args.get('hideSecRec'), hideAlone=request.args.get('hideAlone'))) Последняя
 
 each item in pictures
     div.modal.fade(id = "pic-modal"~item.pic.id, tabindex="-1", role="dialog", aria-hidden="true")

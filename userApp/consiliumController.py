@@ -89,13 +89,15 @@ def consilium_post(pic_id):
 
 PER_PAGE = 12
 
-@userApp.route('/consilium/', defaults={'page': 0})
-@userApp.route('/consilium/<int:page>', methods=['GET'])
+@userApp.route('/consilium/', defaults={'page': 0, 'cons_num':0})
+@userApp.route('/consilium/<int:cons_num>/<int:page>')
 @login_required
-def consilium_view(page):
+def consilium_view(cons_num, page):
     # if not(current_user.admin):
     #     return redirect(request.referrer)
     # experts = db.session.query(User.User.id).filter(User.User.expert == True)
+    if(request.args.has_key('cons_num')):
+        cons_num = int(request.args.get('hideTest'))
     hideTest = False
     hideConf = False
     hideApp = False
@@ -122,9 +124,8 @@ def consilium_view(page):
         if request.args.get('hideAlone') == 'True':
             hideAlone = True
 
-    usercons = db.session.query(Usercons.Usercons.cons_num).filter(Usercons.Usercons.user_id==current_user.id, Usercons.Usercons.manager==True)
-    consdata = db.session.query(Consdata.Consdata).filter(Consdata.Consdata.cons_num.in_(usercons))
-    users_cons = db.session.query(Usercons.Usercons.user_id).filter(Usercons.Usercons.cons_num.in_(usercons))
+    consdata = db.session.query(Consdata.Consdata).filter(Consdata.Consdata.cons_num==cons_num)
+    users_cons = db.session.query(Usercons.Usercons.user_id).filter(Usercons.Usercons.cons_num==cons_num)
     pics1 = consdata.filter(Consdata.Consdata.pic_id==Recognized.Recognized.pic_id,
                                                              Recognized.Recognized.user_id.in_(users_cons)).group_by(Consdata.Consdata.id)
     pics = list()
@@ -242,13 +243,15 @@ def consilium_view(page):
                 form.consilium.append(cns.symp_id)
         pics_list.append(form)
     print '5'
+    consname = db.session.query(Consnames.Consnames).get(cons_num)
     return render_template('/consilium/index.pug', admin=current_user.admin, pagination=pagination, pictures=pics_list,
-                           message=message, hideTest=hideTest, hideConf=hideConf, info=iForm, hideApp=hideApp, hideSecRec=hideSecRec, hideAlone=hideAlone)
+                           message=message, hideTest=hideTest, hideConf=hideConf, info=iForm, hideApp=hideApp, hideSecRec=hideSecRec, hideAlone=hideAlone
+                           ,cons_number=cons_num, consname=consname)
 
 @userApp.route('/consilium/', methods=['POST'], defaults={'page': 0})
-@userApp.route('/consilium/<int:page>', methods=['POST'])
+@userApp.route('/consilium/<int:cons_num>/<int:page>', methods=['POST'])
 @login_required
-def consilium_view_post(page):
+def consilium_view_post(cons_num, page):
     if (current_user.user_name == "demo"):
         return redirect(request.referrer)
     # if not(current_user.admin):
@@ -270,7 +273,7 @@ def consilium_view_post(page):
             hideSecRec = True
         if (form.has_key('hideAlone')):
             hideAlone = True
-        return redirect(url_for('consilium_view', hideTest=hideTest, hideConf=hideConf, hideApp=hideApp, hideSecRec=hideSecRec, hideAlone=hideAlone))
+        return redirect(url_for('consilium_view', hideTest=hideTest, hideConf=hideConf, hideApp=hideApp, hideSecRec=hideSecRec, hideAlone=hideAlone, cons_num=cons_num, page=0))
     if (form.has_key('user') and form.has_key('message') and form.has_key('pic')):
         app = Appoint.Appoint()
         app.user_id = form['user']

@@ -16,13 +16,14 @@ def validateForm(form):
     else:
         return None
 
-def toAppDb(pics, forUser):
+def toAppDb(pics, forUser, toCnnConf):
     for pic in pics:
         app = Appoint.Appoint()
         app.user_id = forUser
         app.secondary = False
         app.pic_id = pic.id
         app.date = datetime.datetime.now().date()
+        app.from_cnn = toCnnConf
         db.session.add(app)
     print ("Commit...")
     db.session.commit()

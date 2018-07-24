@@ -10,7 +10,7 @@ import logging
 @login_required
 def sec_rec():
     logging.info('primary_rec')
-    pic = db.session.query(Picture.Picture.id, Picture.Picture.pic_name, Appoint.Appoint.id, Appoint.Appoint.message).filter(Picture.Picture.id==Appoint.Appoint.pic_id, Appoint.Appoint.user_id==current_user.id,Appoint.Appoint.secondary==True).first()
+    pic = db.session.query(Picture.Picture.id, Picture.Picture.pic_name, Appoint.Appoint.id, Appoint.Appoint.message).filter(Picture.Picture.id==Appoint.Appoint.pic_id, Appoint.Appoint.user_id==current_user.id,Appoint.Appoint.secondary==True, Appoint.Appoint.from_cnn==False).first()
     neural = ""
     pic_local = ""
     message = ""
@@ -29,7 +29,7 @@ def sec_rec():
                                                                       Recognized.Recognized.user_id==current_user.id)\
                                                                     .group_by(Recognized.Recognized.pic_id)
 
-    pics_in_wait = Appoint.Appoint.query.filter_by(user_id=current_user.id, secondary=True)
+    pics_in_wait = Appoint.Appoint.query.filter_by(user_id=current_user.id, secondary=True, from_cnn=False)
     categories = Category.Category.query.order_by(Category.Category.id).all()
     recognized = None
     if(pic):

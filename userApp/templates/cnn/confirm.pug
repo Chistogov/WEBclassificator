@@ -1,0 +1,170 @@
+include application
+currentPage = "/rec"
+include navBar
+
+.content
+    .row
+        div.col-md-6
+            .card.card-block
+                .card-body
+                    if(message)
+                        div.alert.alert-danger(role="alert")=message
+                    if(pic_local)
+                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal")
+                            img.materialboxed(src=pic_local, width="100%")
+                    table.table.table-striped
+                        tbody
+                            tr
+                                td Сегодня распознано:
+                                td=today_rec
+                            tr
+                                td Снимков в ожидании:
+                                td=in_wait
+                            tr
+                                td Время распознания:
+                                td.timer=0
+            .card.card-block
+                .card-body
+                    h5.card-title="Нейросеть"
+                    each item in neural
+                        li.card-text=item[1]
+            .card.card-block
+                .card-body
+                    h5.card-title="Диагнозы"
+                    div#params_d
+                    h5.card-title="Визуальные Признаки"
+                    div#params
+
+        div.col-md-6
+            .card.card-block
+                nav
+                    div#tabForm.nav.nav-tabs(role="tablist")
+                        a.nav-item.nav-link.active(href="#earTab", data-toggle="tab",id="ear-tab", aria-controls="earTab", aria-selected="true")="Ухо"
+                        a.nav-item.nav-link(href="#throatTab", data-toggle="tab",id="throat-tab", aria-controls="throatTab", aria-selected="false")="Горло"
+                        a.nav-item.nav-link(href="#noseTab", data-toggle="tab",id="nose-tab", role="tab", aria-controls="noseTab", aria-selected="false")="Нос"
+                    .tab-content
+                        div#earTab.tab-pane.fade.show.active(role="tabpanel", aria-labelledby="ear-tab")
+                            .card-body
+                                form#earform(method="post" action="#")
+                                    input.hidden.timer(name = "timer", value=0, hidden)
+                                    if(appointed)
+                                        input.hidden(name = "appointed", value=appointed, hidden)
+                                    each symp in symptoms
+                                        if (symp.primary and symp.ear)
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'ear', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if not(symp.ismedical or symp.primary)
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'ear', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
+                                    hr
+                                    each cat in categories
+                                        if(cat.id == 1)
+                                            a.btn.btn-link(data-toggle="collapse", href="#nose"~cat.id, aria-expanded="true", aria-controls="#nose"~cat.id)=cat.category_name
+                                        else
+                                            a.btn.btn-link(data-toggle="collapse", href="#nose"~cat.id, aria-expanded="true", aria-controls="#nose"~cat.id)=cat.category_name
+                                    each cat in categories
+                                        if(cat.id == 1)
+                                            div.collapse.show(id="nose"~cat.id)
+                                                each symp in symptoms
+                                                    if(symp.symptom_name and symp.ear and symp.ismedical and not(symp.diagnos) and not(symp.primary))
+                                                        if(symp.cat_id == cat.id)
+                                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'ear', name=symp.id, data-name=symp.symptom_name)
+                                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
+                                        else
+                                            div.collapse(id="nose"~cat.id)
+                                                each symp in symptoms
+                                                    if(symp.symptom_name and symp.ear and symp.ismedical and not(symp.diagnos) and not(symp.primary))
+                                                        if(symp.cat_id == cat.id)
+                                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'ear', name=symp.id, data-name=symp.symptom_name)
+                                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.ear and symp.ismedical and symp.diagnos and not(symp.primary))
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag_d
+                                                input.custom-control-input.checkitem_d(type="checkbox", id=symp.id~'ear', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
+                                    hr
+                                    if(appointed)
+                                        button.btn.btn-success(href="#" type="submit")="Сохранить"
+                                        button.btn.btn-warning(href="/rec/skip/"~appointed)="Пропустить"
+                        div#throatTab.tab-pane.fade(role="tabpanel", aria-labelledby="throat-tab")
+                            .card-body
+                                form#throatform(method="post" action="#")
+                                    input.hidden.timer(name = "timer", value=0, hidden)
+                                    if(appointed)
+                                        input.hidden(name = "appointed", value=appointed, hidden)
+                                    each symp in symptoms
+                                        if (symp.primary and symp.throat)
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'ear', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if not(symp.ismedical or symp.primary)
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'throat', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.throat and symp.ismedical and not(symp.diagnos) and not(symp.primary))
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'throat', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.throat and symp.ismedical and symp.diagnos and not(symp.primary))
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag_d
+                                                input.custom-control-input.checkitem_d(type="checkbox", id=symp.id~'throat', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'throat')=symp.symptom_name
+                                    hr
+                                    if(appointed)
+                                        button.btn.btn-success(href="#" type="submit")="Сохранить"
+                                        button.btn.btn-warning(href="/rec/skip/"~appointed)="Пропустить"
+                        div#noseTab.tab-pane.fade(role="tabpanel", aria-labelledby="nose-tab")
+                            .card-body
+                                form#noseform(method="post" action="#")
+                                    input.hidden.timer(name = "timer", value=0, hidden)
+                                    if(appointed)
+                                        input.hidden(name = "appointed", value=appointed, hidden)
+                                    each symp in symptoms
+                                        if (symp.primary and symp.nose)
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'ear', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'ear')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if not(symp.ismedical or symp.primary)
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'nose', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.nose and symp.ismedical and not(symp.diagnos) and not(symp.primary))
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                                input.custom-control-input.checkitem(type="checkbox", id=symp.id~'nose', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
+                                    hr
+                                    each symp in symptoms
+                                        if(symp.symptom_name and symp.nose and symp.ismedical and symp.diagnos and not(symp.primary))
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag_d
+                                                input.custom-control-input.checkitem_d(type="checkbox", id=symp.id~'nose', name=symp.id, data-name=symp.symptom_name)
+                                                label.custom-control-label(for=symp.id~'nose')=symp.symptom_name
+                                    hr
+                                    if(appointed)
+                                        button.btn.btn-success(href="#" type="submit")="Сохранить"
+                                        button.btn.btn-warning(href="/rec/skip/"~appointed)="Пропустить"
+
+div#pic-modal.modal.fade(tabindex="-1", role="dialog", aria-hidden="true")
+    div.modal-dialog.modal-lg(role="document")
+        div.modal-content
+            div.modal-header
+                button.close(type="button", data-dismiss="modal", aria-label="Close")
+                    span(aria-hidden="true")&times;
+            div.modal-body
+                img.materialboxed(src=pic_local, width="100%")

@@ -2,8 +2,11 @@
 from flask import Flask
 import logging
 import sys
+from jinja2 import Environment, FileSystemLoader
+# from babel.support import Translations
 
 userApp = Flask(__name__, instance_relative_config=True)
+
 if __name__ == '__main__':
     reload(sys)
     sys.setdefaultencoding('utf8')
@@ -28,6 +31,8 @@ from userApp import rejectionController
 from userApp import testsController
 from userApp import consiliumController
 from userApp import secondaryRecController
+from userApp import cnnConfirmController
+from userApp import jinjaHelper
 
 from userApp import updateController
 
@@ -37,6 +42,16 @@ from userApp.dbc import *
 userApp.jinja_env.add_extension('pypugjs.ext.jinja.PyPugJSExtension')
 userApp.config.from_object('config')
 userApp.secret_key = '2240641'
+# locale_dir = "i18n"
+# msgdomain = "html"
+# list_of_desired_locales = ["cs", "en"]
+# loader = FileSystemLoader("templates")
+# extensions = ['jinja2.ext.i18n', 'jinja2.ext.autoescape', 'jinja2.ext.with_']
+#
+# env = Environment(extensions=extensions, loader=loader) # add any other env options if needed
+#
+# template = env.get_template("stack.html")
+# rendered_template = template.render()
 logging.basicConfig(level = logging.INFO)
 db.create_all()
 

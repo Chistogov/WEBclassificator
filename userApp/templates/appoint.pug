@@ -26,19 +26,11 @@ include navBar
                     if(message)
                         div.alert.alert-danger(role="alert")=message
                     form#addForm(method="post" action="#")
-                        .row
+                        each cnnrec in cnnrec_symps
                             div.col-md-2
                                 div.custom-control.custom-checkbox.my-1.mr-sm-2
-                                    input.custom-control-input(type="checkbox", id='ear', name="ear")
-                                    label.custom-control-label(for='ear')="Ухо"
-                            div.col-md-2
-                                div.custom-control.custom-checkbox.my-1.mr-sm-2
-                                    input.custom-control-input(type="checkbox", id='throat', name="throat")
-                                    label.custom-control-label(for='throat')="Горло"
-                            div.col-md-2
-                                div.custom-control.custom-checkbox.my-1.mr-sm-2
-                                    input.custom-control-input(type="checkbox", id='nose', name="nose")
-                                    label.custom-control-label(for='nose')="Нос"
+                                    input.custom-control-input(type="checkbox", id='cnn'~cnnrec.id, name=cnnrec.id)
+                                    label.custom-control-label(for='cnn'~cnnrec.id)=cnnrec.symptom_name
                         div.form-group
                             select.form-control(name="forUser")
                                 option(value="", disabled, selected)="Пользователь"
@@ -49,6 +41,9 @@ include navBar
                         div.custom-control.custom-checkbox.my-1.mr-sm-2
                             input#fromApp.custom-control-input(type = 'checkbox', name="fromApp")
                             label.custom-control-label(for='fromApp')="Из назначенных"
+                        div.custom-control.custom-checkbox.my-1.mr-sm-2
+                            input#cnnConf.custom-control-input(type = 'checkbox', name="cnnConf")
+                            label.custom-control-label(for='cnnConf')="Подтверждение НС"
                         div.custom-control.custom-checkbox.my-1.mr-sm-2
                             input#fromRec.custom-control-input(type = 'checkbox', name="fromRec")
                             label.custom-control-label(for='fromRec')="Из распознанных пользователем:"

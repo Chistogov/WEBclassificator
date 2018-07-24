@@ -41,13 +41,39 @@ include navBar
                             a(href='tests/testing/'~test.id)
                                 li.list-group-item.list-group-item-action
                                     span=test.dataset.dataset_name
+            //div.col-12
+                .card.card-block
+                    div.card-body
+                        h5.card-title="Результаты тестирований"
+                        ul.list-group
+                            each test in results
+                                a(href='tests/results/'~test.id~"/0")
+                                    li.list-group-item.list-group-item-action
+                                        span="Пользователь "~test.user.user_name~" прошел \""~test.dataset.dataset_name~"\" с результатом "~test.results~"% "~test.date
+
+
         div.col-12
             .card.card-block
                 div.card-body
                     h5.card-title="Результаты тестирований"
-                    ul.list-group
-                        each test in results
-                            a(href='tests/results/'~test.id~"/0")
-                                li.list-group-item.list-group-item-action
-                                    span="Пользователь "~test.user.user_name~" прошел \""~test.dataset.dataset_name~"\" с результатом "~test.results~"% "~test.date
+                    table#datatable.table.table-striped.table-bordered.dataTable(style="width:100%")
+                        thead
+                            tr
+                                th='Пользователь'
+                                th='Тест'
+                                th='Результат'
+                                th='Дата'
+                        tbody
+                            each test in results
+                                    tr
+                                        td
+                                            a(href='tests/results/'~test.id~"/0")=test.user.user_name
+                                        td
+                                            a(href='tests/results/'~test.id~"/0")=test.dataset.dataset_name
+                                        td
+                                            a(href='tests/results/'~test.id~"/0")=test.results
+                                        td
+                                            a(href='tests/results/'~test.id~"/0")=test.date
+
+
 

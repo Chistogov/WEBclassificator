@@ -9,6 +9,7 @@ class Appoint(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     date = db.Column(db.Date)
     secondary = db.Column(db.Boolean)
+    from_cnn = db.Column(db.Boolean)
     message = db.Column(db.Text)
 
     user = db.relationship("User", back_populates="app")
