@@ -13,9 +13,6 @@ import logging, datetime
 def appoint():
     if not(current_user.admin):
         return redirect('/')
-    message = ""
-    if('message' in request.args):
-        message = request.args['message']
     logging.info("appoint")
     all_pics = db.session.query(Picture.Picture).all()
     app_pics = db.session.query(Appoint.Appoint).all()
@@ -32,7 +29,7 @@ def appoint():
     cnnrec_symps = db.session.query(Symptom.Symptom).filter(Cnnrec.Cnnrec.symp_id==Symptom.Symptom.id).group_by(Symptom.Symptom.id)
     for item in cnnrec_symps:
         print item.symptom_name
-    return render_template('appoint.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, users=users, message=message, admin=current_user.admin, cnnrec_symps=cnnrec_symps)
+    return render_template('appoint.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, users=users, admin=current_user.admin, cnnrec_symps=cnnrec_symps)
 
 @userApp.route('/appoint', methods=['POST'])
 @login_required

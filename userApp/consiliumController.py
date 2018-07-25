@@ -133,6 +133,7 @@ def consilium_view(cons_num, page):
         pics.append(pic.pic_id)
     iForm = infoForm()
 
+
     hidden_pics = db.session.query(Usertests.Usertests.pic_id)
     if(hideTest):
         iForm.sec_app = len(list(db.session.query(Picture.Picture).filter(Appoint.Appoint.secondary == True,
@@ -189,6 +190,12 @@ def consilium_view(cons_num, page):
         message = request.args['message']
     for pic in pics:
         form = picsForm()
+        neural = db.session.query(Cnnrec.Cnnrec.symp_id, Symptom.Symptom.symptom_name).filter(
+            Cnnrec.Cnnrec.pic_id == pic.id, Symptom.Symptom.id == Cnnrec.Cnnrec.symp_id).group_by(Cnnrec.Cnnrec.symp_id,
+                                                                                                  Symptom.Symptom.symptom_name).all()
+        form.cnnSymps = list()
+        for smp in neural:
+            form.cnnSymps.append(smp.symptom_name)
         form.pic = pic
         symp_ids = list()
         secondary = False
@@ -335,6 +342,7 @@ class picSymps():
 
 class picsForm():
     pic = None
+    cnnSymps = list()
     symps = picSymps()
     consilium = list()
     secondary = False

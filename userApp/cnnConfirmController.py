@@ -29,8 +29,6 @@ def cnn_rec():
     pics_in_wait = Appoint.Appoint.query.filter_by(user_id=current_user.id, secondary=False, from_cnn=True)
     categories = Category.Category.query.order_by(Category.Category.id).all()
 
-    if ('message' in request.args):
-        message = request.args['message']
     return render_template('/cnn/confirm.pug', symptoms=symptoms,
                            admin=current_user.admin, pic_local=pic_local,
                            message=message, appointed=appointed,
