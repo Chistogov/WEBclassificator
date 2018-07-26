@@ -27,8 +27,7 @@ def appoint():
     infoForm.wait_pics = infoForm.all_pics-infoForm.rec_pics
     users = User.User.query.all()
     cnnrec_symps = db.session.query(Symptom.Symptom).filter(Cnnrec.Cnnrec.symp_id==Symptom.Symptom.id).group_by(Symptom.Symptom.id)
-    for item in cnnrec_symps:
-        print item.symptom_name
+
     return render_template('appoint.pug', infoForm=infoForm, pics_by_symp=pics_by_symp, users=users, admin=current_user.admin, cnnrec_symps=cnnrec_symps)
 
 @userApp.route('/appoint', methods=['POST'])

@@ -38,7 +38,7 @@ def indexing_post():
     for g in num:
         listt.append(g.pic_name)
     for file in glob.glob("*.jpg"):
-        # num = db.session.query(Picture.Picture.id).filter(Picture.Picture.pic_name == file).al-[/ l()
+        # num = db.session.query(Picture.Picture.id).filter(Picture.Picture.pic_name == file).all()
         # if(len(num) == 0):
         # print listt
         # if not(file in listt):
@@ -51,7 +51,7 @@ def indexing_post():
         cnn = Cnnrec.Cnnrec()
         picture = db.session.query(Picture.Picture).filter(Picture.Picture.pic_name == file).first()
         cnn.pic_id = picture.id
-        cnn.symp_id = 20
+        cnn.symp_id = 207
         print i
         print file
         i = i + 1
