@@ -25,12 +25,13 @@ def get_count_cnn_app():
 
 def get_count_app():
     pics_in_wait = Appoint.Appoint\
-        .query.filter_by(user_id=current_user.id, secondary=False)
+        .query.filter_by(user_id=current_user.id, secondary=False, from_cnn=False)
     return len(list(pics_in_wait))
 
 def get_count_sec_app():
     pics_in_wait = Appoint.Appoint\
         .query.filter_by(user_id=current_user.id, secondary=True)
+    print list(pics_in_wait)
     return len(list(pics_in_wait))
 
 def get_user_cons():

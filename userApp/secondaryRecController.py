@@ -70,9 +70,16 @@ def sec_rec():
             symp = picSymps()
             symp.symptom = symptom
             if (symptom.ismedical and not (symptom.primary)):
-                symp.count = (100 / count_users) * symp_ids.count(symptom.id)
+                if(count_users != 0):
+                    symp.count = (100 / count_users) * symp_ids.count(symptom.id)
+                else:
+                    symp.count = 0
             if (symptom.diagnos):
-                symp.count = (100 / count_diagnoses) * symp_ids.count(symptom.id)
+                if (count_diagnoses != 0):
+                    symp.count = (100 / count_diagnoses) * symp_ids.count(symptom.id)
+                else:
+                    symp.count = 0
+
             symptom_list.append(symp)
     # ***
     if ('message' in request.args):

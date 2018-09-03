@@ -12,12 +12,38 @@ include navBar
                             tr
                                 td Консилиумных снимков:
                                 td=cons_pics
-            .card.card-block
-                .card-body
-                    table.table.table-striped
-                        tbody
-                            each item in pics_by_symp
-                                tr
-                                    td=item[0]
-                                    td=item[1]
-
+            div#accordion
+                .card
+                    .card-header#all
+                        button.btn.btn-link.collapsed(data-toggle="collapse", data-target="#all-list", aria-expanded="false")="Полная статистика"
+                    div#all-list.collapse(aria-labelledby="all" data-parent="#accordion")
+                        div.card-body
+                            table.table.table-striped
+                                tbody
+                                    each item in pics_by_symp
+                                        tr
+                                            td=item[0]
+                                            td=item[1]
+                each consilium in consiliums
+                    .card
+                        .card-header(id='cons'~consilium.cons.id)
+                            button.btn.btn-link.collapsed(data-toggle="collapse", data-target="#list"~consilium.cons.id, aria-expanded="false")=consilium.cons.cons_name
+                            a.btn.btn-primary.float-right(href = "/consilium_view/"~consilium.cons.id~"/0") Результаты
+                        div.collapse(id='list'~consilium.cons.id, aria-labelledby="cons"~consilium.cons.id, data-parent="#accordion")
+                            div.card-body
+                                table.table
+                                    tbody
+                                        tr
+                                            td='Руководитель:'
+                                            td=consilium.manager.user_name
+                                        tr
+                                            td='Участники:'
+                                            td
+                                                each user in consilium.users
+                                                    span=user.user_name~" "
+                                table.table.table-striped
+                                    tbody
+                                        each item in consilium.pics_by_symp
+                                            tr
+                                                td=item[0]
+                                                td=item[1]

@@ -33,10 +33,10 @@ def indexing_post():
         return redirect(url_for('indexing', message="Demo user, read only"))
     i = 0
     os.chdir(userApp.config.get('DATA_PATH'))
-    num = list(db.session.query(Picture.Picture.pic_name))
-    listt = list();
-    for g in num:
-        listt.append(g.pic_name)
+    # num = list(db.session.query(Picture.Picture.pic_name))
+    # listt = list();
+    # for g in num:
+    #     listt.append(g.pic_name)
     for file in glob.glob("*.jpg"):
         # num = db.session.query(Picture.Picture.id).filter(Picture.Picture.pic_name == file).all()
         # if(len(num) == 0):
@@ -48,12 +48,13 @@ def indexing_post():
         #     pic.skipped = False
         #     pic.index_date = datetime.datetime.now().date()
         #     db.session.add(pic)
+        #     i = i + 1
         cnn = Cnnrec.Cnnrec()
         picture = db.session.query(Picture.Picture).filter(Picture.Picture.pic_name == file).first()
         cnn.pic_id = picture.id
-        cnn.symp_id = 207
-        print i
-        print file
+        cnn.symp_id = 208
+        # print i
+        # print file
         i = i + 1
         db.session.add(cnn)
             # db.session.commit()

@@ -1,0 +1,119 @@
+include application
+currentPage = "/consilium"
+include navBar
+
+
+.content
+    h3=consname.cons_name
+
+    table.table
+        tbody
+            tr
+                td='Руководитель:'
+                td=manager.user_name
+            tr
+                td='Участники:'
+                td
+                    each user in cons_users
+                        span=user.user_name~" "
+
+    .row
+        each item in pictures
+            div.col-4
+                - var color = 'white'
+                if(item.consilium)
+                    color = '#ecffe6'
+                .card.card-block(style='background-color:'~color~';')
+                    .card-title
+                        p=" № "~item.pic.id
+                        a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal"~item.pic.id)
+                            img.card-img-top(src='/data/'~item.pic.pic_name, width="100%")
+                    .card-body
+                        a.btn.btn-primary(href = "/consilium/pic/"~item.pic.id) Детали
+                        hr
+                        h5='Нейросеть'
+                        each item in item.cnnSymps
+                            li.card-text=item
+                        form(id="form"~item.pic.id, method="post", action="#")
+                            input.hidden(name = "pic", value=item.pic.id, hidden)
+                                //each rec in item.symps
+                                    if(rec.symptom.primary)
+                                        if(rec.symptom.id in item.consilium)
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag.hidden
+                                                input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~item.pic.id, name=rec.symptom.id, data-name=rec.symptom.symptom_name, checked)
+                                                label.custom-control-label(for=rec.symptom.id~item.pic.id)=rec.symptom.symptom_name
+                                        else
+                                            div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag.hidden
+                                                input.custom-control-input.checkitem.hidden(type="checkbox", id=rec.symptom.id~item.pic.id, name=rec.symptom.id, data-name=rec.symptom.symptom_name)
+                                                label.custom-control-label(for=rec.symptom.id~item.pic.id)=rec.symptom.symptom_name
+                            hr
+                            each rec in item.symps
+                                if(rec.symptom.ismedical and rec.symptom.diagnos and not(rec.symptom.primary))
+                                    if(rec.symptom.id in item.consilium)
+                                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                            input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~item.pic.id, name=rec.symptom.id, data-name=rec.symptom.symptom_name, checked)
+                                            label.custom-control-label(style="color:red;", for=rec.symptom.id~item.pic.id)=rec.symptom.symptom_name~" ("~rec.count~"%)"
+                                    else
+                                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                            input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~item.pic.id, name=rec.symptom.id, data-name=rec.symptom.symptom_name)
+                                            label.custom-control-label(style="color:red;", for=rec.symptom.id~item.pic.id)=rec.symptom.symptom_name~" ("~rec.count~"%)"
+                                    each usr in rec.users
+                                        span=usr.user_name+" "
+
+                            hr
+                            each rec in item.symps
+                                if(rec.symptom.ismedical and not(rec.symptom.diagnos) and not(rec.symptom.primary))
+                                    if(rec.symptom.id in item.consilium)
+                                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                            input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~item.pic.id, name=rec.symptom.id, data-name=rec.symptom.symptom_name, checked)
+                                            label.custom-control-label(style="color:green;", for=rec.symptom.id~item.pic.id)=rec.symptom.symptom_name~" ("~rec.count~"%)"
+                                    else
+                                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                            input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~item.pic.id, name=rec.symptom.id, data-name=rec.symptom.symptom_name)
+                                            label.custom-control-label(style="color:green;", for=rec.symptom.id~item.pic.id)=rec.symptom.symptom_name~" ("~rec.count~"%)"
+                            hr
+                            each rec in item.symps
+                                if not(rec.symptom.ismedical or rec.symptom.primary)
+                                    if(rec.symptom.id in item.consilium)
+                                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                            input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~item.pic.id, name=rec.symptom.id, data-name=rec.symptom.symptom_name, checked)
+                                            label.custom-control-label(style="color:blue;", for=rec.symptom.id~item.pic.id)=rec.symptom.symptom_name~" ("~rec.count~"%)"
+                                    else
+                                        div.custom-control.custom-checkbox.my-1.mr-sm-2.checktag
+                                            input.custom-control-input.checkitem(type="checkbox", id=rec.symptom.id~item.pic.id, name=rec.symptom.id, data-name=rec.symptom.symptom_name)
+                                            label.custom-control-label(tyle="color:blue;", for=rec.symptom.id~item.pic.id)=rec.symptom.symptom_name~" ("~rec.count~"%)"
+
+.content
+    .row
+        div.col-s4.pagination-center
+            ul.pagination
+                li.page-item
+                    a.page-link(href=url_for('consilium_view_results', cons_num=cons_number, page=0)) Первая
+                if(pagination.page == 0)
+                    li.page-item(hidden=true)
+                        a.page-link(href=url_for('consilium_view_results', cons_num=cons_number, page=pagination.page - 1)) &laquo;
+                else
+                    li.page-item
+                        a.page-link(href=url_for('consilium_view_results', cons_num=cons_number, page=pagination.page - 1)) &laquo;
+                li.page-item
+                    a.page-link(href='')=(pagination.page+1)
+                if(pagination.page == pagination.total_pages)
+                    li.page-item(hidden=true)
+                        a.page-link(href=url_for('consilium_view_results', cons_num=cons_number, page=pagination.page + 1)) &raquo;
+                else
+                    li.page-item
+                        a.page-link(href=url_for('consilium_view_results', cons_num=cons_number, page=pagination.page + 1)) &raquo;
+                li.page-item
+                    a.page-link(href=url_for('consilium_view_results', cons_num=cons_number, page=pagination.total_pages)) Последняя
+
+each item in pictures
+    div.modal.fade(id = "pic-modal"~item.pic.id, tabindex="-1", role="dialog", aria-hidden="true")
+        div.modal-dialog.modal-lg(role="document")
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true")&times;
+                div.modal-body
+                    img.card-img-top(src='/data/'~item.pic.pic_name, width="100%")
+                div.modal-footer
+                    a.btn.btn-secondary(href = "/consilium/pic/"~item.pic.id) Детали

@@ -10,7 +10,7 @@ include navBar
                     if(message)
                         div.alert.alert-danger(role="alert")=message
                     if(app_message)
-                        div.alert.alert-primary(role="alert")=app_message
+                            div.alert.alert-primary(role="alert")=app_message
                     if(pic_local)
                         a.nav-link.modal-trigger(data-toggle="modal", data-target="#pic-modal")
                             img.materialboxed(src=pic_local, width="100%")
